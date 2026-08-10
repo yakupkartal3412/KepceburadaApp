@@ -1,0 +1,159 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.kepceburada.app"
+4    android:versionCode="25"
+5    android:versionName="2.5" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:4:5-67
+11-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:4:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:5:5-79
+12-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:5:22-76
+13    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+13-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:6:5-79
+13-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:6:22-76
+14    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+14-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:7:5-81
+14-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:7:22-78
+15    <uses-permission
+15-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:8:5-107
+16        android:name="android.permission.READ_EXTERNAL_STORAGE"
+16-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:8:22-77
+17        android:maxSdkVersion="32" />
+17-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:8:78-104
+18    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+18-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:9:5-76
+18-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:9:22-73
+19    <uses-permission android:name="android.permission.CAMERA" />
+19-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:10:5-65
+19-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:10:22-62
+20
+21    <!-- Android 11+ (API 30+) Package Visibility Queries for Dialing, Gallery & WhatsApp -->
+22    <queries>
+22-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:13:5-30:15
+23        <intent>
+23-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:14:9-17:18
+24            <action android:name="android.intent.action.DIAL" />
+24-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:15:13-65
+24-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:15:21-62
+25
+26            <data android:scheme="tel" />
+26-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:16:13-42
+26-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:16:19-39
+27        </intent>
+28        <intent>
+28-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:18:9-21:18
+29            <action android:name="android.intent.action.VIEW" />
+29-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:19:13-65
+29-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:19:21-62
+30
+31            <data android:scheme="tel" />
+31-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:16:13-42
+31-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:16:19-39
+32        </intent>
+33        <intent>
+33-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:22:9-25:18
+34            <action android:name="android.intent.action.VIEW" />
+34-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:19:13-65
+34-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:19:21-62
+35
+36            <data android:scheme="https" />
+36-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:16:13-42
+36-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:16:19-39
+37        </intent>
+38        <intent>
+38-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:26:9-29:18
+39            <action android:name="android.intent.action.GET_CONTENT" />
+39-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:27:13-72
+39-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:27:21-69
+40
+41            <data android:mimeType="image/*" />
+41-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:16:13-42
+41-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:28:19-45
+42        </intent>
+43    </queries>
+44
+45    <permission
+45-->[androidx.core:core:1.9.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\904020c9b1843801ae0dfa6dfb49f48d\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+46        android:name="com.kepceburada.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+46-->[androidx.core:core:1.9.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\904020c9b1843801ae0dfa6dfb49f48d\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+47        android:protectionLevel="signature" />
+47-->[androidx.core:core:1.9.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\904020c9b1843801ae0dfa6dfb49f48d\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+48
+49    <uses-permission android:name="com.kepceburada.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+49-->[androidx.core:core:1.9.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\904020c9b1843801ae0dfa6dfb49f48d\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+49-->[androidx.core:core:1.9.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\904020c9b1843801ae0dfa6dfb49f48d\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+50
+51    <application
+51-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:32:5-53:19
+52        android:allowBackup="true"
+52-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:33:9-35
+53        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+53-->[androidx.core:core:1.9.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\904020c9b1843801ae0dfa6dfb49f48d\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+54        android:debuggable="true"
+55        android:extractNativeLibs="true"
+56        android:hardwareAccelerated="true"
+56-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:38:9-43
+57        android:icon="@mipmap/ic_launcher"
+57-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:34:9-43
+58        android:label="@string/app_name"
+58-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:35:9-41
+59        android:largeHeap="true"
+59-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:39:9-33
+60        android:roundIcon="@mipmap/ic_launcher_round"
+60-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:36:9-54
+61        android:supportsRtl="true"
+61-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:37:9-35
+62        android:theme="@style/Theme.KepceApp" >
+62-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:40:9-46
+63        <activity
+63-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:42:9-51:20
+64            android:name="com.kepceburada.app.MainActivity"
+64-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:43:13-41
+65            android:configChanges="orientation|screenSize|keyboardHidden"
+65-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:45:13-74
+66            android:exported="true"
+66-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:44:13-36
+67            android:windowSoftInputMode="adjustResize" >
+67-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:46:13-55
+68            <intent-filter>
+68-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:47:13-50:29
+69                <action android:name="android.intent.action.MAIN" />
+69-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:48:17-69
+69-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:48:25-66
+70
+71                <category android:name="android.intent.category.LAUNCHER" />
+71-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:49:17-77
+71-->C:\Users\lenovo\.gemini\antigravity\scratch\KepceburadaApp\app\src\main\AndroidManifest.xml:49:27-74
+72            </intent-filter>
+73        </activity>
+74
+75        <provider
+75-->[androidx.emoji2:emoji2:1.2.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\ec7d8e76f1546b35b9df5f67878834b6\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+76            android:name="androidx.startup.InitializationProvider"
+76-->[androidx.emoji2:emoji2:1.2.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\ec7d8e76f1546b35b9df5f67878834b6\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+77            android:authorities="com.kepceburada.app.androidx-startup"
+77-->[androidx.emoji2:emoji2:1.2.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\ec7d8e76f1546b35b9df5f67878834b6\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+78            android:exported="false" >
+78-->[androidx.emoji2:emoji2:1.2.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\ec7d8e76f1546b35b9df5f67878834b6\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+79            <meta-data
+79-->[androidx.emoji2:emoji2:1.2.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\ec7d8e76f1546b35b9df5f67878834b6\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+80                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+80-->[androidx.emoji2:emoji2:1.2.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\ec7d8e76f1546b35b9df5f67878834b6\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+81                android:value="androidx.startup" />
+81-->[androidx.emoji2:emoji2:1.2.0] C:\Users\lenovo\.gradle\caches\8.14\transforms\ec7d8e76f1546b35b9df5f67878834b6\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+82            <meta-data
+82-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\lenovo\.gradle\caches\8.14\transforms\0adeab2230ea69dd6e47c9c1723000cf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+83                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+83-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\lenovo\.gradle\caches\8.14\transforms\0adeab2230ea69dd6e47c9c1723000cf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+84                android:value="androidx.startup" />
+84-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\lenovo\.gradle\caches\8.14\transforms\0adeab2230ea69dd6e47c9c1723000cf\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+85        </provider>
+86    </application>
+87
+88</manifest>
