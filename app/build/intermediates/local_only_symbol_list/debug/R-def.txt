@@ -4,8 +4,6 @@ color bg_dark
 color primary
 color primary_dark
 color white
-drawable ic_launcher_background
-drawable ic_launcher_foreground
 drawable splash_3d_excavator
 drawable splash_glow
 drawable splash_glow_bg

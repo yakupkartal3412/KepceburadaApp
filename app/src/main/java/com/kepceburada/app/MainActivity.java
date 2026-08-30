@@ -182,6 +182,8 @@ public class MainActivity extends AppCompatActivity {
         settings.setTextZoom(100);
 
         webView.clearCache(true);
+        webView.setOverScrollMode(View.OVER_SCROLL_IF_CONTENT_SCROLLS);
+        webView.setVerticalScrollBarEnabled(true);
         webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         // Native JS bridge

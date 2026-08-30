@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
@@ -17,7 +17,6 @@
 <body>
 
   <!-- ==================== 1. SPLASH ENTRANCE SCREEN ==================== -->
-  <!-- ==================== 1. ENTRANCE LANDING SCREEN ==================== -->
   <div id="splash-screen" class="splash-screen active">
     
     <!-- Top Full-Width Bar: Logo Far Left + Biz Kimiz & Atla Buttons Far Right -->
@@ -32,10 +31,10 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 0.4rem; align-items: center; flex-shrink: 0;">
-        <button id="btn-biz-kimiz" class="btn-splash-info" onclick="openAboutModal()">
+      <div style="display: flex; gap: 0.65rem; align-items: center;">
+        <button id="btn-biz-kimiz" class="btn-splash-skip" onclick="openAboutModal()">
           <span class="btn-3d-info-icon-badge">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px;">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:14px; height:14px;">
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
               <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               <circle cx="12" cy="8" r="1" fill="currentColor"/>
@@ -43,10 +42,9 @@
           </span>
           Biz Kimiz
         </button>
-        <button class="btn-splash-close" onclick="enterMainApp('rent')" title="Kapat">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-          </svg>
+        <button class="btn-splash-skip" onclick="enterMainApp('rent')">
+          <span>Atla</span>
+          <span style="font-size: 0.85rem;">→</span>
         </button>
       </div>
     </header>
@@ -86,8 +84,8 @@
       <div class="splash-action-cards">
         <!-- Choice 1: Hemen İlan Ver -->
         <div class="splash-choice-card" onclick="enterMainApp('list')">
-          <div class="choice-icon-circle orange-rocket">
-            🚀
+          <div class="choice-icon-circle orange-rocket" style="display: flex; align-items: center; justify-content: center;">
+            <img src="assets/icon_3d_excavator.png" alt="3D İlan Ver" style="width: 28px; height: 28px; object-fit: contain;">
           </div>
           <div class="choice-text-group">
             <h3 class="choice-title">Hemen İlan Ver</h3>
@@ -124,21 +122,21 @@
           </div>
           <div class="brand-text-3d">
             <h1 class="logo-title-3d">Makine<span class="highlight-3d">Bul</span></h1>
-            <p class="logo-sub-3d">81 İlde Komisyonsuz & Doğrudan Kiralama</p>
+            <p class="logo-sub-3d">81 İlde Komisyonsuz &amp; Doğrudan Kiralama</p>
           </div>
         </div>
         
         <!-- Top Action Switcher Buttons & Right Close X Icon -->
         <div class="header-right-group">
-          <div id="user-profile-badge"></div>
           <div class="mode-switcher">
             <button id="btn-mode-rent" class="mode-btn active" onclick="switchMode('rent')">
-              <span class="btn-icon">🔍</span> Kirala
+              <span class="btn-icon">🔍</span> Kepçe Kirala
             </button>
             <button id="btn-mode-list" class="mode-btn" onclick="switchMode('list')">
-              <span class="btn-icon">🚀</span> İlan Ver
+              <span class="btn-icon">🚜</span> İlan Ver
             </button>
           </div>
+          <button class="btn-close-to-splash" onclick="returnToSplash()" title="Giriş Ekranına Dön (Çıkış)">✕</button>
         </div>
       </div>
     </header>
@@ -187,202 +185,447 @@
         </div>
       </section>
 
-      <!-- ==================== OWNER VIEW (KEPÇENİ KİRALAT) ==================== -->
+      <!-- ==================== OWNER VIEW (3D KEPÇENİ KİRALAT & KAYIT SİHİRBAZI) ==================== -->
       <section id="list-view" class="view-section">
         
-        <!-- Sub Nav for Owner View -->
-        <div class="owner-tabs">
-          <button id="tab-add-btn" class="owner-tab-btn active" onclick="switchOwnerTab('add')">
-            ✨ Hızlı İlan Ekle
-          </button>
-          <button id="tab-manage-btn" class="owner-tab-btn" onclick="switchOwnerTab('manage')">
-            📋 İlanlarım
-          </button>
-        </div>
-
-        <!-- TAB 1: Add Listing Form -->
-        <div id="owner-tab-add" class="owner-tab-content active">
-          <div class="card simple-form-card">
-            <h2 class="form-title">Makinenizi Kiraya Çıkarın</h2>
-            <p class="form-subtitle">Komisyon yok, aracı yok! İlanınız doğrudan müteahhitlere ve şantiyelere ulaşsın.</p>
+        <!-- LOGGED-IN USER DASHBOARD (Giriş yapıldığında görünen Profesyonel Makine Sahibi Paneli) -->
+        <div id="logged-in-user-dashboard" style="display: none; margin-bottom: 1.25rem;">
+          
+          <!-- Top Profile Header Card (Kompakt & Zarif) -->
+          <div style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%); border: 1.5px solid rgba(245,158,11,0.35); border-radius: 14px; padding: 0.65rem 0.85rem; margin-bottom: 0.6rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4); color: #fff; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
             
-            <form id="add-listing-form" onsubmit="handleCreateListing(event)">
-              
-              <!-- Row 1: Full-Width Title -->
-              <div class="form-group" style="margin-bottom: 1.1rem;">
-                <label for="input-title">İlan Başlığı / Makine Modeli <span style="color:#EF4444">*</span></label>
-                <input type="text" id="input-title" required placeholder="Örn: JCB 3CX Beko Loder Kepçe">
-              </div>
-
-              <!-- Row 2: Type & City -->
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label for="input-type">Makine Türü <span style="color:#EF4444">*</span></label>
-                  <select id="input-type" required onchange="handleTypeChange(this.value)">
-                    <option value="">Seçiniz...</option>
-                    <option value="Paletli Ekskavatör">Paletli Ekskavatör</option>
-                    <option value="Beko Loder (JCB)">Beko Loder (JCB / Lastikli)</option>
-                    <option value="Mini Ekskavatör / Kepçe">Mini Kepçe / Ekskavatör</option>
-                    <option value="Bobcat Mini Yükleyici">Bobcat Mini Yükleyici</option>
-                    <option value="Manitou Telehandler">Manitou Telehandler</option>
-                    <option value="Mobil Vinç">Mobil Vinç</option>
-                    <option value="Dozer">Dozer</option>
-                    <option value="Hafriyat Kamyonu">Hafriyat Kamyonu</option>
-                    <option value="Diğer">✏️ Diğer (Kendim Yazacağım)</option>
-                  </select>
-                  <input type="text" id="input-custom-type" placeholder="Örn: Silindir, Asfalt Serici, Forklift..." style="display: none; margin-top: 0.5rem;" />
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+              <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(15,23,42,0.85); border: 1.5px solid #F59E0B; box-shadow: 0 4px 10px rgba(245,158,11,0.3); display: flex; align-items: center; justify-content: center; padding: 3px; flex-shrink: 0;">
+                  <img src="assets/logo_3d.png" alt="MakineBul 3D Logo" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
-
-                <div class="form-group">
-                  <label for="input-city-select">Bulunduğu İl <span style="color:#EF4444">*</span></label>
-                  <select id="input-city-select" required onchange="handleCityChange(this.value)">
-                    <option value="">İl Seçiniz (81 İl)</option>
-                    <option value="İstanbul">İstanbul</option>
-                    <option value="Ankara">Ankara</option>
-                    <option value="İzmir">İzmir</option>
-                    <option value="Bursa">Bursa</option>
-                    <option value="Antalya">Antalya</option>
-                    <option value="Adana">Adana</option>
-                    <option value="Konya">Konya</option>
-                    <option value="Gaziantep">Gaziantep</option>
-                    <option value="Şanlıurfa">Şanlıurfa</option>
-                    <option value="Kocaeli">Kocaeli</option>
-                    <option value="Mersin">Mersin</option>
-                    <option value="Diyarbakır">Diyarbakır</option>
-                    <option value="Samsun">Samsun</option>
-                    <option value="Denizli">Denizli</option>
-                    <option value="Eskişehir">Eskişehir</option>
-                    <option value="Trabzon">Trabzon</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Row 3: District & Phone -->
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label for="input-district-select">Bulunduğu İlçe <span style="font-weight:400; color:#6B7280; font-size:0.8rem;">(Opsiyonel)</span></label>
-                  <select id="input-district-select">
-                    <option value="Merkez">Merkez</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label for="input-phone">Telefon Numaranız (WhatsApp) <span style="color:#EF4444">*</span></label>
-                  <input type="tel" id="input-phone" required placeholder="Örn: 0532 000 00 00">
-                </div>
-              </div>
-
-              <!-- Row 4: Günlük & Saatlik Ücret (YAN YANA!) -->
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label for="input-price">Günlük Kiralama Ücreti (TL) <span style="color:#EF4444">*</span></label>
-                  <input type="number" id="input-price" required placeholder="Örn: 3000">
-                </div>
-
-                <div class="form-group">
-                  <label for="input-hourly-price">Saatlik Ücret (TL) <span style="font-weight:400; color:#6B7280; font-size:0.8rem;">(Opsiyonel)</span></label>
-                  <input type="number" id="input-hourly-price" placeholder="Örn: 400">
-                </div>
-              </div>
-
-              <!-- Row 5: Photo Dropzone -->
-              <div class="form-group" style="margin-bottom: 1.25rem;">
-                <label>Makine Fotoğrafı <span style="font-weight:400; color:#6B7280; font-size:0.8rem;">(Opsiyonel)</span></label>
-                <div class="custom-file-dropzone-compact" style="cursor:pointer; display:block;" onclick="triggerPhotoUpload(event)">
-                  <input type="file" id="input-image-file" name="photo" accept="image/*" class="file-upload-input-hidden" onchange="previewUserImage(event)">
-                  <div id="dropzone-prompt" class="dropzone-prompt-compact" style="display: flex;">
-                    <span style="font-weight: 600; font-size: 0.88rem; color: #D97706;">📷 Galeriden Fotoğraf Seç</span>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                    <span style="background: rgba(16,185,129,0.2); color: #34D399; border: 1px solid rgba(16,185,129,0.4); padding: 0.08rem 0.45rem; border-radius: 6px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase;">🟢 Aktif Makine Sahibi</span>
                   </div>
-                  <div id="image-preview-container" class="image-preview-container-compact" style="display: none;">
-                    <img id="image-preview-img" src="" alt="Önizleme">
-                    <span class="preview-ok-text">✓ Fotoğraf Yüklendi</span>
-                    <button type="button" class="btn-remove-photo-sm" onclick="removeUserPhoto(event)">Kaldır</button>
-                  </div>
+                  <h3 id="dash-user-name" style="font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 800; color: #FFFFFF; margin: 0.1rem 0 0.05rem; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">Yakup Kartal (Bey Hafriyat)</h3>
+                  <p id="dash-user-sub" style="font-size: 0.72rem; color: #94A3B8; margin: 0;">📞 Telefon: <strong style="color: #FCD34D;">0531 726 84 54</strong> | 📍 Şehir: <strong style="color: #fff;">Bingöl</strong></p>
                 </div>
               </div>
 
-              <button type="submit" class="btn-submit-listing" style="margin-top: 0.5rem;">
-                İlanı Yayına Al (Ücretsiz)
+              <!-- Modern Profile Action: Secure Logout Button -->
+              <button type="button" onclick="logoutUser()" title="Hesaptan Güvenli Çıkış Yap" style="padding: 0.38rem 0.75rem; background: rgba(239,68,68,0.15); border: 1.5px solid rgba(239,68,68,0.45); color: #FCA5A5; font-weight: 700; border-radius: 9px; cursor: pointer; font-size: 0.73rem; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(239,68,68,0.2); transition: all 0.2s ease;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F87171" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Çıkış Yap</span>
               </button>
-            </form>
+            </div>
           </div>
-        </div>
 
-        <!-- TAB 2: Manage My Listings -->
-        <div id="owner-tab-manage" class="owner-tab-content">
-          <div class="card">
-            <h3 class="manage-title">Yayınladığınız İlanlar</h3>
+          <!-- Segmented Navigation Tabs (Kompakt) -->
+          <div style="display: flex; background: rgba(15,23,42,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 3px; margin-bottom: 0.65rem; gap: 4px;">
+            <button type="button" id="tab-btn-dash-listings" onclick="switchDashboardTab('listings')" style="flex: 1; padding: 0.55rem 0.5rem; border: none; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 800; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(135deg, #F59E0B, #D97706); color: #0F172A; box-shadow: 0 3px 10px rgba(245,158,11,0.3); white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <span>📋 İlanlarım (<span id="dash-stat-my-listings">1</span>)</span>
+            </button>
+            <button type="button" id="tab-btn-dash-add" onclick="switchDashboardTab('add')" style="flex: 1; padding: 0.55rem 0.5rem; border: none; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; background: transparent; color: #94A3B8; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <span>➕ Yeni İlan Ekle</span>
+            </button>
+          </div>
+
+          <!-- TAB 1: LISTINGS VIEW (Directly shown, no scrolling down needed!) -->
+          <div id="dash-view-listings" style="display: block;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; padding: 0 0.15rem;">
+              <h4 style="font-family: 'Poppins', sans-serif; font-size: 0.86rem; font-weight: 800; color: #F59E0B; margin: 0; display: flex; align-items: center; gap: 6px;">
+                <img src="assets/logo_3d.png" alt="MakineBul 3D" style="width: 20px; height: 20px; object-fit: contain;">
+                <span>Yayındaki Makineleriniz</span>
+              </h4>
+            </div>
+            
+            <!-- Injected Listing Cards -->
             <div id="my-listings-list" class="my-listings-grid">
               <!-- Rendered dynamically -->
             </div>
           </div>
+
+          <!-- TAB 2: FAST ADD FORM VIEW (Kompakt & Şık Form) -->
+          <div id="dash-view-add" style="display: none; background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%); border: 1.5px solid rgba(245,158,11,0.35); border-radius: 14px; padding: 0.85rem 0.85rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+            <div style="font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 800; color: #F59E0B; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 5px;">
+              <span>➕ Hızlı Yeni Makine / İlan Ekle</span>
+            </div>
+            
+            <form onsubmit="handleFastAddListing(event)">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 0.2rem;">Makine Türü *</label>
+                  <select id="fast-reg-type" required onchange="handleMachineTypeChange('fast-reg-type', 'fast-custom-type')" class="input-3d-dark" style="width: 100%; padding: 0.45rem 0.6rem; font-size: 0.76rem; border-radius: 8px;">
+                    <option value="JCB Beko Loder Kepçe">JCB Beko Loder Kepçe</option>
+                    <option value="Paletli Ekskavatör">Paletli Ekskavatör</option>
+                    <option value="Lastikli Ekskavatör">Lastikli Ekskavatör</option>
+                    <option value="Mini Ekskavatör / Kepçe">Mini Ekskavatör / Kepçe</option>
+                    <option value="Bobcat Mini Yükleyici">Bobcat Mini Yükleyici</option>
+                    <option value="Hafriyat Kamyonu">Hafriyat Kamyonu</option>
+                    <option value="Manitou Telehandler">Manitou Telehandler</option>
+                    <option value="Mobil / Kule Vinç">Mobil / Kule Vinç</option>
+                    <option value="Dozer / Greyder / Silindir">Dozer / Greyder / Silindir</option>
+                    <option value="Forklift">Forklift</option>
+                    <option value="Diğer">+ Farklı Bir Makine Yaz</option>
+                  </select>
+                  <input type="text" id="fast-custom-type" placeholder="Makinenizin Türünü Yazın (Örn: Finişer, Sondaj...)" class="input-3d-dark" style="display: none; width: 100%; margin-top: 0.35rem; padding: 0.45rem 0.6rem; font-size: 0.76rem; border-radius: 8px; border: 1.5px solid #F59E0B;">
+                </div>
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 0.2rem;">İlan Başlığı / Model *</label>
+                  <input type="text" id="fast-reg-title" placeholder="Örn: Kiralık Kepçe" required class="input-3d-dark" style="width: 100%; padding: 0.45rem 0.6rem; font-size: 0.76rem; border-radius: 8px;">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 0.2rem;">Bulunduğu İl (81 İl) *</label>
+                  <select id="fast-reg-city" required onchange="handleFastCityChange(this.value)" class="input-3d-dark" style="width: 100%; padding: 0.45rem 0.6rem; font-size: 0.76rem; border-radius: 8px;">
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 0.2rem;">Bulunduğu İlçe *</label>
+                  <select id="fast-reg-district" required class="input-3d-dark" style="width: 100%; padding: 0.45rem 0.6rem; font-size: 0.76rem; border-radius: 8px;">
+                    <option value="Merkez">Merkez</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.65rem;">
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 0.2rem;">Saatlik Ücret (TL) *</label>
+                  <input type="number" id="fast-reg-hourly" placeholder="1500" required class="input-3d-dark" style="width: 100%; padding: 0.45rem 0.6rem; font-size: 0.76rem; border-radius: 8px;">
+                </div>
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 0.2rem;">Günlük Ücret (TL) *</label>
+                  <input type="number" id="fast-reg-daily" placeholder="10000" required class="input-3d-dark" style="width: 100%; padding: 0.45rem 0.6rem; font-size: 0.76rem; border-radius: 8px;">
+                </div>
+              </div>
+
+              <!-- Fast Photo Upload Box -->
+              <div style="margin-bottom: 0.75rem;">
+                <label style="font-size: 0.72rem; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 0.25rem;">İş Makinesi Fotoğrafı <span style="color:#94A3B8; font-weight:400;">(Galeriden Seçin)</span></label>
+                <div onclick="triggerFastPhotoUpload(event)" style="border: 1.5px dashed rgba(245,158,11,0.5); border-radius: 10px; padding: 0.65rem; text-align: center; background: rgba(15,23,42,0.6); cursor: pointer;">
+                  <input type="file" id="fast-photo-file" accept="image/*" style="display:none;" onchange="previewFastPhotoImage(event)">
+                  <div id="fast-photo-prompt">
+                    <div style="font-size: 1.4rem; margin-bottom: 2px;">📷</div>
+                    <div style="font-size: 0.76rem; font-weight: 700; color: #FCD34D;">Galeriden Kepçe Fotoğrafı Seç / Yükle</div>
+                    <p style="font-size: 0.65rem; color: #94A3B8; margin: 2px 0 0;">Kendi iş makinenizin gerçek fotoğrafını ekleyin</p>
+                  </div>
+                  <div id="fast-photo-preview-box" style="display:none; position: relative;">
+                    <img id="fast-photo-preview-img" src="" alt="Makine Fotoğrafı" style="max-height: 110px; border-radius: 8px; object-fit: contain; border: 1px solid rgba(245,158,11,0.4);">
+                    <div style="margin-top: 5px;">
+                      <button type="button" onclick="removeFastPhoto(event)" class="btn-3d-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.68rem; border-radius: 6px;">✕ Değiştir</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.65rem;">
+                <button type="button" onclick="switchDashboardTab('listings')" class="btn-3d-secondary" style="padding: 0.45rem 0.85rem; font-size: 0.76rem; border-radius: 8px;">İptal</button>
+                <button type="submit" class="btn-3d-emerald-action" style="padding: 0.45rem 1.1rem; font-size: 0.78rem; border-radius: 8px;">🎉 İlanı Hemen Yayına Al</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+
+        <!-- ANONYMOUS AUTH SECTION (Sadece giriş yapmamış ziyaretçilere görünür) -->
+        <div id="anon-auth-section" style="display: block;">
+          <!-- 3D Ultra-Premium Header Banner -->
+          <div class="card-3d-hero">
+            <div class="hero-3d-icon-badge">
+              <img src="assets/logo_3d.png" alt="3D Logo" class="hero-3d-logo-img">
+            </div>
+            <div class="hero-3d-text-content">
+              <h2 class="hero-3d-title">Makine Sahibi Kayıt &amp; İlan Sihirbazı</h2>
+              <p class="hero-3d-sub">81 İlde Komisyonsuz · %0 Aracı · Doğrudan Müteahhit ve Müşteri</p>
+            </div>
+          </div>
+
+          <!-- 3D Auth Switcher Tabs (Ana Sayfada Canlı!) -->
+          <div class="main-3d-auth-tabs">
+            <button type="button" id="main-tab-wiz" class="btn-3d-auth-tab active" onclick="switchMainAuthTab('wizard')">
+              <span>🚜 3D Makine Sahibi Kaydı (3 Adım)</span>
+            </button>
+            <button type="button" id="main-tab-login" class="btn-3d-auth-tab" onclick="switchMainAuthTab('login')">
+              <span>🔐 Zaten Üyeyim: Şifreli Hızlı Giriş</span>
+            </button>
+          </div>
+
+          <!-- 3D WIZARD CONTAINER -->
+          <div id="main-wiz-container" class="card-3d-glass-container">
+            
+            <!-- 3D Step Progress Bar -->
+            <div class="wiz-3d-steps-indicator">
+              <div id="main-step-pill-1" class="step-3d-pill active">
+                <span class="step-3d-num">1</span>
+                <span class="step-3d-label">Üyelik &amp; Şifre</span>
+              </div>
+              <div class="step-3d-line"></div>
+              <div id="main-step-pill-2" class="step-3d-pill">
+                <span class="step-3d-num">2</span>
+                <span class="step-3d-label">Hizmet &amp; Ücret</span>
+              </div>
+              <div class="step-3d-line"></div>
+              <div id="main-step-pill-3" class="step-3d-pill">
+                <span class="step-3d-num">3</span>
+                <span class="step-3d-label">Kepçe Fotoğrafı</span>
+              </div>
+            </div>
+
+            <!-- Step 1 Form -->
+            <form id="main-wiz-form-step1" onsubmit="handleMainWizStep1(event)" class="form-3d-step">
+              <div class="form-3d-header">
+                <span class="icon-3d-step">🔑</span>
+                <h3>1. Adım: Kişisel Bilgiler, Şifre &amp; WhatsApp</h3>
+              </div>
+
+              <div class="form-3d-grid-2">
+                <div class="form-group-3d">
+                  <label for="main-reg-name">Adınız Soyadınız *</label>
+                  <input type="text" id="main-reg-name" placeholder="Örn: Yakup Kartal" required class="input-3d-dark">
+                </div>
+
+                <div class="form-group-3d">
+                  <label for="main-reg-company">Firma / İşletme Adı <span class="label-opt">(Opsiyonel)</span></label>
+                  <input type="text" id="main-reg-company" placeholder="Örn: Bey Hafriyat Ltd." class="input-3d-dark">
+                </div>
+              </div>
+
+              <div class="form-3d-grid-2">
+                <div class="form-group-3d">
+                  <label for="main-reg-password">Giriş Şifreniz *</label>
+                  <input type="password" id="main-reg-password" placeholder="••••••••" required class="input-3d-dark">
+                </div>
+
+                <div class="form-group-3d">
+                  <label for="main-reg-phone">Telefon Numaranız (WhatsApp) *</label>
+                  <input type="tel" id="main-reg-phone" placeholder="Örn: 0532 123 45 67" required class="input-3d-dark">
+                </div>
+              </div>
+
+              <div class="form-3d-grid-2">
+                <div class="form-group-3d">
+                  <label for="main-reg-city">Bulunduğunuz Şehir (81 İl) *</label>
+                  <select id="main-reg-city" required onchange="handleMainRegCityChange(this.value)" class="input-3d-dark">
+                  </select>
+                </div>
+                <div class="form-group-3d">
+                  <label for="main-reg-district">Bulunduğunuz İlçe *</label>
+                  <select id="main-reg-district" required class="input-3d-dark">
+                    <option value="Merkez">Merkez</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-3d-gold-action">
+                <span>2. Adıma Geç (Makine &amp; Fiyat Bilgileri) ›</span>
+              </button>
+            </form>
+
+            <!-- Step 2 Form -->
+            <form id="main-wiz-form-step2" onsubmit="handleMainWizStep2(event)" class="form-3d-step" style="display:none;">
+              <div class="form-3d-header">
+                <span class="icon-3d-step">🚜</span>
+                <h3>2. Adım: Kiralık Makine Türü &amp; Ücretler</h3>
+              </div>
+
+              <div class="form-3d-grid-2">
+                <div class="form-group-3d">
+                  <label for="main-wiz-type">Makine Türü *</label>
+                  <select id="main-wiz-type" required onchange="handleMachineTypeChange('main-wiz-type', 'main-wiz-custom-type')" class="input-3d-dark">
+                    <option value="JCB Beko Loder Kepçe">JCB Beko Loder Kepçe</option>
+                    <option value="Paletli Ekskavatör">Paletli Ekskavatör</option>
+                    <option value="Lastikli Ekskavatör">Lastikli Ekskavatör</option>
+                    <option value="Mini Ekskavatör / Kepçe">Mini Ekskavatör / Kepçe</option>
+                    <option value="Bobcat Mini Yükleyici">Bobcat Mini Yükleyici</option>
+                    <option value="Hafriyat Kamyonu">Hafriyat Kamyonu</option>
+                    <option value="Manitou Telehandler">Manitou Telehandler</option>
+                    <option value="Mobil / Kule Vinç">Mobil / Kule Vinç</option>
+                    <option value="Dozer / Greyder / Silindir">Dozer / Greyder / Silindir</option>
+                    <option value="Forklift">Forklift</option>
+                    <option value="Diğer">+ Farklı Bir Makine Yaz</option>
+                  </select>
+                  <input type="text" id="main-wiz-custom-type" placeholder="Makinenizin Türünü Yazın (Örn: Sondaj Makinesi, Greyder...)" class="input-3d-dark" style="display: none; width: 100%; margin-top: 0.5rem; border: 1.5px solid #F59E0B;">
+                </div>
+
+                <div class="form-group-3d">
+                  <label for="main-wiz-title">İlan Başlığı *</label>
+                  <input type="text" id="main-wiz-title" placeholder="Örn: Kiralık Kepçe" required class="input-3d-dark">
+                </div>
+              </div>
+
+              <div class="form-3d-grid-2">
+                <div class="form-group-3d">
+                  <label for="main-wiz-hourly">Saatlik Ücret (TL) *</label>
+                  <input type="number" id="main-wiz-hourly" placeholder="Örn: 2500" required class="input-3d-dark">
+                </div>
+
+                <div class="form-group-3d">
+                  <label for="main-wiz-daily">Günlük Ücret (TL) *</label>
+                  <input type="number" id="main-wiz-daily" placeholder="Örn: 20000" required class="input-3d-dark">
+                </div>
+              </div>
+
+              <div style="display:flex; gap:0.75rem; margin-top:1.5rem;">
+                <button type="button" onclick="backToMainWizStep1()" class="btn-3d-secondary" style="flex:1;">
+                  ‹ Geri
+                </button>
+                <button type="submit" class="btn-3d-gold-action" style="flex:2;">
+                  <span>3. Adıma Geç (Fotoğraf) ›</span>
+                </button>
+              </div>
+            </form>
+
+            <!-- Step 3 Form -->
+            <form id="main-wiz-form-step3" onsubmit="completeMainWizardListing(event)" class="form-3d-step" style="display:none;">
+              <div class="form-3d-header">
+                <span class="icon-3d-step">📸</span>
+                <h3>3. Adım: İş Makinesi Fotoğrafı</h3>
+              </div>
+
+              <!-- Upload Area -->
+              <div class="dropzone-3d-box" onclick="triggerMainWizPhotoUpload(event)">
+                <input type="file" id="main-wiz-file" accept="image/*" style="display:none;" onchange="previewMainWizImage(event)">
+                <div id="main-wiz-prompt">
+                  <div class="icon-3d-camera">📷</div>
+                  <h4>Kepçenizin Fotoğrafını Ekleyin</h4>
+                  <p>Galeriden gerçek iş makinesi fotoğrafınızı seçin</p>
+                  <button type="button" class="btn-3d-upload-action">📁 Fotoğraf Seç</button>
+                </div>
+                <div id="main-wiz-preview-box" style="display:none;">
+                  <img id="main-wiz-preview-img" src="" alt="Önizleme">
+                  <button type="button" onclick="removeMainWizPhoto(event)" class="btn-3d-remove-photo">✕ Değiştir</button>
+                </div>
+              </div>
+
+              <div style="display:flex; gap:0.75rem; margin-top:1.5rem;">
+                <button type="button" onclick="backToMainWizStep2()" class="btn-3d-secondary" style="flex:1;">
+                  ‹ Geri
+                </button>
+                <button type="submit" class="btn-3d-emerald-action" style="flex:2;">
+                  <span>🎉 İlanı Yayına Al &amp; Üye Ol</span>
+                </button>
+              </div>
+            </form>
+
+          </div>
+
+          <!-- 3D LOGIN CONTAINER -->
+          <div id="main-login-container" class="card-3d-glass-container" style="display:none;">
+            <!-- Normal Login Form -->
+            <form id="main-quick-login-form" onsubmit="handleMainQuickLogin(event)" class="form-3d-step">
+              <div class="form-3d-header">
+                <span class="icon-3d-step">🔐</span>
+                <h3>Mevcut Üye Girişi</h3>
+              </div>
+              <div class="form-group-3d">
+                <label for="main-login-phone">Telefon Numaranız *</label>
+                <input type="tel" id="main-login-phone" placeholder="Örn: 0532 123 45 67" required class="input-3d-dark">
+              </div>
+              <div class="form-group-3d">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+                  <label for="main-login-password" style="margin:0;">Giriş Şifreniz *</label>
+                  <button type="button" onclick="showForgotPasswordForm()" style="background:none; border:none; color:#FCD34D; font-size:0.75rem; font-weight:700; cursor:pointer; padding:0; text-decoration:underline;">❓ Şifremi Unuttum</button>
+                </div>
+                <input type="password" id="main-login-password" placeholder="••••••••" required class="input-3d-dark">
+              </div>
+              <button type="submit" class="btn-3d-gold-action">
+                <span>Giriş Yap ›</span>
+              </button>
+            </form>
+
+            <!-- Forgot / Reset Password Form (Hidden by default) -->
+            <form id="main-forgot-password-form" onsubmit="handleResetPassword(event)" class="form-3d-step" style="display:none;">
+              <div class="form-3d-header">
+                <span class="icon-3d-step">🔑</span>
+                <h3>Şifre Sıfırlama &amp; Yenileme</h3>
+              </div>
+              <p style="font-size:0.78rem; color:#94A3B8; margin-bottom:0.85rem; line-height:1.4;">Kayıtlı telefon numaranızı ve belirlemek istediğiniz yeni şifrenizi giriniz.</p>
+              <div class="form-group-3d">
+                <label for="reset-phone">Kayıtlı Telefon Numaranız *</label>
+                <input type="tel" id="reset-phone" placeholder="Örn: 0532 123 45 67" required class="input-3d-dark">
+              </div>
+              <div class="form-group-3d">
+                <label for="reset-new-password">Yeni Şifreniz *</label>
+                <input type="password" id="reset-new-password" placeholder="Yeni şifrenizi girin" required class="input-3d-dark">
+              </div>
+              <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+                <button type="button" onclick="hideForgotPasswordForm()" class="btn-3d-secondary" style="flex:1;">‹ Geri Dön</button>
+                <button type="submit" class="btn-3d-emerald-action" style="flex:2;"><span>🔑 Şifremi Yenile &amp; Giriş Yap</span></button>
+              </div>
+            </form>
+          </div>
+
         </div>
 
       </section>
 
     </main>
 
+
+
   </div><!-- End main-app-content -->
 
   <!-- ==================== 3. BİZ KİMİZ MODAL ==================== -->
   <div id="about-modal" class="modal">
-    <div style="background: linear-gradient(160deg, rgba(15,23,42,0.97) 0%, rgba(30,58,95,0.97) 100%); max-width: 560px; width: 94%; max-height: 88vh; overflow-y: auto; border-radius: 22px; position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.08);">
+    <div style="background: linear-gradient(160deg, #0F172A 0%, #1E293B 100%); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); max-width: 520px; width: 92%; max-height: 90vh; overflow-y: auto; border-radius: 20px; position: relative; box-shadow: 0 30px 80px rgba(0,0,0,0.7); border: 1px solid rgba(245,158,11,0.3); color: #FFFFFF;">
 
-      <!-- Close button -->
-      <button onclick="closeAboutModal()" style="position: absolute; top: 0.9rem; right: 0.9rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.65); width: 30px; height: 30px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;">✕</button>
+      <!-- Modal Header with Close Button -->
+      <div style="position: sticky; top: 0; background: rgba(15,23,42,0.95); backdrop-filter: blur(12px); padding: 1.25rem 1.25rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; z-index: 10;">
+        <div>
+          <span style="background: rgba(245,158,11,0.18); color: #FCD34D; border: 1px solid rgba(245,158,11,0.3); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase;">Komisyonsuz İş Makinesi Platformu</span>
+          <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.35rem; font-weight: 800; color: #ffffff; margin: 0.3rem 0 0; line-height: 1.2;">
+            Biz Kimiz &amp; <span style="color: #F59E0B;">Ne İçin Varız?</span>
+          </h2>
+        </div>
+        <button onclick="closeAboutModal()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #CBD5E1; width: 32px; height: 32px; border-radius: 50%; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
+      </div>
 
-      <div style="padding: 1.5rem 1.5rem 1.5rem;">
-
-        <!-- Title -->
-        <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.45rem; font-weight: 700; color: #ffffff; margin: 0 0 0.25rem; line-height: 1.2;">
-          Biz Kimiz &amp;<br><span style="color: #F59E0B;">Ne İçin Varız?</span>
-        </h2>
-        <p style="font-size: 0.72rem; font-weight: 400; color: rgba(255,255,255,0.4); margin: 0 0 1.25rem;">Ağır Sanayide Aracısız · Dijital · Güvenilir</p>
+      <div style="padding: 1.25rem;">
+        <p style="font-size: 0.8rem; color: #94A3B8; margin: 0 0 1.25rem;">Ağır Sanayide Aracısız · Dijital · Güvenilir Platform</p>
 
         <!-- Q1 -->
-        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-left: 3px solid #F59E0B; border-radius: 12px; padding: 0.75rem 1rem; margin-bottom: 0.65rem;">
-          <div style="font-size: 0.75rem; font-weight: 700; color: #F59E0B; margin-bottom: 0.3rem;">Biz Kimiz?</div>
-          <p style="font-size: 0.73rem; font-weight: 400; color: rgba(255,255,255,0.6); line-height: 1.55; margin: 0;"><strong style="color:#fff; font-weight:600;">MakineBul.com</strong>; Türkiye'nin 81 ilinde iş makinesi arayan müteahhitler ile kepçe, ekskavatör, vinç ve kamyon sahiplerini <strong style="color:#FCD34D; font-weight:600;">aracısız, %0 komisyonla</strong> buluşturan bağımsız sanayi platformudur.</p>
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-left: 3.5px solid #F59E0B; border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 0.85rem;">
+          <div style="font-family: 'Poppins', sans-serif; font-size: 0.86rem; font-weight: 700; color: #F59E0B; margin-bottom: 0.35rem;">Biz Kimiz?</div>
+          <p style="font-size: 0.82rem; color: rgba(255,255,255,0.8); line-height: 1.6; margin: 0;"><strong style="color:#fff;">MakineBul.com</strong>; Türkiye'nin 81 ilinde iş makinesi arayan müteahhitler ile kepçe, ekskavatör, vinç ve kamyon sahiplerini <strong style="color:#FCD34D;">aracısız, %0 komisyonla</strong> buluşturan bağımsız sanayi platformudur.</p>
         </div>
 
         <!-- Q2 -->
-        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-left: 3px solid #60A5FA; border-radius: 12px; padding: 0.75rem 1rem; margin-bottom: 0.65rem;">
-          <div style="font-size: 0.75rem; font-weight: 700; color: #60A5FA; margin-bottom: 0.3rem;">Ne İçin Varız?</div>
-          <p style="font-size: 0.73rem; font-weight: 400; color: rgba(255,255,255,0.6); line-height: 1.55; margin: 0;">Sektördeki <strong style="color:#fff; font-weight:600;">komisyoncu ücretlerini, aracı bürokrasisini ve makine arama çilesini sonlandırmak</strong> için varız. Herkes en yakınındaki makine sahibine tek tıkla ulaşsın.</p>
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-left: 3.5px solid #60A5FA; border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 0.85rem;">
+          <div style="font-family: 'Poppins', sans-serif; font-size: 0.86rem; font-weight: 700; color: #60A5FA; margin-bottom: 0.35rem;">Ne İçin Varız?</div>
+          <p style="font-size: 0.82rem; color: rgba(255,255,255,0.8); line-height: 1.6; margin: 0;">Sektördeki <strong style="color:#fff;">komisyoncu ücretlerini, aracı bürokrasisini ve makine arama çilesini sonlandırmak</strong> için varız. Herkes en yakınındaki makine sahibine tek tıkla ulaşsın.</p>
         </div>
 
         <!-- Q3 -->
-        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-left: 3px solid #34D399; border-radius: 12px; padding: 0.75rem 1rem; margin-bottom: 1.1rem;">
-          <div style="font-size: 0.75rem; font-weight: 700; color: #34D399; margin-bottom: 0.4rem;">Neden Çalışıyoruz?</div>
-          <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-            <div style="font-size: 0.72rem; font-weight: 400; color: rgba(255,255,255,0.6); line-height: 1.5;"><span style="color:#F59E0B; font-weight:700;">› </span><strong style="color:rgba(255,255,255,0.85); font-weight:600;">Makine Sahipleri İçin:</strong> Makineler boşta beklemesin, her gün kesintisiz kazanç sağlasın.</div>
-            <div style="font-size: 0.72rem; font-weight: 400; color: rgba(255,255,255,0.6); line-height: 1.5;"><span style="color:#60A5FA; font-weight:700;">› </span><strong style="color:rgba(255,255,255,0.85); font-weight:600;">Kiralayanlar İçin:</strong> En yakın makine 1 dakikada şantiyeye ulaşsın, işler aksımasın.</div>
-            <div style="font-size: 0.72rem; font-weight: 400; color: rgba(255,255,255,0.6); line-height: 1.5;"><span style="color:#34D399; font-weight:700;">› </span><strong style="color:rgba(255,255,255,0.85); font-weight:600;">Türkiye İçin:</strong> Altyapı ve sanayi çarklarının maksimum verimle dönmesi için çalışıyoruz.</div>
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-left: 3.5px solid #34D399; border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 1.25rem;">
+          <div style="font-family: 'Poppins', sans-serif; font-size: 0.86rem; font-weight: 700; color: #34D399; margin-bottom: 0.5rem;">Neden Çalışıyoruz?</div>
+          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+            <div style="font-size: 0.81rem; color: rgba(255,255,255,0.75); line-height: 1.5;"><span style="color:#F59E0B; font-weight:700;">› </span><strong style="color:#fff;">Makine Sahipleri İçin:</strong> Makineler boşta beklemesin, her gün kesintisiz kazanç sağlasın.</div>
+            <div style="font-size: 0.81rem; color: rgba(255,255,255,0.75); line-height: 1.5;"><span style="color:#60A5FA; font-weight:700;">› </span><strong style="color:#fff;">Kiralayanlar İçin:</strong> En yakın makine 1 dakikada şantiyeye ulaşsın, işler aksımasın.</div>
+            <div style="font-size: 0.81rem; color: rgba(255,255,255,0.75); line-height: 1.5;"><span style="color:#34D399; font-weight:700;">› </span><strong style="color:#fff;">Türkiye İçin:</strong> Altyapı ve sanayi çarklarının maksimum verimle dönmesi için çalışıyoruz.</div>
           </div>
         </div>
 
-        <!-- Stats row — 2x2 grid, taşma yok -->
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
-          <div style="background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.22); border-radius: 10px; padding: 0.55rem 0.4rem; text-align: center;">
-            <div style="font-size: 0.95rem; font-weight: 700; color: #F59E0B;">%0</div>
-            <div style="font-size: 0.62rem; font-weight: 400; color: rgba(255,255,255,0.4); margin-top: 2px;">Komisyon</div>
+        <!-- Stats row (4 Grid Columns) -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1.25rem;">
+          <div style="background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 0.6rem 0.2rem; text-align: center;">
+            <div style="font-size: 1rem; font-weight: 800; color: #F59E0B;">%0</div>
+            <div style="font-size: 0.64rem; color: rgba(255,255,255,0.6); margin-top: 2px;">Komisyon</div>
           </div>
-          <div style="background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.18); border-radius: 10px; padding: 0.55rem 0.4rem; text-align: center;">
-            <div style="font-size: 0.95rem; font-weight: 700; color: #60A5FA;">81 İl</div>
-            <div style="font-size: 0.62rem; font-weight: 400; color: rgba(255,255,255,0.4); margin-top: 2px;">Kapsama</div>
+          <div style="background: rgba(96,165,250,0.1); border: 1px solid rgba(96,165,250,0.2); border-radius: 12px; padding: 0.6rem 0.2rem; text-align: center;">
+            <div style="font-size: 1rem; font-weight: 800; color: #60A5FA;">81 İl</div>
+            <div style="font-size: 0.64rem; color: rgba(255,255,255,0.6); margin-top: 2px;">Kapsama</div>
           </div>
-          <div style="background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.18); border-radius: 10px; padding: 0.55rem 0.4rem; text-align: center;">
-            <div style="font-size: 0.95rem; font-weight: 700; color: #34D399;">✓</div>
-            <div style="font-size: 0.62rem; font-weight: 400; color: rgba(255,255,255,0.4); margin-top: 2px;">Doğrudan</div>
+          <div style="background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); border-radius: 12px; padding: 0.6rem 0.2rem; text-align: center;">
+            <div style="font-size: 1rem; font-weight: 800; color: #34D399;">✓</div>
+            <div style="font-size: 0.64rem; color: rgba(255,255,255,0.6); margin-top: 2px;">Doğrudan</div>
           </div>
-          <div style="background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.18); border-radius: 10px; padding: 0.55rem 0.4rem; text-align: center;">
-            <div style="font-size: 0.95rem; font-weight: 700; color: #A78BFA;">Ücretsiz</div>
-            <div style="font-size: 0.62rem; font-weight: 400; color: rgba(255,255,255,0.4); margin-top: 2px;">İlan Ver</div>
+          <div style="background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.2); border-radius: 12px; padding: 0.6rem 0.2rem; text-align: center;">
+            <div style="font-size: 1rem; font-weight: 800; color: #A78BFA;">Ücretsiz</div>
+            <div style="font-size: 0.64rem; color: rgba(255,255,255,0.6); margin-top: 2px;">İlan</div>
           </div>
-        </div>
+        </div><!-- Properly closed grid div! -->
 
-        <!-- CTA -->
-        <button onclick="closeAboutModal(); enterMainApp('rent');" style="width: 100%; padding: 0.75rem; background: linear-gradient(135deg, #F59E0B, #D97706); color: #1F2937; font-weight: 700; font-family: 'Poppins', sans-serif; font-size: 0.85rem; border-radius: 12px; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(245,158,11,0.30);">
+        <!-- CTA Full-Width Button -->
+        <button onclick="closeAboutModal()" style="width: 100%; padding: 0.85rem; background: linear-gradient(135deg, #F59E0B, #D97706); color: #0F172A; font-weight: 800; font-family: 'Poppins', sans-serif; font-size: 0.92rem; border-radius: 12px; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(245,158,11,0.4); display: block;">
           Makineleri İncelemeye Başla
         </button>
 
@@ -390,69 +633,226 @@
     </div>
   </div><!-- End about-modal -->
 
-  <!-- User Authentication / Registration Modal -->
+  <!-- ==================== 4. 3-STEP MACHINE OWNER ONBOARDING WIZARD MODAL ==================== -->
   <div id="auth-modal" class="modal">
-    <div class="modal-content card" style="max-width: 440px; width: 92%; padding: 1.5rem; background: #0F172A; border: 1px solid rgba(245,158,11,0.3); border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); color: #F8FAFC;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
+    <div class="modal-content card" style="max-width: 520px; width: 100%; margin: 1rem auto 4rem auto; padding: 1.25rem 1rem; background: #0F172A; border: 1px solid rgba(245,158,11,0.4); border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.7); color: #F8FAFC; position: relative;">
+      
+      <!-- Top Modal Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <span style="font-size: 1.4rem;">🔐</span>
-          <h3 id="auth-modal-title" style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin: 0;">Üyelik &amp; SMS Doğrulama</h3>
+          <span style="font-size: 1.4rem;">🚜</span>
+          <div>
+            <h3 id="auth-modal-title" style="font-size: 1.1rem; font-weight: 800; color: #FFFFFF; margin: 0;">Makine Sahibi Kayıt &amp; İlan Sihirbazı</h3>
+            <p style="font-size: 0.72rem; color: #94A3B8; margin: 0;">3 Adımda İlanınızı Yayına Alın</p>
+          </div>
         </div>
         <button type="button" onclick="closeAuthModal()" style="background: rgba(255,255,255,0.1); border: none; font-size: 1.1rem; font-weight: 700; cursor: pointer; color: #94A3B8; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">✕</button>
       </div>
 
-      <!-- Step 1: User Info Form -->
-      <form id="auth-form-step1" onsubmit="handleUserAuthStep1(event)">
-        <p style="font-size: 0.82rem; color: #94A3B8; margin-bottom: 1.25rem; line-height: 1.4;">
-          Makinelerinizi listeleyebilmek ve alıcıların size kolayca ulaşması için lütfen bilgilerinizi giriniz.
+      <!-- Auth Mode Switcher Header -->
+      <div style="display: flex; gap: 0.4rem; margin-bottom: 0.85rem; background: rgba(30,41,59,0.9); padding: 0.3rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+        <button type="button" id="auth-tab-register" onclick="switchAuthTab('register')" style="flex: 1; padding: 0.45rem; background: rgba(245,158,11,0.25); border: 1px solid #F59E0B; color: #F59E0B; font-weight: 700; font-size: 0.76rem; border-radius: 8px; cursor: pointer;">
+          🚜 Yeni Makine Sahibi Kaydı
+        </button>
+        <button type="button" id="auth-tab-login" onclick="switchAuthTab('login')" style="flex: 1; padding: 0.45rem; background: transparent; border: 1px solid transparent; color: #94A3B8; font-weight: 700; font-size: 0.76rem; border-radius: 8px; cursor: pointer;">
+          🔐 Mevcut Üye Girişi
+        </button>
+      </div>
+
+      <!-- ================= MEVCUT ÜYE GİRİŞ FORMU ================= -->
+      <form id="auth-login-form" style="display: none;" onsubmit="handleQuickLogin(event)">
+        <p style="font-size: 0.8rem; color: #94A3B8; margin-bottom: 1rem;">
+          🔐 Telefon numaranız ve şifreniz ile hızlıca giriş yapın.
         </p>
 
         <div class="form-group" style="margin-bottom: 0.85rem;">
-          <label for="auth-name" style="font-size: 0.84rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Adınız Soyadınız *</label>
-          <input type="text" id="auth-name" placeholder="Örn: Ahmet Yılmaz" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
-        </div>
-
-        <div class="form-group" style="margin-bottom: 0.85rem;">
-          <label for="auth-company" style="font-size: 0.84rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Firma Adı <span style="font-weight:400; color:#94A3B8; font-size:0.75rem;">(Opsiyonel)</span></label>
-          <input type="text" id="auth-company" placeholder="Örn: Yılmaz Hafriyat Ltd." style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
-        </div>
-
-        <div class="form-group" style="margin-bottom: 1rem;">
-          <label for="auth-phone" style="font-size: 0.84rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.35rem;">Telefon Numaranız (WhatsApp) *</label>
-          <input type="tel" id="auth-phone" placeholder="0532 123 45 67" required style="width: 100%; padding: 0.75rem 0.9rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.9rem; color: #FFFFFF; outline: none;">
+          <label for="login-phone" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Telefon Numaranız *</label>
+          <input type="tel" id="login-phone" placeholder="Örn: 0532 123 45 67" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
         </div>
 
         <div class="form-group" style="margin-bottom: 1.25rem;">
-          <label for="auth-city" style="font-size: 0.84rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.35rem;">Bulunduğunuz Şehir *</label>
-          <select id="auth-city" required style="width: 100%; padding: 0.75rem 0.9rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.9rem; color: #FFFFFF; outline: none;">
-          </select>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.3rem;">
+            <label for="login-password" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; margin: 0;">Şifreniz *</label>
+            <button type="button" onclick="showModalForgotPasswordForm()" style="background:none; border:none; color:#FCD34D; font-size:0.75rem; font-weight:700; cursor:pointer; padding:0; text-decoration:underline;">❓ Şifremi Unuttum</button>
+          </div>
+          <input type="password" id="login-password" placeholder="••••••••" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
         </div>
 
-        <button type="submit" style="width: 100%; padding: 0.85rem; background: linear-gradient(135deg, #F59E0B, #D97706); border: none; color: #0F172A; font-weight: 800; font-size: 0.95rem; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245,158,11,0.35);">
-          SMS Doğrulama Koduna Geç ›
+        <button type="submit" style="width: 100%; padding: 0.85rem; background: linear-gradient(135deg, #F59E0B, #D97706); border: none; color: #0F172A; font-weight: 800; font-size: 0.92rem; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245,158,11,0.35);">
+          Giriş Yap ›
         </button>
       </form>
 
-      <!-- Step 2: SMS Verification Code (OTP) Form -->
-      <form id="auth-form-step2" onsubmit="handleUserAuthStep2(event)" style="display: none;">
-        <p style="font-size: 0.84rem; color: #F59E0B; margin-bottom: 1rem; line-height: 1.4; background: rgba(245,158,11,0.1); padding: 0.75rem; border-radius: 10px; border: 1px solid rgba(245,158,11,0.25);">
-          📱 <span id="auth-target-phone">0532 ...</span> numaranıza SMS onay kodu gönderildi.
+      <!-- Modal Forgot Password Form (Hidden by default) -->
+      <form id="modal-forgot-password-form" style="display: none;" onsubmit="handleResetPassword(event)">
+        <p style="font-size: 0.8rem; color: #94A3B8; margin-bottom: 1rem;">
+          🔑 Kayıtlı telefon numaranızı ve yeni şifrenizi girerek şifrenizi anında yenileyebilirsiniz.
         </p>
 
+        <div class="form-group" style="margin-bottom: 0.85rem;">
+          <label for="modal-reset-phone" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Telefon Numaranız *</label>
+          <input type="tel" id="modal-reset-phone" placeholder="Örn: 0532 123 45 67" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+        </div>
+
         <div class="form-group" style="margin-bottom: 1.25rem;">
-          <label for="auth-sms-code" style="font-size: 0.84rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.35rem;">6 Haneli SMS Doğrulama Kodu *</label>
-          <input type="number" id="auth-sms-code" placeholder="Örn: 213091" value="213091" style="width: 100%; padding: 0.85rem; background: #1E293B; border: 1.5px solid #F59E0B; border-radius: 10px; font-size: 1.25rem; font-weight: 800; color: #F59E0B; text-align: center; letter-spacing: 0.2em; outline: none;">
+          <label for="modal-reset-new-password" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Yeni Şifreniz *</label>
+          <input type="password" id="modal-reset-new-password" placeholder="Yeni şifrenizi girin" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
         </div>
 
         <div style="display: flex; gap: 0.5rem;">
-          <button type="button" onclick="backToAuthStep1()" style="flex: 1; padding: 0.8rem; background: #334155; border: none; color: #FFFFFF; font-weight: 700; font-size: 0.85rem; border-radius: 10px; cursor: pointer;">
-            ‹ Geri
-          </button>
-          <button type="submit" style="flex: 2; padding: 0.8rem; background: linear-gradient(135deg, #10B981, #059669); border: none; color: #FFFFFF; font-weight: 800; font-size: 0.9rem; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 14px rgba(16,185,129,0.35);">
-            ✓ Kod İle Doğrula
+          <button type="button" onclick="hideModalForgotPasswordForm()" class="btn-3d-secondary" style="flex: 1; padding: 0.75rem; border-radius: 10px; font-size: 0.85rem;">‹ Geri</button>
+          <button type="submit" style="flex: 2; padding: 0.75rem; background: linear-gradient(135deg, #10B981, #059669); border: none; color: #FFFFFF; font-weight: 800; font-size: 0.88rem; border-radius: 10px; cursor: pointer;">
+            🔑 Şifremi Yenile &amp; Giriş
           </button>
         </div>
       </form>
+
+      <!-- Step Progress Bar -->
+      <div id="wizard-steps-bar" class="wizard-steps-bar" style="display: flex; justify-content: space-between; margin-bottom: 1.25rem; background: rgba(30,41,59,0.8); padding: 0.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+        <div id="wiz-step-pill-1" class="wiz-step-pill active" style="flex: 1; text-align: center; font-size: 0.73rem; font-weight: 700; padding: 0.35rem 0.2rem; border-radius: 8px; color: #F59E0B; background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4);">
+          1. Üyelik &amp; Şifre
+        </div>
+        <div id="wiz-step-pill-2" class="wiz-step-pill" style="flex: 1; text-align: center; font-size: 0.73rem; font-weight: 700; padding: 0.35rem 0.2rem; border-radius: 8px; color: #64748B;">
+          2. Hizmet &amp; Ücret
+        </div>
+        <div id="wiz-step-pill-3" class="wiz-step-pill" style="flex: 1; text-align: center; font-size: 0.73rem; font-weight: 700; padding: 0.35rem 0.2rem; border-radius: 8px; color: #64748B;">
+          3. Kepçe Fotoğrafı
+        </div>
+      </div>
+
+      <!-- ================= ADIM 1: KİŞİSEL & ÜYELİK BİLGİLERİ ================= -->
+      <form id="auth-form-step1" onsubmit="goToWizardStep2(event)">
+        <p style="font-size: 0.8rem; color: #94A3B8; margin-bottom: 1rem;">
+          🔑 <strong>1. Adım:</strong> Adınız, şifreniz ve iletişim bilgileriniz.
+        </p>
+
+        <div class="form-group" style="margin-bottom: 0.85rem;">
+          <label for="auth-name" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Adınız Soyadınız *</label>
+          <input type="text" id="auth-name" placeholder="Örn: Yakup Kartal" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0.85rem;">
+          <label for="auth-company" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Firma Adı <span style="font-weight:400; color:#94A3B8; font-size:0.75rem;">(Opsiyonel)</span></label>
+          <input type="text" id="auth-company" placeholder="Örn: Bey Hafriyat Ltd." style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.85rem;">
+          <div class="form-group">
+            <label for="auth-password" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Şifreniz *</label>
+            <input type="password" id="auth-password" placeholder="••••••••" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+          </div>
+          <div class="form-group">
+            <label for="auth-phone" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Telefon (WhatsApp) *</label>
+            <input type="tel" id="auth-phone" placeholder="0532 123 45 67" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.25rem;">
+          <div class="form-group">
+            <label for="auth-city" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Bulunduğunuz Şehir *</label>
+            <select id="auth-city" required onchange="handleAuthCityChange(this.value)" style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="auth-district" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Bulunduğunuz İlçe *</label>
+            <select id="auth-district" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+              <option value="Merkez">Merkez</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 0.85rem; background: linear-gradient(135deg, #F59E0B, #D97706); border: none; color: #0F172A; font-weight: 800; font-size: 0.92rem; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245,158,11,0.35);">
+          İlerle: Hizmet &amp; Ücret Bilgisine Geç ›
+        </button>
+      </form>
+
+
+      <!-- ================= ADIM 2: HİZMET BÖLGESİ & ÜCRET BİLGİSİ ================= -->
+      <form id="auth-form-step2" style="display: none;" onsubmit="goToWizardStep3(event)">
+        <p style="font-size: 0.8rem; color: #94A3B8; margin-bottom: 1rem;">
+          📍 <strong>2. Adım:</strong> Kepçenizin türü, çalıştığınız il/ilçe ve kiralama ücretleri.
+        </p>
+
+        <div class="form-group" style="margin-bottom: 0.85rem;">
+          <label for="wiz-machine-type" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Makine / Kepçe Türü *</label>
+          <select id="wiz-machine-type" required onchange="handleMachineTypeChange('wiz-machine-type', 'modal-wiz-custom-type')" style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+            <option value="JCB Beko Loder Kepçe">JCB Beko Loder Kepçe</option>
+            <option value="Paletli Ekskavatör">Paletli Ekskavatör</option>
+            <option value="Lastikli Ekskavatör">Lastikli Ekskavatör</option>
+            <option value="Mini Ekskavatör / Kepçe">Mini Ekskavatör / Kepçe</option>
+            <option value="Bobcat Mini Yükleyici">Bobcat Mini Yükleyici</option>
+            <option value="Hafriyat Kamyonu">Hafriyat Kamyonu</option>
+            <option value="Manitou Telehandler">Manitou Telehandler</option>
+            <option value="Mobil / Kule Vinç">Mobil / Kule Vinç</option>
+            <option value="Dozer / Greyder / Silindir">Dozer / Greyder / Silindir</option>
+            <option value="Forklift">Forklift</option>
+            <option value="Diğer">+ Farklı Bir Makine Yaz</option>
+          </select>
+          <input type="text" id="modal-wiz-custom-type" placeholder="Makinenizin Türünü Yazın (Örn: Greyder, Silindir...)" style="display: none; width: 100%; margin-top: 0.5rem; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #F59E0B; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0.85rem;">
+          <label for="wiz-listing-title" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">İlan Başlığı / Model *</label>
+          <input type="text" id="wiz-listing-title" placeholder="Örn: Kiralık Kepçe" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.85rem;">
+          <div class="form-group">
+            <label for="wiz-hourly-price" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Saatlik Ücret (TL) *</label>
+            <input type="number" id="wiz-hourly-price" placeholder="Örn: 500" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+          </div>
+          <div class="form-group">
+            <label for="wiz-daily-price" style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.3rem;">Günlük Ücret (TL) *</label>
+            <input type="number" id="wiz-daily-price" placeholder="Örn: 4000" required style="width: 100%; padding: 0.7rem 0.85rem; background: #1E293B; border: 1.5px solid #334155; border-radius: 10px; font-size: 0.88rem; color: #FFFFFF; outline: none;">
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.6rem; margin-top: 1rem;">
+          <button type="button" onclick="backToWizardStep1()" style="flex: 1; padding: 0.8rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #CBD5E1; font-weight: 700; font-size: 0.85rem; border-radius: 12px; cursor: pointer;">
+            ‹ Geri
+          </button>
+          <button type="submit" style="flex: 2; padding: 0.8rem; background: linear-gradient(135deg, #F59E0B, #D97706); border: none; color: #0F172A; font-weight: 800; font-size: 0.9rem; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(245,158,11,0.35);">
+            İlerle: Fotoğraf Yüklemeye Geç ›
+          </button>
+        </div>
+      </form>
+
+
+      <!-- ================= ADIM 3: KEPÇE FOTOĞRAFLARI & TAMAMLAMA ================= -->
+      <form id="auth-form-step3" style="display: none;" onsubmit="completeWizardListing(event)">
+        <p style="font-size: 0.8rem; color: #94A3B8; margin-bottom: 1rem;">
+          📸 <strong>3. Adım:</strong> Kepçenizin fotoğrafını yükleyin ve ilanı yayına alın.
+        </p>
+
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label style="font-size: 0.83rem; font-weight: 600; color: #CBD5E1; display: block; margin-bottom: 0.4rem;">Kepçe Fotoğrafı <span style="font-weight:400; color:#94A3B8; font-size:0.75rem;">(Opsiyonel)</span></label>
+          
+          <div class="custom-file-dropzone-compact" onclick="document.getElementById('wiz-photo-file').click()" style="background: #1E293B; border: 2px dashed rgba(245,158,11,0.4); border-radius: 14px; padding: 1.25rem; text-align: center; cursor: pointer;">
+            <input type="file" id="wiz-photo-file" accept="image/*" class="file-upload-input-hidden" onchange="previewWizPhoto(event)" style="display: none;">
+            
+            <div id="wiz-dropzone-prompt" style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
+              <span style="font-size: 1.8rem;">📸</span>
+              <span style="font-weight: 700; font-size: 0.86rem; color: #F59E0B;">Fotoğraf Yüklemek İçin Dokunun</span>
+              <span style="font-size: 0.74rem; color: #94A3B8;">Galeriden kepçenizin net bir fotoğrafını seçebilirsiniz.</span>
+            </div>
+
+            <div id="wiz-image-preview-container" style="display: none; flex-direction: column; align-items: center; gap: 0.5rem;">
+              <img id="wiz-image-preview-img" src="" alt="Kepçe Önizleme" style="max-height: 140px; border-radius: 10px; border: 1.5px solid #F59E0B;">
+              <span style="font-size: 0.78rem; color: #10B981; font-weight: 700;">✓ Fotoğraf Başarıyla Yüklendi</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.6rem; margin-top: 1rem;">
+          <button type="button" onclick="backToWizardStep2()" style="flex: 1; padding: 0.85rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #CBD5E1; font-weight: 700; font-size: 0.85rem; border-radius: 12px; cursor: pointer;">
+            ‹ Geri
+          </button>
+          <button type="submit" style="flex: 2; padding: 0.85rem; background: linear-gradient(135deg, #10B981, #059669); border: none; color: #FFFFFF; font-weight: 800; font-size: 0.95rem; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 16px rgba(16,185,129,0.4);">
+            🎉 İlanı Yayına Al &amp; Üye Ol
+          </button>
+        </div>
+      </form>
+
     </div>
   </div>
 

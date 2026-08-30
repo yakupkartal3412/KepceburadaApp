@@ -472,9 +472,445 @@ function populateCitySelect(id) {
   }
 }
 
+// District Dropdown Helpers
+function handleFastCityChange(city) {
+  const districtEl = document.getElementById("fast-reg-district");
+  if (!districtEl) return;
+  const districts = TURKEY_CITIES[city] || ["Merkez"];
+  districtEl.innerHTML = districts.map(d => `<option value="${d}">${d}</option>`).join('');
+}
+
+function handleMainRegCityChange(city) {
+  const districtEl = document.getElementById("main-reg-district");
+  if (!districtEl) return;
+  const districts = TURKEY_CITIES[city] || ["Merkez"];
+  districtEl.innerHTML = districts.map(d => `<option value="${d}">${d}</option>`).join('');
+}
+
+function handleAuthCityChange(city) {
+  const districtEl = document.getElementById("auth-district");
+  if (!districtEl) return;
+  const districts = TURKEY_CITIES[city] || ["Merkez"];
+  districtEl.innerHTML = districts.map(d => `<option value="${d}">${d}</option>`).join('');
+}
+
+let mainPendingAuthData = {};
+let mainWizPhotoDataUrl = "";
+
+function switchMainAuthTab(tab) {
+  try {
+    populateCitySelect("main-reg-city");
+    const firstCity = document.getElementById("main-reg-city") ? document.getElementById("main-reg-city").value : "";
+    if (firstCity) handleMainRegCityChange(firstCity);
+  } catch(e) {}
+
+  const wizTab = document.getElementById("main-tab-wiz");
+  const loginTab = document.getElementById("main-tab-login");
+  const wizContainer = document.getElementById("main-wiz-container");
+  const loginContainer = document.getElementById("main-login-container");
+
+  if (tab === 'login') {
+    if (wizTab) wizTab.classList.remove("active");
+    if (loginTab) loginTab.classList.add("active");
+    if (wizContainer) wizContainer.style.display = "none";
+    if (loginContainer) loginContainer.style.display = "block";
+  } else {
+    if (loginTab) loginTab.classList.remove("active");
+    if (wizTab) wizTab.classList.add("active");
+    if (loginContainer) loginContainer.style.display = "none";
+    if (wizContainer) wizContainer.style.display = "block";
+    backToMainWizStep1();
+  }
+}
+
+function updateMainWizPills(stepNum) {
+  for (let i = 1; i <= 3; i++) {
+    const pill = document.getElementById(`main-step-pill-${i}`);
+    if (!pill) continue;
+    if (i === stepNum) {
+      pill.classList.add("active");
+    } else {
+      pill.classList.remove("active");
+    }
+  }
+}
+
+function handleMainWizStep1(event) {
+  event.preventDefault();
+  const name = document.getElementById("main-reg-name").value.trim();
+  const company = document.getElementById("main-reg-company") ? document.getElementById("main-reg-company").value.trim() : "";
+  const password = document.getElementById("main-reg-password").value.trim();
+  const phone = document.getElementById("main-reg-phone").value.trim();
+  const city = document.getElementById("main-reg-city").value;
+  const district = (document.getElementById("main-reg-district") ? document.getElementById("main-reg-district").value : "") || "Merkez";
+
+  if (!name || !password || !phone || !city) {
+    showToast("⚠️ Lütfen 1. Adımdaki tüm zorunlu alanları doldurunuz.");
+    return;
+  }
+
+  mainPendingAuthData = { name, company, password, phone, city, district };
+
+  document.getElementById("main-wiz-form-step1").style.display = "none";
+  document.getElementById("main-wiz-form-step2").style.display = "block";
+  document.getElementById("main-wiz-form-step3").style.display = "none";
+  updateMainWizPills(2);
+
+  const titleInput = document.getElementById("main-reg-title");
+  if (titleInput && !titleInput.value) {
+    const brandName = company || name;
+    titleInput.value = `${brandName} - Kiralık Kepçe`;
+  }
+}
+
+function backToMainWizStep1() {
+  document.getElementById("main-wiz-form-step1").style.display = "block";
+  document.getElementById("main-wiz-form-step2").style.display = "none";
+  document.getElementById("main-wiz-form-step3").style.display = "none";
+  updateMainWizPills(1);
+}
+
+function handleMainWizStep2(event) {
+  event.preventDefault();
+  const typeEl = document.getElementById("main-wiz-type") || document.getElementById("main-reg-type");
+  let type = typeEl ? typeEl.value : "JCB Beko Loder Kepçe";
+  const customInput = document.getElementById("main-wiz-custom-type");
+  if ((type === 'Diğer' || type.includes('Farklı')) && customInput && customInput.value.trim()) {
+    type = customInput.value.trim();
+  }
+
+  const title = (document.getElementById("main-wiz-title") || document.getElementById("main-reg-title")).value.trim();
+  const hourlyPrice = parseFloat((document.getElementById("main-wiz-hourly") || document.getElementById("main-reg-hourly")).value) || 0;
+  const dailyPrice = parseFloat((document.getElementById("main-wiz-daily") || document.getElementById("main-reg-daily")).value) || 0;
+
+  if (!title || !hourlyPrice || !dailyPrice) {
+    showToast("⚠️ Lütfen 2. Adımdaki makine ve ücret bilgilerini doldurunuz.");
+    return;
+  }
+
+  mainPendingAuthData.type = type;
+  mainPendingAuthData.title = title;
+  mainPendingAuthData.hourlyPrice = hourlyPrice;
+  mainPendingAuthData.dailyPrice = dailyPrice;
+
+  document.getElementById("main-wiz-form-step1").style.display = "none";
+  document.getElementById("main-wiz-form-step2").style.display = "none";
+  document.getElementById("main-wiz-form-step3").style.display = "block";
+  updateMainWizPills(3);
+}
+
+function backToMainWizStep2() {
+  document.getElementById("main-wiz-form-step1").style.display = "none";
+  document.getElementById("main-wiz-form-step2").style.display = "block";
+  document.getElementById("main-wiz-form-step3").style.display = "none";
+  updateMainWizPills(2);
+}
+
+function previewMainWizPhoto(event) {
+  const file = event.target && event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement("canvas");
+      let width = img.width;
+      let height = img.height;
+      const MAX_SIZE = 800;
+      if (width > height) {
+        if (width > MAX_SIZE) {
+          height = Math.round((height * MAX_SIZE) / width);
+          width = MAX_SIZE;
+        }
+      } else {
+        if (height > MAX_SIZE) {
+          width = Math.round((width * MAX_SIZE) / height);
+          height = MAX_SIZE;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      mainWizPhotoDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+
+      const promptBox = document.getElementById("main-wiz-prompt");
+      const container = document.getElementById("main-wiz-preview-box");
+      const imgEl = document.getElementById("main-wiz-preview-img");
+
+      if (imgEl) imgEl.src = mainWizPhotoDataUrl;
+      if (promptBox) promptBox.style.display = "none";
+      if (container) container.style.display = "block";
+      showToast("📸 Kepçe fotoğrafı yüklendi!");
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleMainWizStep3(event) {
+  if (event) event.preventDefault();
+
+  if (!mainPendingAuthData) {
+    mainPendingAuthData = {
+      name: "Makine Sahibi",
+      company: "",
+      phone: "0532 000 00 00",
+      city: userCurrentCity || "İstanbul",
+      password: "123",
+      type: "Beko Loder (JCB)",
+      title: "Kiralık Beko Loder",
+      hourlyPrice: 1500,
+      dailyPrice: 10000
+    };
+  }
+
+  const name = mainPendingAuthData.name || "Makine Sahibi";
+  const company = mainPendingAuthData.company || "";
+  const displayName = company ? `${name} (${company})` : name;
+
+  // 1. Create User Account
+  currentUser = {
+    name: name,
+    company: company,
+    displayName: displayName,
+    phone: mainPendingAuthData.phone || "",
+    city: mainPendingAuthData.city || userCurrentCity || "İstanbul",
+    password: mainPendingAuthData.password || "123",
+    verifiedCode: "213091",
+    createdAt: new Date().toISOString()
+  };
+
+  localStorage.setItem("makinebul_current_user", JSON.stringify(currentUser));
+
+  // 2. Select Machine Image
+  let image = mainWizPhotoDataUrl;
+  if (!image) {
+    const machineType = mainPendingAuthData.type || "Beko Loder (JCB)";
+    image = machineType.includes("Beko") || machineType.includes("JCB")
+      ? "assets/backhoe_loader.png" 
+      : machineType.includes("Mini") 
+      ? "assets/mini_excavator.png" 
+      : machineType.includes("Bobcat")
+      ? "assets/bobcat.png"
+      : machineType.includes("Manitou")
+      ? "assets/manitou.png"
+      : machineType.includes("Kamyon")
+      ? "assets/dump_truck.png"
+      : "assets/excavator1.png";
+  }
+
+  // 3. Create Listing
+  const newListing = {
+    id: "kepce-" + Date.now(),
+    title: mainPendingAuthData.title || "Kiralık İş Makinesi",
+    type: mainPendingAuthData.type || "Beko Loder (JCB)",
+    city: mainPendingAuthData.city || userCurrentCity || "İstanbul",
+    district: mainPendingAuthData.district || "Merkez",
+    price: mainPendingAuthData.dailyPrice || 10000,
+    hourlyPrice: mainPendingAuthData.hourlyPrice || 1500,
+    period: "Günlük",
+    operator: "Operatörlü",
+    specs: "Kiralık İş Makinesi",
+    phone: mainPendingAuthData.phone || "0532 000 00 00",
+    owner: displayName,
+    image: image,
+    status: "available",
+    isMyListing: true,
+    createdAt: new Date().toISOString()
+  };
+
+  listings.unshift(newListing);
+  saveListings();
+
+  // Reset Photo Preview
+  mainWizPhotoDataUrl = "";
+
+  backToMainWizStep1();
+  renderUserBadge();
+  renderListings();
+  renderMyListings();
+
+  showToast("🎉 Üyeliğiniz oluşturuldu ve kepçe ilanınız başarıyla yayınlandı!");
+
+  enterMainApp('rent');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showForgotPasswordForm() {
+  const loginForm = document.getElementById("main-quick-login-form");
+  const forgotForm = document.getElementById("main-forgot-password-form");
+  if (loginForm) loginForm.style.display = "none";
+  if (forgotForm) forgotForm.style.display = "block";
+}
+
+function hideForgotPasswordForm() {
+  const loginForm = document.getElementById("main-quick-login-form");
+  const forgotForm = document.getElementById("main-forgot-password-form");
+  if (loginForm) loginForm.style.display = "block";
+  if (forgotForm) forgotForm.style.display = "none";
+}
+
+function showModalForgotPasswordForm() {
+  const loginForm = document.getElementById("auth-login-form");
+  const forgotForm = document.getElementById("modal-forgot-password-form");
+  if (loginForm) loginForm.style.display = "none";
+  if (forgotForm) forgotForm.style.display = "block";
+}
+
+function hideModalForgotPasswordForm() {
+  const loginForm = document.getElementById("auth-login-form");
+  const forgotForm = document.getElementById("modal-forgot-password-form");
+  if (loginForm) loginForm.style.display = "block";
+  if (forgotForm) forgotForm.style.display = "none";
+}
+
+function handleResetPassword(event) {
+  if (event) event.preventDefault();
+  const phoneEl = document.getElementById("reset-phone") || document.getElementById("modal-reset-phone");
+  const newPassEl = document.getElementById("reset-new-password") || document.getElementById("modal-reset-new-password");
+
+  const phone = phoneEl ? phoneEl.value.trim() : "";
+  const newPass = newPassEl ? newPassEl.value.trim() : "";
+
+  if (!phone || !newPass) {
+    showToast("⚠️ Lütfen telefon numaranızı ve yeni şifrenizi giriniz.");
+    return;
+  }
+
+  const cleanPhone = phone.replace(/\D/g, '');
+  
+  let user = null;
+  const storedUser = localStorage.getItem("makinebul_current_user");
+  if (storedUser) {
+    try {
+      user = JSON.parse(storedUser);
+    } catch(e) {}
+  }
+
+  if (!user) {
+    const userListing = listings.find(i => i.phone && i.phone.replace(/\D/g, '').endsWith(cleanPhone.slice(-7)));
+    const ownerName = userListing ? userListing.owner : "Yakup Kartal (Bey Hafriyat)";
+    user = {
+      name: ownerName,
+      displayName: ownerName,
+      company: "Bey Hafriyat",
+      phone: phone,
+      city: userListing ? userListing.city : "Bingöl",
+      createdAt: new Date().toISOString()
+    };
+  }
+
+  user.password = newPass;
+  user.phone = phone;
+  currentUser = user;
+  localStorage.setItem("makinebul_current_user", JSON.stringify(currentUser));
+
+  showToast("🎉 Şifreniz başarıyla yenilendi ve giriş yapıldı!");
+  
+  hideForgotPasswordForm();
+  hideModalForgotPasswordForm();
+  closeAuthModal();
+  updateLoggedInDashboardUI();
+  renderUserBadge();
+  renderListings();
+  renderMyListings();
+  switchMode('list');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Clean Phone Formatter
+function formatCleanPhoneNumber(phone) {
+  if (!phone) return "";
+  const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.length === 11 && cleaned.startsWith('0')) {
+    return `${cleaned.slice(0,4)} ${cleaned.slice(4,7)} ${cleaned.slice(7,9)} ${cleaned.slice(9,11)}`;
+  } else if (cleaned.length === 10) {
+    return `0${cleaned.slice(0,3)} ${cleaned.slice(3,6)} ${cleaned.slice(6,8)} ${cleaned.slice(8,10)}`;
+  }
+  return phone;
+}
+
+// User Badge & Header Profile Controller
+function renderUserBadge() {
+  const badge = document.getElementById("header-user-badge");
+  const userNameEl = document.getElementById("header-user-name");
+  const authModalBtn = document.getElementById("btn-open-auth-modal");
+  
+  if (currentUser && currentUser.name) {
+    if (badge) badge.style.display = "flex";
+    if (userNameEl) userNameEl.textContent = currentUser.name;
+    if (authModalBtn) authModalBtn.style.display = "none";
+  } else {
+    if (badge) badge.style.display = "none";
+    if (authModalBtn) authModalBtn.style.display = "inline-flex";
+  }
+}
+
+function handleMainQuickLogin(event) {
+  if (event) event.preventDefault();
+  const phone = document.getElementById("main-login-phone").value.trim();
+  const password = document.getElementById("main-login-password") ? document.getElementById("main-login-password").value.trim() : "";
+
+  if (!phone) {
+    showToast("⚠️ Lütfen telefon numaranızı giriniz.");
+    return;
+  }
+
+  // Restore saved user if found, or create logged-in user profile
+  let foundUser = null;
+  try {
+    const saved = localStorage.getItem("makinebul_current_user");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.name) foundUser = parsed;
+    }
+  } catch(e) {}
+
+  if (foundUser) {
+    currentUser = foundUser;
+    if (phone) currentUser.phone = phone;
+    if (password) currentUser.password = password;
+  } else {
+    currentUser = {
+      name: "Yakup Kartal",
+      company: "Bey Hafriyat",
+      displayName: "Yakup Kartal (Bey Hafriyat)",
+      phone: phone,
+      city: userCurrentCity || "Bingöl",
+      password: password,
+      verifiedCode: "213091",
+      createdAt: new Date().toISOString()
+    };
+  }
+
+  localStorage.setItem("makinebul_current_user", JSON.stringify(currentUser));
+
+  try { renderUserBadge(); } catch(e) {}
+  try { updateLoggedInDashboardUI(); } catch(e) {}
+  try { renderMyListings(); } catch(e) {}
+  try { renderListings(); } catch(e) {}
+
+  showToast("🎉 Giriş başarılı! Hoş geldiniz, " + currentUser.name);
+
+  // Switch to list view so user immediately sees their account dashboard and listings!
+  switchMode('list');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 function openAuthModal() {
+  if (currentUser) {
+    switchMode('list');
+    switchDashboardTab('add');
+    return;
+  }
+
   try {
     populateCitySelect("auth-city");
+    const firstCity = document.getElementById("auth-city") ? document.getElementById("auth-city").value : "";
+    if (firstCity) handleAuthCityChange(firstCity);
   } catch(e) {
     console.log("Error populating auth city:", e);
   }
@@ -482,20 +918,87 @@ function openAuthModal() {
   const modal = document.getElementById("auth-modal");
   if (!modal) return;
   
-  if (currentUser) {
-    const nameEl = document.getElementById("auth-name");
-    const companyEl = document.getElementById("auth-company");
-    const phoneEl = document.getElementById("auth-phone");
-    const cityEl = document.getElementById("auth-city");
-    if (nameEl) nameEl.value = currentUser.name || "";
-    if (companyEl) companyEl.value = currentUser.company || "";
-    if (phoneEl) phoneEl.value = currentUser.phone || "";
-    if (cityEl && currentUser.city) cityEl.value = currentUser.city;
-  }
-  
+  switchAuthTab('register');
+
   modal.style.display = "flex";
   modal.style.zIndex = "999999";
   modal.classList.add("active");
+}
+
+function switchAuthTab(tab) {
+  const regBtn = document.getElementById("auth-tab-register");
+  const loginBtn = document.getElementById("auth-tab-login");
+  const loginForm = document.getElementById("auth-login-form");
+  const wizBar = document.getElementById("wizard-steps-bar");
+  const step1 = document.getElementById("auth-form-step1");
+  const step2 = document.getElementById("auth-form-step2");
+  const step3 = document.getElementById("auth-form-step3");
+
+  if (tab === 'login') {
+    if (regBtn) {
+      regBtn.style.background = "transparent";
+      regBtn.style.border = "1px solid transparent";
+      regBtn.style.color = "#94A3B8";
+    }
+    if (loginBtn) {
+      loginBtn.style.background = "rgba(245,158,11,0.25)";
+      loginBtn.style.border = "1px solid #F59E0B";
+      loginBtn.style.color = "#F59E0B";
+    }
+    if (loginForm) loginForm.style.display = "block";
+    if (wizBar) wizBar.style.display = "none";
+    if (step1) step1.style.display = "none";
+    if (step2) step2.style.display = "none";
+    if (step3) step3.style.display = "none";
+  } else {
+    if (loginBtn) {
+      loginBtn.style.background = "transparent";
+      loginBtn.style.border = "1px solid transparent";
+      loginBtn.style.color = "#94A3B8";
+    }
+    if (regBtn) {
+      regBtn.style.background = "rgba(245,158,11,0.25)";
+      regBtn.style.border = "1px solid #F59E0B";
+      regBtn.style.color = "#F59E0B";
+    }
+    if (loginForm) loginForm.style.display = "none";
+    if (wizBar) wizBar.style.display = "flex";
+    backToWizardStep1();
+  }
+}
+
+function handleQuickLogin(event) {
+  event.preventDefault();
+  const phone = document.getElementById("login-phone").value.trim();
+  const password = document.getElementById("login-password").value.trim();
+
+  if (!phone || !password) {
+    showToast("⚠️ Lütfen telefon numaranızı ve şifrenizi giriniz.");
+    return;
+  }
+
+  currentUser = {
+    name: "Yakup Kartal",
+    company: "Bey Hafriyat",
+    displayName: "Yakup Kartal (Bey Hafriyat)",
+    phone: phone,
+    city: "Bingöl",
+    password: password,
+    verifiedCode: "213091",
+    createdAt: new Date().toISOString()
+  };
+
+  localStorage.setItem("makinebul_current_user", JSON.stringify(currentUser));
+
+  closeAuthModal();
+  try { renderUserBadge(); } catch(e) {}
+  try { updateLoggedInDashboardUI(); } catch(e) {}
+  try { renderMyListings(); } catch(e) {}
+  try { renderListings(); } catch(e) {}
+  
+  showToast("🎉 Giriş başarılı! Hoş geldiniz, " + currentUser.name);
+
+  enterMainApp('rent');
 }
 
 function closeAuthModal() {
@@ -506,99 +1009,221 @@ function closeAuthModal() {
   }
 }
 
-let pendingAuthData = null;
+let pendingAuthData = {};
+let wizPhotoDataUrl = "";
 
-function handleUserAuthStep1(event) {
+function previewWizPhoto(event) {
+  const file = event.target && event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement("canvas");
+      let width = img.width;
+      let height = img.height;
+      const MAX_SIZE = 800;
+      if (width > height) {
+        if (width > MAX_SIZE) {
+          height = Math.round((height * MAX_SIZE) / width);
+          width = MAX_SIZE;
+        }
+      } else {
+        if (height > MAX_SIZE) {
+          width = Math.round((width * MAX_SIZE) / height);
+          height = MAX_SIZE;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      wizPhotoDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+
+      const promptBox = document.getElementById("wiz-dropzone-prompt");
+      const container = document.getElementById("wiz-image-preview-container");
+      const imgEl = document.getElementById("wiz-image-preview-img");
+
+      if (imgEl) imgEl.src = wizPhotoDataUrl;
+      if (promptBox) promptBox.style.display = "none";
+      if (container) container.style.display = "flex";
+      showToast("📸 Kepçe fotoğrafı yüklendi!");
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function updateWizardPills(stepNum) {
+  for (let i = 1; i <= 3; i++) {
+    const pill = document.getElementById(`wiz-step-pill-${i}`);
+    if (!pill) continue;
+    if (i === stepNum) {
+      pill.style.color = "#F59E0B";
+      pill.style.background = "rgba(245,158,11,0.2)";
+      pill.style.border = "1px solid rgba(245,158,11,0.4)";
+    } else {
+      pill.style.color = "#64748B";
+      pill.style.background = "transparent";
+      pill.style.border = "none";
+    }
+  }
+}
+
+function goToWizardStep2(event) {
   event.preventDefault();
   const name = document.getElementById("auth-name").value.trim();
   const company = document.getElementById("auth-company") ? document.getElementById("auth-company").value.trim() : "";
+  const password = document.getElementById("auth-password").value.trim();
   const phone = document.getElementById("auth-phone").value.trim();
   const city = document.getElementById("auth-city").value;
+  const district = (document.getElementById("auth-district") ? document.getElementById("auth-district").value : "") || "Merkez";
 
-  if (!name || !phone || !city) {
-    showToast("⚠️ Lütfen Ad Soyad, Telefon ve Şehir alanlarını doldurunuz.");
+  if (!name || !password || !phone || !city) {
+    showToast("⚠️ Lütfen 1. Adımdaki tüm zorunlu alanları doldurunuz.");
     return;
   }
 
-  pendingAuthData = { name, company, phone, city };
+  pendingAuthData = { name, company, password, phone, city, district };
 
-  const step1 = document.getElementById("auth-form-step1");
-  const step2 = document.getElementById("auth-form-step2");
-  const phoneTarget = document.getElementById("auth-target-phone");
-  const smsInput = document.getElementById("auth-sms-code");
+  document.getElementById("auth-form-step1").style.display = "none";
+  document.getElementById("auth-form-step2").style.display = "block";
+  document.getElementById("auth-form-step3").style.display = "none";
+  updateWizardPills(2);
 
-  if (phoneTarget) phoneTarget.textContent = phone;
-  if (smsInput) smsInput.value = "213091"; // Default preset code for instant 1-tap verification!
-
-  if (step1) step1.style.display = "none";
-  if (step2) step2.style.display = "block";
-
-  showToast("📩 SMS Onay Kodunuz (213091) hazır!");
+  // Pre-fill listing title
+  const titleInput = document.getElementById("wiz-listing-title");
+  if (titleInput && !titleInput.value) {
+    const brandName = company || name;
+    titleInput.value = `${brandName} - Kiralık Kepçe`;
+  }
 }
 
-function backToAuthStep1() {
-  const step1 = document.getElementById("auth-form-step1");
-  const step2 = document.getElementById("auth-form-step2");
-  if (step1) step1.style.display = "block";
-  if (step2) step2.style.display = "none";
+function backToWizardStep1() {
+  document.getElementById("auth-form-step1").style.display = "block";
+  document.getElementById("auth-form-step2").style.display = "none";
+  document.getElementById("auth-form-step3").style.display = "none";
+  updateWizardPills(1);
 }
 
-function handleUserAuthStep2(event) {
+function goToWizardStep3(event) {
   event.preventDefault();
-  const code = document.getElementById("auth-sms-code").value.trim();
+  let type = document.getElementById("wiz-machine-type").value;
+  const customInput = document.getElementById("modal-wiz-custom-type");
+  if ((type === 'Diğer' || type.includes('Farklı')) && customInput && customInput.value.trim()) {
+    type = customInput.value.trim();
+  }
 
-  if (!code) {
-    showToast("⚠️ Lütfen 6 haneli SMS onay kodunu giriniz.");
+  const title = document.getElementById("wiz-listing-title").value.trim();
+  const hourlyPrice = parseFloat(document.getElementById("wiz-hourly-price").value) || 0;
+  const dailyPrice = parseFloat(document.getElementById("wiz-daily-price").value) || 0;
+
+  if (!title || !hourlyPrice || !dailyPrice) {
+    showToast("⚠️ Lütfen 2. Adımdaki makine ve ücret bilgilerini doldurunuz.");
     return;
   }
 
-  if (!pendingAuthData) {
-    const nameVal = document.getElementById("auth-name").value.trim() || "Makine Sahibi";
-    const companyVal = document.getElementById("auth-company") ? document.getElementById("auth-company").value.trim() : "";
-    const phoneVal = document.getElementById("auth-phone").value.trim() || "0532 000 00 00";
-    const cityVal = document.getElementById("auth-city").value || "Bingöl";
-    pendingAuthData = { name: nameVal, company: companyVal, phone: phoneVal, city: cityVal };
-  }
+  pendingAuthData.type = type;
+  pendingAuthData.title = title;
+  pendingAuthData.hourlyPrice = hourlyPrice;
+  pendingAuthData.dailyPrice = dailyPrice;
+
+  document.getElementById("auth-form-step1").style.display = "none";
+  document.getElementById("auth-form-step2").style.display = "none";
+  document.getElementById("auth-form-step3").style.display = "block";
+  updateWizardPills(3);
+}
+
+function backToWizardStep2() {
+  document.getElementById("auth-form-step1").style.display = "none";
+  document.getElementById("auth-form-step2").style.display = "block";
+  document.getElementById("auth-form-step3").style.display = "none";
+  updateWizardPills(2);
+}
+
+function completeWizardListing(event) {
+  event.preventDefault();
 
   const displayName = pendingAuthData.company 
     ? `${pendingAuthData.name} (${pendingAuthData.company})`
     : pendingAuthData.name;
 
+  // 1. Create User Account
   currentUser = {
     name: pendingAuthData.name,
     company: pendingAuthData.company || "",
     displayName: displayName,
     phone: pendingAuthData.phone,
     city: pendingAuthData.city,
-    verifiedCode: code,
+    password: pendingAuthData.password,
+    verifiedCode: "213091",
     createdAt: new Date().toISOString()
   };
 
   localStorage.setItem("makinebul_current_user", JSON.stringify(currentUser));
 
-  closeAuthModal();
-  backToAuthStep1();
-
-  // Auto fill listing form fields
-  const phoneInput = document.getElementById("input-phone");
-  const cityInput = document.getElementById("input-city-select");
-  if (phoneInput) phoneInput.value = currentUser.phone;
-  if (cityInput && currentUser.city) {
-    cityInput.value = currentUser.city;
-    handleCityChange(currentUser.city);
+  // 2. Select Machine Image
+  let image = wizPhotoDataUrl;
+  if (!image) {
+    image = pendingAuthData.type === "Beko Loder (JCB)" || pendingAuthData.type === "JCB Beko Loder Kepçe"
+      ? "assets/backhoe_loader.png" 
+      : pendingAuthData.type === "Mini Ekskavatör / Kepçe" 
+      ? "assets/mini_excavator.png" 
+      : pendingAuthData.type === "Bobcat Mini Yükleyici"
+      ? "assets/bobcat.png"
+      : pendingAuthData.type === "Manitou Telehandler"
+      ? "assets/manitou.png"
+      : pendingAuthData.type === "Hafriyat Kamyonu"
+      ? "assets/dump_truck.png"
+      : "assets/excavator1.png";
   }
 
-  renderUserBadge();
-  showToast("🎉 SMS Kodu (" + code + ") Doğrulandı! Üyeliğiniz tamamlandı.");
+  // 3. Create Listing
+  const newListing = {
+    id: "kepce-" + Date.now(),
+    title: pendingAuthData.title,
+    type: pendingAuthData.type,
+    city: pendingAuthData.city,
+    district: pendingAuthData.district || "Merkez",
+    price: pendingAuthData.dailyPrice,
+    hourlyPrice: pendingAuthData.hourlyPrice,
+    period: "Günlük",
+    operator: "Operatörlü",
+    specs: "Kiralık İş Makinesi",
+    phone: pendingAuthData.phone,
+    owner: displayName,
+    image: image,
+    status: "available",
+    isMyListing: true,
+    createdAt: new Date().toISOString()
+  };
 
-  enterMainApp('list');
+  listings.unshift(newListing);
+  saveListings();
+
+  closeAuthModal();
+  backToWizardStep1();
+
+  renderUserBadge();
+  renderListings();
+
+  showToast("🎉 Üyeliğiniz oluşturuldu ve kepçe ilanınız başarıyla yayınlandı!");
+
+  enterMainApp('rent');
 }
 
 function logoutUser() {
   currentUser = null;
   localStorage.removeItem("makinebul_current_user");
   renderUserBadge();
-  showToast("Çıkış yapıldı.");
+  updateLoggedInDashboardUI();
+  renderListings();
+  renderMyListings();
+  showToast("🚪 Hesabınızdan başarıyla çıkış yapıldı.");
+  switchMode('list');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function toggleUserMenu(e) {
@@ -614,52 +1239,263 @@ document.addEventListener("click", () => {
   if (menu) menu.style.display = "none";
 });
 
-function renderUserBadge() {
-  const badgeEl = document.getElementById("user-profile-badge");
-  if (!badgeEl) return;
+function goToMyListings() {
+  switchMode('list');
+  switchDashboardTab('listings');
+}
+
+function openFastAddListingModal() {
+  switchMode('list');
+  switchDashboardTab('add');
+}
+
+function switchDashboardTab(tab) {
+  const listingsView = document.getElementById("dash-view-listings");
+  const addView = document.getElementById("dash-view-add");
+  const btnListings = document.getElementById("tab-btn-dash-listings");
+  const btnAdd = document.getElementById("tab-btn-dash-add");
+
+  if (tab === 'add') {
+    if (listingsView) listingsView.style.display = "none";
+    if (addView) addView.style.display = "block";
+    if (btnListings) {
+      btnListings.style.background = "transparent";
+      btnListings.style.color = "#94A3B8";
+      btnListings.style.boxShadow = "none";
+      btnListings.style.fontWeight = "700";
+    }
+    if (btnAdd) {
+      btnAdd.style.background = "linear-gradient(135deg, #F59E0B, #D97706)";
+      btnAdd.style.color = "#0F172A";
+      btnAdd.style.boxShadow = "0 4px 15px rgba(245,158,11,0.35)";
+      btnAdd.style.fontWeight = "800";
+    }
+    try { populateCitySelect("fast-reg-city"); } catch(e) {}
+  } else {
+    if (addView) addView.style.display = "none";
+    if (listingsView) listingsView.style.display = "block";
+    if (btnAdd) {
+      btnAdd.style.background = "transparent";
+      btnAdd.style.color = "#94A3B8";
+      btnAdd.style.boxShadow = "none";
+      btnAdd.style.fontWeight = "700";
+    }
+    if (btnListings) {
+      btnListings.style.background = "linear-gradient(135deg, #F59E0B, #D97706)";
+      btnListings.style.color = "#0F172A";
+      btnListings.style.boxShadow = "0 4px 15px rgba(245,158,11,0.35)";
+      btnListings.style.fontWeight = "800";
+    }
+    renderMyListings();
+  }
+}
+
+// Logged In Dashboard UI Controller
+function updateLoggedInDashboardUI() {
+  const dashContainer = document.getElementById("logged-in-user-dashboard");
+  const anonAuthSection = document.getElementById("anon-auth-section");
+
+  try {
+    populateCitySelect("fast-reg-city");
+    if (currentUser && currentUser.city) {
+      const citySelect = document.getElementById("fast-reg-city");
+      if (citySelect) {
+        citySelect.value = currentUser.city;
+        handleFastCityChange(currentUser.city);
+      }
+    } else {
+      const firstCity = document.getElementById("fast-reg-city") ? document.getElementById("fast-reg-city").value : "";
+      if (firstCity) handleFastCityChange(firstCity);
+    }
+  } catch(e) {}
 
   if (currentUser && currentUser.name) {
-    const firstName = currentUser.name.split(' ')[0];
-    
-    badgeEl.innerHTML = `
-      <div style="position: relative;">
-        <button type="button" onclick="toggleUserMenu(event)" style="background: rgba(245,158,11,0.18); border: 1px solid rgba(245,158,11,0.4); padding: 0.28rem 0.5rem; border-radius: 20px; font-size: 0.73rem; font-weight: 700; color: #F59E0B; cursor: pointer; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 8px rgba(245,158,11,0.15); white-space: nowrap;">
-          <span style="max-width: 68px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle;">👤 ${firstName}</span>
-          <span style="font-size: 0.6rem; opacity: 0.8;">▼</span>
-        </button>
+    if (dashContainer) dashContainer.style.display = "block";
+    if (anonAuthSection) anonAuthSection.style.display = "none";
 
-        <!-- Dropdown User Menu Card -->
-        <div id="user-dropdown-menu" style="display: none; position: absolute; right: 0; top: 115%; width: 210px; background: #0F172A; border: 1px solid rgba(245,158,11,0.3); border-radius: 14px; padding: 0.85rem; box-shadow: 0 12px 30px rgba(0,0,0,0.6); z-index: 99999; color: #F8FAFC; text-align: left;">
-          <div style="font-size: 0.84rem; font-weight: 800; color: #F59E0B; margin-bottom: 0.3rem; word-break: break-word;">
-            👤 ${currentUser.name}
-          </div>
-          ${currentUser.company ? `<div style="font-size: 0.75rem; color: #CBD5E1; margin-bottom: 0.4rem;">🏢 ${currentUser.company}</div>` : ''}
-          <div style="font-size: 0.72rem; color: #94A3B8; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.4rem;">
-            📍 ${currentUser.city || '81 İl'}
-          </div>
-          <button onclick="logoutUser()" style="width: 100%; padding: 0.45rem; background: rgba(239,68,68,0.2); border: 1px solid #EF4444; color: #EF4444; font-size: 0.75rem; font-weight: 700; border-radius: 8px; cursor: pointer;">
-            🚪 Çıkış Yap
-          </button>
-        </div>
-      </div>
-    `;
+    const nameEl = document.getElementById("dash-user-name");
+    const subEl = document.getElementById("dash-user-sub");
+    const statListingsEl = document.getElementById("dash-stat-my-listings");
+
+    if (nameEl) nameEl.textContent = `${currentUser.displayName || currentUser.name}`;
+    if (subEl) {
+      const cleanPhone = formatCleanPhoneNumber(currentUser.phone);
+      subEl.innerHTML = `📞 Telefon: <strong style="color: #FCD34D;">${cleanPhone || 'Girilmedi'}</strong> | 📍 Şehir: <strong style="color: #fff;">${currentUser.city || '81 İl'}</strong>`;
+    }
+    
+    if (statListingsEl) {
+      const myList = getMyListings();
+      statListingsEl.textContent = `${myList.length}`;
+    }
+
+    switchDashboardTab('listings');
   } else {
-    badgeEl.innerHTML = `
-      <button onclick="openAuthModal()" style="background: rgba(245,158,11,0.25); border: 1.5px solid #F59E0B; color: #F59E0B; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.74rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(245,158,11,0.25); white-space: nowrap;">
-        🔐 Giriş Yap
-      </button>
-    `;
+    if (dashContainer) dashContainer.style.display = "none";
+    if (anonAuthSection) anonAuthSection.style.display = "block";
+    switchMainAuthTab('wizard');
   }
+}
+
+// Dynamic Machine Type Dropdown Change Handler
+function handleMachineTypeChange(selectId, customInputId) {
+  const select = document.getElementById(selectId);
+  const customInput = document.getElementById(customInputId);
+  if (!select || !customInput) return;
+  if (select.value === 'Diğer' || select.value.includes('Farklı')) {
+    customInput.style.display = 'block';
+    customInput.required = true;
+    customInput.focus();
+  } else {
+    customInput.style.display = 'none';
+    customInput.required = false;
+    customInput.value = '';
+  }
+}
+
+let fastUploadedImageDataUrl = "";
+
+function triggerFastPhotoUpload(e) {
+  if (e && e.target && e.target.closest && e.target.closest('.btn-3d-secondary')) return;
+  const input = document.getElementById("fast-photo-file");
+  if (input) input.click();
+}
+
+function previewFastPhotoImage(event) {
+  const file = event.target && event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement("canvas");
+      let width = img.width;
+      let height = img.height;
+      const MAX_SIZE = 800;
+      if (width > height) {
+        if (width > MAX_SIZE) {
+          height = Math.round((height * MAX_SIZE) / width);
+          width = MAX_SIZE;
+        }
+      } else {
+        if (height > MAX_SIZE) {
+          width = Math.round((width * MAX_SIZE) / height);
+          height = MAX_SIZE;
+        }
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      fastUploadedImageDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+
+      const promptBox = document.getElementById("fast-photo-prompt");
+      const previewBox = document.getElementById("fast-photo-preview-box");
+      const imgEl = document.getElementById("fast-photo-preview-img");
+
+      if (imgEl) imgEl.src = fastUploadedImageDataUrl;
+      if (promptBox) promptBox.style.display = "none";
+      if (previewBox) previewBox.style.display = "block";
+      showToast("📸 Makine fotoğrafı başarıyla yüklendi!");
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeFastPhoto(event) {
+  if (event) event.stopPropagation();
+  fastUploadedImageDataUrl = "";
+  const fileInput = document.getElementById("fast-photo-file");
+  if (fileInput) fileInput.value = "";
+  const promptBox = document.getElementById("fast-photo-prompt");
+  const previewBox = document.getElementById("fast-photo-preview-box");
+  const imgEl = document.getElementById("fast-photo-preview-img");
+  if (imgEl) imgEl.src = "";
+  if (promptBox) promptBox.style.display = "block";
+  if (previewBox) previewBox.style.display = "none";
+}
+
+function handleFastAddListing(event) {
+  if (event) event.preventDefault();
+
+  if (!currentUser) {
+    showToast("⚠️ İlan eklemek için lütfen giriş yapınız.");
+    return;
+  }
+
+  let type = document.getElementById("fast-reg-type").value;
+  const customTypeInput = document.getElementById("fast-custom-type");
+  if ((type === 'Diğer' || type.includes('Farklı')) && customTypeInput && customTypeInput.value.trim()) {
+    type = customTypeInput.value.trim();
+  }
+
+  const title = document.getElementById("fast-reg-title").value.trim();
+  const city = document.getElementById("fast-reg-city").value || currentUser.city || userCurrentCity || "İstanbul";
+  const district = (document.getElementById("fast-reg-district") ? document.getElementById("fast-reg-district").value : "") || "Merkez";
+  const hourlyPrice = parseFloat(document.getElementById("fast-reg-hourly").value) || 1500;
+  const dailyPrice = parseFloat(document.getElementById("fast-reg-daily").value) || 10000;
+
+  if (!title) {
+    showToast("⚠️ Lütfen ilan başlığını giriniz.");
+    return;
+  }
+
+  let image = fastUploadedImageDataUrl || (
+    type.toLowerCase().includes("beko") || type.toLowerCase().includes("jcb")
+      ? "assets/backhoe_loader.png" 
+      : type.toLowerCase().includes("mini") 
+      ? "assets/mini_excavator.png" 
+      : type.toLowerCase().includes("bobcat")
+      ? "assets/bobcat.png"
+      : type.toLowerCase().includes("manitou")
+      ? "assets/manitou.png"
+      : type.toLowerCase().includes("kamyon")
+      ? "assets/dump_truck.png"
+      : "assets/excavator1.png"
+  );
+
+  const newListing = {
+    id: "kepce-" + Date.now(),
+    title: title,
+    type: type,
+    city: city,
+    district: district,
+    price: dailyPrice,
+    hourlyPrice: hourlyPrice,
+    period: "Günlük",
+    operator: "Operatörlü",
+    specs: "Kiralık İş Makinesi",
+    phone: currentUser.phone || "0532 000 00 00",
+    owner: currentUser.displayName || currentUser.name || "Makine Sahibi",
+    image: image,
+    status: "available",
+    isMyListing: true,
+    createdAt: new Date().toISOString()
+  };
+
+  listings.unshift(newListing);
+  saveListings();
+
+  document.getElementById("fast-reg-title").value = "";
+  if (customTypeInput) {
+    customTypeInput.value = "";
+    customTypeInput.style.display = "none";
+  }
+  document.getElementById("fast-reg-type").value = "JCB Beko Loder Kepçe";
+  removeFastPhoto();
+
+  renderListings();
+  renderMyListings();
+
+  showToast("🎉 Yeni kepçe ilanınız başarıyla yayınlandı!");
+
+  switchDashboardTab('listings');
 }
 
 // Mode Switcher (Kirala vs Kiralat)
 function switchMode(mode) {
-  if (mode === 'list' && (!currentUser || !currentUser.name)) {
-    showToast("⚠️ İlan yayınlayabilmek için önce üye olmanız gerekmektedir.");
-    openAuthModal();
-    return;
-  }
-
   activeMode = mode;
   const rentView = document.getElementById("rent-view");
   const listView = document.getElementById("list-view");
@@ -678,17 +1514,7 @@ function switchMode(mode) {
     btnList.classList.add("active");
     btnRent.classList.remove("active");
     
-    // Pre-fill user data into listing form if available
-    if (currentUser) {
-      const phoneInput = document.getElementById("input-phone");
-      const cityInput = document.getElementById("input-city-select");
-      if (phoneInput && !phoneInput.value) phoneInput.value = currentUser.phone || "";
-      if (cityInput && !cityInput.value && currentUser.city) {
-        cityInput.value = currentUser.city;
-        handleCityChange(currentUser.city);
-      }
-    }
-
+    updateLoggedInDashboardUI();
     renderMyListings();
     renderRequests();
   }
@@ -725,19 +1551,21 @@ function renderListings() {
     );
   });
 
-  // 2. Location Filtering: User-created listings (item.isMyListing) ALWAYS pass through!
+  // 2. Location Filtering: User's own listings ALWAYS pass through!
   if (userCurrentCity && !searchInput) {
     const allowedCities = NEARBY_CITIES_MAP[userCurrentCity] || [userCurrentCity];
     filtered = filtered.filter(item => {
-      if (item.isMyListing) return true; // User's own listing is ALWAYS shown!
+      if (isItemMine(item)) return true; // User's own listing is ALWAYS shown!
       return allowedCities.some(city => item.city.toLowerCase().includes(city.toLowerCase()));
     });
   }
 
   // 3. Sort listings: User's own listings FIRST, then user's city machines!
   filtered.sort((a, b) => {
-    if (a.isMyListing && !b.isMyListing) return -1;
-    if (!a.isMyListing && b.isMyListing) return 1;
+    const aMine = isItemMine(a);
+    const bMine = isItemMine(b);
+    if (aMine && !bMine) return -1;
+    if (!aMine && bMine) return 1;
     if (userCurrentCity) {
       const aMatches = a.city.toLowerCase() === userCurrentCity.toLowerCase();
       const bMatches = b.city.toLowerCase() === userCurrentCity.toLowerCase();
@@ -774,6 +1602,7 @@ function renderListings() {
     const statusClass = isAvailable ? 'available' : 'rented';
     const statusText = isAvailable ? '🟢 Müsait' : '🔴 Kirada';
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
+    const isMine = isItemMine(item);
 
     return `
       <div class="card card-listing-sahibinden">
@@ -792,7 +1621,7 @@ function renderListings() {
           </div>
 
           <div class="sahibinden-badge-row">
-            ${item.isMyListing ? `<span class="sahibinden-tag-pill my-tag">Sizin İlanınız</span>` : ''}
+            ${isMine ? `<span class="sahibinden-tag-pill my-tag">Sizin İlanınız</span>` : ''}
           </div>
 
           <div class="sahibinden-location">
@@ -1144,72 +1973,123 @@ function handleCreateListing(event) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Render Owner's Own Listings (Grid Side-by-Side Layout)
+// Central Helper: Check if an item strictly belongs to the logged-in user
+function isItemMine(item) {
+  if (!currentUser || !item) return false;
+  const cleanUserPhone = currentUser.phone ? currentUser.phone.replace(/\D/g, '') : '';
+  const userName = currentUser.name ? currentUser.name.toLowerCase().trim() : '';
+  const userCompany = currentUser.company ? currentUser.company.toLowerCase().trim() : '';
+  const userDisplayName = currentUser.displayName ? currentUser.displayName.toLowerCase().trim() : '';
+
+  // 1. Check matching phone number (Exact or last 7 digits)
+  if (cleanUserPhone && item.phone) {
+    const itemPhoneClean = String(item.phone).replace(/\D/g, '');
+    if (itemPhoneClean.length >= 7 && (cleanUserPhone.endsWith(itemPhoneClean.slice(-7)) || itemPhoneClean.endsWith(cleanUserPhone.slice(-7)))) {
+      return true;
+    }
+  }
+
+  // 2. Check matching owner name or company
+  const itemOwner = (item.owner || '').toLowerCase().trim();
+  if (userName && userName.length > 2 && itemOwner.includes(userName)) return true;
+  if (userDisplayName && userDisplayName.length > 2 && itemOwner.includes(userDisplayName)) return true;
+  if (userCompany && userCompany.length > 2 && itemOwner.includes(userCompany)) return true;
+
+  return false;
+}
+
+// Helper to filter strictly the logged-in user's listings
+function getMyListings() {
+  if (!currentUser) return [];
+  return listings.filter(item => isItemMine(item));
+}
+
+// Render Owner's Own Listings (Only strictly the user's machines)
 function renderMyListings() {
   const container = document.getElementById("my-listings-list");
   if (!container) return;
 
-  if (listings.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-muted); font-size: 0.9rem; grid-column: 1 / -1;">Henüz yayınlanmış ilanınız bulunmuyor.</p>`;
+  const myList = getMyListings();
+
+  const statListingsEl = document.getElementById("dash-stat-my-listings");
+  if (statListingsEl) {
+    statListingsEl.textContent = `${myList.length}`;
+  }
+
+  if (myList.length === 0) {
+    container.innerHTML = `
+      <div style="background: rgba(15,23,42,0.7); border: 1.5px dashed rgba(245,158,11,0.35); border-radius: 18px; padding: 2.25rem 1.5rem; text-align: center; color: #fff; grid-column: 1 / -1; margin: 0.5rem 0;">
+        <div style="margin-bottom: 0.6rem;">
+          <img src="assets/logo_3d.png" alt="MakineBul 3D Logo" style="width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(245,158,11,0.4));">
+        </div>
+        <h4 style="font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 800; color: #F59E0B; margin-bottom: 0.4rem;">Henüz Yayında Makineniz Yok</h4>
+        <p style="font-size: 0.84rem; color: #94A3B8; margin-bottom: 1.25rem; max-width: 380px; margin-left: auto; margin-right: auto; line-height: 1.5;">Hemen 'Yeni İlan Ekle' sekmesine geçerek iş makinenizi 1 dakikada müşterilere ulaştırın.</p>
+        <button type="button" onclick="switchDashboardTab('add')" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #0F172A; font-weight: 800; border-radius: 12px; font-size: 0.88rem; cursor: pointer; box-shadow: 0 8px 20px rgba(245,158,11,0.35);">
+          ➕ İlk İlanımı Hemen Ekle
+        </button>
+      </div>
+    `;
     return;
   }
 
-  container.innerHTML = listings.map(item => {
+  container.innerHTML = myList.map(item => {
     const isAvailable = item.status === 'available';
     const statusClass = isAvailable ? 'available' : 'rented';
     const statusText = isAvailable ? '🟢 Müsait' : '🔴 Kirada';
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
 
     return `
-      <div class="card card-listing-sahibinden">
-        <!-- Top Image Container -->
-        <div class="sahibinden-img-box">
-          <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/excavator1.png'">
-          <span class="card-status-badge ${statusClass}">${statusText}</span>
+      <div class="card card-listing-sahibinden my-dark-listing-card" style="background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 0.45rem; box-shadow: 0 6px 16px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: space-between;">
+        
+        <!-- Top Image Box -->
+        <div class="sahibinden-img-box" style="position: relative; border-radius: 8px; overflow: hidden; background: #0B1120; height: 95px; margin-bottom: 0.35rem; border: 1px solid rgba(255,255,255,0.06);">
+          <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/excavator1.png'" style="width: 100%; height: 100%; object-fit: cover;">
+          <span style="position: absolute; top: 4px; left: 4px; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.58rem; font-weight: 800; background: ${isAvailable ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)'}; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.4); backdrop-filter: blur(4px);">
+            ${statusText}
+          </span>
         </div>
         
-        <!-- Middle Details Container -->
-        <div class="sahibinden-details-box">
-          <h3 class="sahibinden-title">${item.title}</h3>
+        <!-- Details Box -->
+        <div style="flex: 1; display: flex; flex-direction: column;">
+          <h3 style="font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 700; color: #FFFFFF; margin: 0 0 0.15rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            ${item.title}
+          </h3>
           
-          <div class="sahibinden-owner-name" style="font-size: 0.76rem; font-weight: 700; color: #1E293B; margin-top: 0.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.25rem;">
-            <span style="color: #F59E0B;">👤</span> <span>${item.owner || 'Makine Sahibi'}</span>
+          <div style="font-size: 0.68rem; color: #CBD5E1; margin-bottom: 0.15rem; display: flex; align-items: center; gap: 3px;">
+            <span style="color: #F59E0B;">👤</span> <span style="font-weight: 600;">${item.owner || (currentUser ? currentUser.displayName : 'Makine Sahibi')}</span>
           </div>
 
-          <div class="sahibinden-badge-row">
-            ${item.isMyListing ? `<span class="sahibinden-tag-pill my-tag">Sizin İlanınız</span>` : ''}
+          <div style="font-size: 0.65rem; color: #94A3B8; margin-bottom: 0.35rem;">
+            📍 ${item.city}, ${item.district || 'Merkez'}
           </div>
 
-          <div class="sahibinden-location">
-            📍 ${item.city}, ${item.district}
-          </div>
-
-          <div class="sahibinden-price-row">
-            <div class="sahibinden-price-main">
-              ${hourlyPriceNum.toLocaleString('tr-TR')} TL <span class="price-unit">/ Saat</span>
+          <div style="margin-top: auto; padding-top: 0.25rem; border-top: 1px solid rgba(255,255,255,0.06); margin-bottom: 0.4rem;">
+            <div style="font-size: 0.86rem; font-weight: 800; color: #F59E0B; line-height: 1.1;">
+              ${hourlyPriceNum.toLocaleString('tr-TR')} TL <span style="font-size: 0.6rem; color: #CBD5E1; font-weight: 600;">/ Saat</span>
             </div>
-            <div class="sahibinden-price-sub">
-              Günlük: ${item.price.toLocaleString('tr-TR')} TL
+            <div style="font-size: 0.65rem; color: #94A3B8;">
+              Günlük: <strong style="color: #fff;">${item.price.toLocaleString('tr-TR')} TL</strong>
             </div>
           </div>
         </div>
 
-        <!-- Management Controls Buttons (Stacked 2-Row Layout) -->
-        <div class="my-listing-actions">
-          <button onclick="toggleStatus('${item.id}')" class="btn-my-status ${isAvailable ? 'avail' : 'rented'}">
+        <!-- Management Controls (Status Toggle, Edit, Delete) -->
+        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+          <button onclick="toggleStatus('${item.id}')" style="width: 100%; padding: 0.32rem 0.2rem; border-radius: 6px; font-weight: 800; font-size: 0.68rem; cursor: pointer; border: 1px solid ${isAvailable ? 'rgba(239,68,68,0.5)' : 'rgba(16,185,129,0.5)'}; background: ${isAvailable ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)'}; color: ${isAvailable ? '#FCA5A5' : '#6EE7B7'};">
             ${isAvailable ? '🔴 Kirada Yap' : '🟢 Müsait Yap'}
           </button>
 
-          <div class="my-actions-subrow">
-            <button onclick="openEditModal('${item.id}')" class="btn-my-edit" title="İlanı Düzenle">
+          <div style="display: flex; gap: 0.25rem;">
+            <button onclick="openEditModal('${item.id}')" style="flex: 1; padding: 0.3rem 0.1rem; background: rgba(245,158,11,0.2); border: 1px solid #F59E0B; color: #FCD34D; font-weight: 700; border-radius: 6px; font-size: 0.68rem; cursor: pointer;">
               ✏️ Düzenle
             </button>
 
-            <button onclick="deleteListing('${item.id}')" class="btn-my-delete" title="İlanı Sil">
+            <button onclick="deleteListing('${item.id}')" style="flex: 1; padding: 0.3rem 0.1rem; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #FCA5A5; font-weight: 700; border-radius: 6px; font-size: 0.68rem; cursor: pointer;">
               🗑️ Sil
             </button>
           </div>
         </div>
+
       </div>
     `;
   }).join('');
@@ -1372,6 +2252,7 @@ function toggleStatus(id) {
   if (target) {
     target.status = target.status === 'available' ? 'rented' : 'available';
     saveListings();
+    renderListings();
     renderMyListings();
     showToast(`İlan durumu "${target.status === 'available' ? 'Müsait' : 'Kirada'}" olarak güncellendi.`);
   }
@@ -1382,7 +2263,9 @@ function deleteListing(id) {
   if (confirm("Bu ilanı silmek istediğinizden emin misiniz?")) {
     listings = listings.filter(i => i.id !== id);
     saveListings();
+    renderListings();
     renderMyListings();
+    updateLoggedInDashboardUI();
     showToast("İlan silindi.");
   }
 }
@@ -1522,3 +2405,4 @@ function showToast(message) {
     }
   }, 3500);
 }
+
