@@ -4210,4 +4210,25 @@ select:focus, input:focus {
   margin: 0 auto !important;
 }
 
+.dropzone-3d-box h4,
+#main-wiz-prompt h4,
+#wiz-dropzone-prompt h4,
+#fast-photo-prompt h4 {
+  color: #FFFFFF !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+  margin: 0 !important;
+}
+
+.dropzone-3d-box p,
+#main-wiz-prompt p,
+#wiz-dropzone-prompt p,
+#fast-photo-prompt p {
+  color: #CBD5E1 !important;
+  font-size: 0.82rem !important;
+  margin: 0 !important;
+}
+
+
 
