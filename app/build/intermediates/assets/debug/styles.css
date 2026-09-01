@@ -4200,10 +4200,12 @@ select:focus, input:focus {
 #main-wiz-preview-img,
 #wiz-image-preview-img,
 #fast-photo-preview-img {
-  max-height: 160px !important;
+  max-height: 180px !important;
   max-width: 100% !important;
-  object-fit: cover !important;
-  border-radius: 10px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 8px !important;
   display: block !important;
   margin: 0 auto !important;
 }
