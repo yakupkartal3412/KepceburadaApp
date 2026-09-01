@@ -606,6 +606,21 @@ function backToMainWizStep2() {
   updateMainWizPills(2);
 }
 
+function triggerMainWizPhotoUpload(e) {
+  if (e && e.target && e.target.closest && e.target.closest('.btn-3d-remove-photo')) return;
+  const input = document.getElementById("main-wiz-file");
+  if (input) {
+    if (window.AndroidNative && typeof window.AndroidNative.openGallery === 'function') {
+      try { window.AndroidNative.openGallery(); } catch(err) {}
+    }
+    input.click();
+  }
+}
+
+function previewMainWizImage(event) {
+  previewMainWizPhoto(event);
+}
+
 function previewMainWizPhoto(event) {
   const file = event.target && event.target.files && event.target.files[0];
   if (!file) return;
@@ -643,11 +658,28 @@ function previewMainWizPhoto(event) {
       if (imgEl) imgEl.src = mainWizPhotoDataUrl;
       if (promptBox) promptBox.style.display = "none";
       if (container) container.style.display = "block";
-      showToast("📸 Kepçe fotoğrafı yüklendi!");
+      showToast("📸 Kepçe fotoğrafı başarıyla yüklendi!");
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
+}
+
+function removeMainWizPhoto(event) {
+  if (event) event.stopPropagation();
+  mainWizPhotoDataUrl = "";
+  const fileInput = document.getElementById("main-wiz-file");
+  if (fileInput) fileInput.value = "";
+  const promptBox = document.getElementById("main-wiz-prompt");
+  const container = document.getElementById("main-wiz-preview-box");
+  const imgEl = document.getElementById("main-wiz-preview-img");
+  if (imgEl) imgEl.src = "";
+  if (promptBox) promptBox.style.display = "block";
+  if (container) container.style.display = "none";
+}
+
+function completeMainWizardListing(event) {
+  handleMainWizStep3(event);
 }
 
 function handleMainWizStep3(event) {
@@ -1011,6 +1043,30 @@ function closeAuthModal() {
 
 let pendingAuthData = {};
 let wizPhotoDataUrl = "";
+
+function triggerWizPhotoUpload(e) {
+  if (e && e.target && e.target.closest && e.target.closest('.btn-3d-secondary')) return;
+  const input = document.getElementById("wiz-photo-file");
+  if (input) {
+    if (window.AndroidNative && typeof window.AndroidNative.openGallery === 'function') {
+      try { window.AndroidNative.openGallery(); } catch(err) {}
+    }
+    input.click();
+  }
+}
+
+function removeWizPhoto(event) {
+  if (event) event.stopPropagation();
+  wizPhotoDataUrl = "";
+  const fileInput = document.getElementById("wiz-photo-file");
+  if (fileInput) fileInput.value = "";
+  const promptBox = document.getElementById("wiz-dropzone-prompt");
+  const container = document.getElementById("wiz-image-preview-container");
+  const imgEl = document.getElementById("wiz-image-preview-img");
+  if (imgEl) imgEl.src = "";
+  if (promptBox) promptBox.style.display = "flex";
+  if (container) container.style.display = "none";
+}
 
 function previewWizPhoto(event) {
   const file = event.target && event.target.files && event.target.files[0];
