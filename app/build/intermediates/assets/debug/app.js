@@ -637,7 +637,7 @@ function previewMainWizPhoto(event) {
 
     if (imgEl) imgEl.src = rawDataUrl;
     if (promptBox) promptBox.style.display = "none";
-    if (container) container.style.display = "block";
+    if (container) container.style.display = "flex";
     showToast("📸 Kepçe fotoğrafı yüklendi!");
 
     // Also attempt optimized compression in background

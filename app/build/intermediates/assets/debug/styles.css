@@ -4179,3 +4179,33 @@ select:focus, input:focus {
   padding-bottom: 8rem !important;
 }
 
+/* ==================== PHOTO PREVIEW COMPACT CONSTRAINTS ==================== */
+.dropzone-3d-box {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 2px dashed rgba(245, 158, 11, 0.45) !important;
+  border-radius: 14px !important;
+  padding: 1.1rem 0.85rem !important;
+  text-align: center !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+#main-wiz-preview-box,
+#wiz-image-preview-container,
+#fast-photo-preview-box {
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+#main-wiz-preview-img,
+#wiz-image-preview-img,
+#fast-photo-preview-img {
+  max-height: 160px !important;
+  max-width: 100% !important;
+  object-fit: cover !important;
+  border-radius: 10px !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+
