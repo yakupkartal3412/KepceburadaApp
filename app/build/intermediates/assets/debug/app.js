@@ -610,9 +610,6 @@ function triggerMainWizPhotoUpload(e) {
   if (e && e.target && e.target.closest && e.target.closest('.btn-3d-remove-photo')) return;
   const input = document.getElementById("main-wiz-file");
   if (input) {
-    if (window.AndroidNative && typeof window.AndroidNative.openGallery === 'function') {
-      try { window.AndroidNative.openGallery(); } catch(err) {}
-    }
     input.click();
   }
 }
@@ -626,41 +623,57 @@ function previewMainWizPhoto(event) {
   if (!file) return;
 
   const reader = new FileReader();
+  reader.onerror = function() {
+    showToast("⚠️ Fotoğraf okunamadı, lütfen tekrar deneyin.");
+  };
   reader.onload = function(e) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement("canvas");
-      let width = img.width;
-      let height = img.height;
-      const MAX_SIZE = 800;
-      if (width > height) {
-        if (width > MAX_SIZE) {
-          height = Math.round((height * MAX_SIZE) / width);
-          width = MAX_SIZE;
+    const rawDataUrl = e.target.result;
+    
+    // Quick apply to ensure preview immediately appears
+    mainWizPhotoDataUrl = rawDataUrl;
+    const promptBox = document.getElementById("main-wiz-prompt");
+    const container = document.getElementById("main-wiz-preview-box");
+    const imgEl = document.getElementById("main-wiz-preview-img");
+
+    if (imgEl) imgEl.src = rawDataUrl;
+    if (promptBox) promptBox.style.display = "none";
+    if (container) container.style.display = "block";
+    showToast("📸 Kepçe fotoğrafı yüklendi!");
+
+    // Also attempt optimized compression in background
+    try {
+      const img = new Image();
+      img.onload = function() {
+        try {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          const MAX_SIZE = 800;
+          if (width > height) {
+            if (width > MAX_SIZE) {
+              height = Math.round((height * MAX_SIZE) / width);
+              width = MAX_SIZE;
+            }
+          } else {
+            if (height > MAX_SIZE) {
+              width = Math.round((width * MAX_SIZE) / height);
+              height = MAX_SIZE;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          mainWizPhotoDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+          if (imgEl) imgEl.src = mainWizPhotoDataUrl;
+        } catch(cErr) {
+          // Keep rawDataUrl
         }
-      } else {
-        if (height > MAX_SIZE) {
-          width = Math.round((width * MAX_SIZE) / height);
-          height = MAX_SIZE;
-        }
-      }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
-
-      mainWizPhotoDataUrl = canvas.toDataURL("image/jpeg", 0.85);
-
-      const promptBox = document.getElementById("main-wiz-prompt");
-      const container = document.getElementById("main-wiz-preview-box");
-      const imgEl = document.getElementById("main-wiz-preview-img");
-
-      if (imgEl) imgEl.src = mainWizPhotoDataUrl;
-      if (promptBox) promptBox.style.display = "none";
-      if (container) container.style.display = "block";
-      showToast("📸 Kepçe fotoğrafı başarıyla yüklendi!");
-    };
-    img.src = e.target.result;
+      };
+      img.src = rawDataUrl;
+    } catch(err) {
+      // Keep rawDataUrl
+    }
   };
   reader.readAsDataURL(file);
 }
@@ -1045,12 +1058,9 @@ let pendingAuthData = {};
 let wizPhotoDataUrl = "";
 
 function triggerWizPhotoUpload(e) {
-  if (e && e.target && e.target.closest && e.target.closest('.btn-3d-secondary')) return;
+  if (e && e.target && e.target.closest && e.target.closest('.btn-3d-remove-photo')) return;
   const input = document.getElementById("wiz-photo-file");
   if (input) {
-    if (window.AndroidNative && typeof window.AndroidNative.openGallery === 'function') {
-      try { window.AndroidNative.openGallery(); } catch(err) {}
-    }
     input.click();
   }
 }
@@ -1073,41 +1083,51 @@ function previewWizPhoto(event) {
   if (!file) return;
 
   const reader = new FileReader();
+  reader.onerror = function() {
+    showToast("⚠️ Fotoğraf okunamadı, lütfen tekrar deneyin.");
+  };
   reader.onload = function(e) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement("canvas");
-      let width = img.width;
-      let height = img.height;
-      const MAX_SIZE = 800;
-      if (width > height) {
-        if (width > MAX_SIZE) {
-          height = Math.round((height * MAX_SIZE) / width);
-          width = MAX_SIZE;
-        }
-      } else {
-        if (height > MAX_SIZE) {
-          width = Math.round((width * MAX_SIZE) / height);
-          height = MAX_SIZE;
-        }
-      }
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
+    const rawDataUrl = e.target.result;
+    wizPhotoDataUrl = rawDataUrl;
 
-      wizPhotoDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+    const promptBox = document.getElementById("wiz-dropzone-prompt");
+    const container = document.getElementById("wiz-image-preview-container");
+    const imgEl = document.getElementById("wiz-image-preview-img");
 
-      const promptBox = document.getElementById("wiz-dropzone-prompt");
-      const container = document.getElementById("wiz-image-preview-container");
-      const imgEl = document.getElementById("wiz-image-preview-img");
+    if (imgEl) imgEl.src = rawDataUrl;
+    if (promptBox) promptBox.style.display = "none";
+    if (container) container.style.display = "flex";
+    showToast("📸 Kepçe fotoğrafı yüklendi!");
 
-      if (imgEl) imgEl.src = wizPhotoDataUrl;
-      if (promptBox) promptBox.style.display = "none";
-      if (container) container.style.display = "flex";
-      showToast("📸 Kepçe fotoğrafı yüklendi!");
-    };
-    img.src = e.target.result;
+    try {
+      const img = new Image();
+      img.onload = function() {
+        try {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+          const MAX_SIZE = 800;
+          if (width > height) {
+            if (width > MAX_SIZE) {
+              height = Math.round((height * MAX_SIZE) / width);
+              width = MAX_SIZE;
+            }
+          } else {
+            if (height > MAX_SIZE) {
+              width = Math.round((width * MAX_SIZE) / height);
+              height = MAX_SIZE;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          wizPhotoDataUrl = canvas.toDataURL("image/jpeg", 0.85);
+          if (imgEl) imgEl.src = wizPhotoDataUrl;
+        } catch(cErr) {}
+      };
+      img.src = rawDataUrl;
+    } catch(err) {}
   };
   reader.readAsDataURL(file);
 }

@@ -140,12 +140,18 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             } else if (data.getData() != null) {
                                 results = new Uri[]{data.getData()};
+                            } else if (data.getDataString() != null) {
+                                results = new Uri[]{Uri.parse(data.getDataString())};
                             }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    filePathCallback.onReceiveValue(results);
+                    try {
+                        filePathCallback.onReceiveValue(results);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     filePathCallback = null;
                 }
             }
@@ -251,7 +257,35 @@ public class MainActivity extends AppCompatActivity {
                 }
                 MainActivity.this.filePathCallback = filePathCallback;
 
-                requestGalleryPermissionAndOpen();
+                Intent intent = null;
+                if (fileChooserParams != null) {
+                    try {
+                        intent = fileChooserParams.createIntent();
+                    } catch (Exception e) {
+                        intent = null;
+                    }
+                }
+                if (intent == null) {
+                    intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                }
+                
+                try {
+                    fileChooserLauncher.launch(intent);
+                } catch (Exception e) {
+                    try {
+                        Intent fallback = new Intent(Intent.ACTION_GET_CONTENT);
+                        fallback.addCategory(Intent.CATEGORY_OPENABLE);
+                        fallback.setType("image/*");
+                        fileChooserLauncher.launch(Intent.createChooser(fallback, "Fotoğraf Seç"));
+                    } catch (Exception ex) {
+                        if (MainActivity.this.filePathCallback != null) {
+                            MainActivity.this.filePathCallback.onReceiveValue(null);
+                            MainActivity.this.filePathCallback = null;
+                        }
+                        return false;
+                    }
+                }
                 return true;
             }
         });
