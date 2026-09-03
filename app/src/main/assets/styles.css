@@ -4461,5 +4461,111 @@ select:focus, input:focus {
   }
 }
 
+/* ==================== ☀️ LIGHT MODE ONBOARDING WIZARD OVERRIDES ==================== */
+[data-theme="light"] .card-3d-hero {
+  background: #FFFFFF !important;
+  border: 1.5px solid #E2E8F0 !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
+}
+
+[data-theme="light"] .hero-3d-title {
+  color: #0F172A !important;
+  text-shadow: none !important;
+}
+
+[data-theme="light"] .main-3d-auth-tabs {
+  background: #F1F5F9 !important;
+  border: 1.5px solid #E2E8F0 !important;
+}
+
+[data-theme="light"] .btn-3d-auth-tab {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .btn-3d-auth-tab.active {
+  background: var(--primary-gradient) !important;
+  color: #0F172A !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-theme="light"] .card-3d-glass-container {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1.5px solid #E2E8F0 !important;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08) !important;
+  color: #1E293B !important;
+}
+
+[data-theme="light"] .wiz-3d-steps-indicator {
+  background: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+}
+
+[data-theme="light"] .step-3d-num {
+  background: #E2E8F0 !important;
+  color: #475569 !important;
+}
+
+[data-theme="light"] .step-3d-label {
+  color: #475569 !important;
+}
+
+[data-theme="light"] .step-3d-pill.active .step-3d-num {
+  background: var(--primary-gradient) !important;
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .step-3d-pill.active .step-3d-label {
+  color: #D97706 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] .form-3d-header {
+  border-bottom: 1px solid #E2E8F0 !important;
+}
+
+[data-theme="light"] .form-3d-header h3 {
+  color: #0F172A !important;
+}
+
+[data-theme="light"] .form-group-3d label {
+  color: #1E293B !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="light"] .input-3d-dark {
+  background: #F1F5F9 !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+  box-shadow: none !important;
+}
+
+[data-theme="light"] .input-3d-dark::placeholder {
+  color: #64748B !important;
+}
+
+[data-theme="light"] .input-3d-dark:focus {
+  background: #FFFFFF !important;
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2) !important;
+}
+
+[data-theme="light"] .dropzone-3d-box {
+  background: #F8FAFC !important;
+  border: 2px dashed #CBD5E1 !important;
+}
+
+[data-theme="light"] .dropzone-3d-box h4,
+[data-theme="light"] #main-wiz-prompt h4 {
+  color: #0F172A !important;
+  text-shadow: none !important;
+}
+
+[data-theme="light"] .dropzone-3d-box p,
+[data-theme="light"] #main-wiz-prompt p {
+  color: #64748B !important;
+}
+
 
 
