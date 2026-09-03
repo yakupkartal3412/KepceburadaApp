@@ -2,7 +2,7 @@
    KEPÇEBURADA ULTRA PREMIUM UNIFIED DESIGN SYSTEM
    ========================================================================== */
 
-:root {
+:root, [data-theme="dark"] {
   --primary: #F59E0B;               /* 🟠 İnşaat Sarısı Amber Gold */
   --primary-hover: #D97706;
   --primary-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
@@ -15,7 +15,32 @@
   --text-main: #E2E8F0;             /* ⚪ Okunaklı Açık Metin */
   --text-muted: #94A3B8;            /* 🩶 İkincil Etiket Metni */
   --text-heading: #FFFFFF;          /* 🤍 Parlak Beyaz Başlık */
+  --input-bg: #0F172A;
+  --input-text: #FFFFFF;
+  --pill-bg: rgba(15, 23, 42, 0.8);
+  --pill-text: #E2E8F0;
+  --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
   --font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="light"] {
+  --primary: #F59E0B;               /* 🟠 İnşaat Sarısı Amber Gold */
+  --primary-hover: #D97706;
+  --primary-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  --primary-light: rgba(245, 158, 11, 0.12);
+  --dark: #FFFFFF;                  /* ⚪ Aydınlık Mod Kart Yüzeyi */
+  --dark-surface: #FFFFFF;          /* ⚪ Aydınlık Kart Yüzeyi */
+  --bg-page: #F8FAFC;               /* ☀️ Aydınlık Porselen Sayfa Arka Planı */
+  --bg-card: #FFFFFF;               /* 🃏 Beyaz Kart Arka Planı */
+  --border-color: #E2E8F0;
+  --text-main: #1E293B;             /* ⚫ Okunaklı Koyu Slate Metin */
+  --text-muted: #64748B;            /* 🩶 İkincil Slate Metni */
+  --text-heading: #0F172A;          /* 🖤 Derin Koyu Başlık */
+  --input-bg: #F1F5F9;
+  --input-text: #0F172A;
+  --pill-bg: #F1F5F9;
+  --pill-text: #334155;
+  --card-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
 }
 
 /* ==================== GLOBAL UNIFIED TYPOGRAPHY & STYLES ==================== */
@@ -137,6 +162,27 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.btn-theme-toggle {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: #FCD34D;
+  padding: 0.35rem 0.65rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-theme-toggle:hover {
+  background: rgba(245, 158, 11, 0.3);
+  border-color: #F59E0B;
+  transform: scale(1.05);
 }
 
 .mode-switcher {

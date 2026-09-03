@@ -31,7 +31,11 @@
         </div>
       </div>
 
-      <div style="display: flex; gap: 0.65rem; align-items: center;">
+      <div style="display: flex; gap: 0.45rem; align-items: center;">
+        <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Gece / Gündüz Modu">
+          <span class="theme-toggle-icon">🌙</span>
+          <span class="theme-toggle-label">Gece</span>
+        </button>
         <button id="btn-biz-kimiz" class="btn-splash-skip" onclick="openAboutModal()">
           <span class="btn-3d-info-icon-badge">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:14px; height:14px;">
@@ -128,6 +132,10 @@
         
         <!-- Top Action Switcher Buttons & Right Close X Icon -->
         <div class="header-right-group">
+          <button type="button" onclick="toggleTheme()" class="btn-theme-toggle" title="Gece / Gündüz Modu">
+            <span class="theme-toggle-icon">🌙</span>
+            <span class="theme-toggle-label">Gece</span>
+          </button>
           <div class="mode-switcher">
             <button id="btn-mode-rent" class="mode-btn active" onclick="switchMode('rent')">
               <span class="btn-icon">🔍</span> Kepçe Kirala

@@ -2482,3 +2482,34 @@ function showToast(message) {
   }, 3500);
 }
 
+// ==================== DYNAMIC THEME SYSTEM (DARK / LIGHT MODE) ====================
+let currentTheme = localStorage.getItem("makinebul_theme") || "dark";
+
+function applyTheme(theme) {
+  currentTheme = theme;
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("makinebul_theme", theme);
+
+  const iconEls = document.querySelectorAll(".theme-toggle-icon");
+  const labelEls = document.querySelectorAll(".theme-toggle-label");
+
+  if (theme === "light") {
+    iconEls.forEach(el => el.textContent = "☀️");
+    labelEls.forEach(el => el.textContent = "Gündüz");
+  } else {
+    iconEls.forEach(el => el.textContent = "🌙");
+    labelEls.forEach(el => el.textContent = "Gece");
+  }
+}
+
+function toggleTheme() {
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  applyTheme(newTheme);
+  showToast(newTheme === "light" ? "☀️ Gündüz Moduna Geçildi" : "🌙 Gece Moduna Geçildi");
+}
+
+// Initialize theme on load
+try {
+  applyTheme(currentTheme);
+} catch(e) {}
+
