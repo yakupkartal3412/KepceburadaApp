@@ -519,7 +519,7 @@
             <!-- Normal Login Form -->
             <form id="main-quick-login-form" onsubmit="handleMainQuickLogin(event)" class="form-3d-step">
               <div class="form-3d-header">
-                <span class="icon-3d-step">🔐</span>
+                <span class="icon-3d-step">🔑</span>
                 <h3>Mevcut Üye Girişi</h3>
               </div>
               <div class="form-group-3d">
@@ -527,9 +527,9 @@
                 <input type="tel" id="main-login-phone" placeholder="Örn: 0532 123 45 67" required class="input-3d-dark">
               </div>
               <div class="form-group-3d">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
                   <label for="main-login-password" style="margin:0;">Giriş Şifreniz *</label>
-                  <button type="button" onclick="showForgotPasswordForm()" style="background:none; border:none; color:#FCD34D; font-size:0.75rem; font-weight:700; cursor:pointer; padding:0; text-decoration:underline;">❓ Şifremi Unuttum</button>
+                  <button type="button" onclick="showForgotPasswordForm()" class="btn-forgot-password-link">🔑 Şifremi Unuttum?</button>
                 </div>
                 <input type="password" id="main-login-password" placeholder="••••••••" required class="input-3d-dark">
               </div>
