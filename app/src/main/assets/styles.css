@@ -4372,8 +4372,16 @@ select:focus, input:focus {
   }
 
   .hero-3d-icon-badge {
-    width: 32px !important;
-    height: 32px !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 12px !important;
+  }
+
+  .hero-3d-logo-img {
+    width: 34px !important;
+    height: 34px !important;
+    object-fit: contain !important;
   }
 
   .main-3d-auth-tabs {
@@ -4468,9 +4476,20 @@ select:focus, input:focus {
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
 }
 
+[data-theme="light"] .hero-3d-icon-badge {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15) !important;
+}
+
 [data-theme="light"] .hero-3d-title {
   color: #0F172A !important;
   text-shadow: none !important;
+}
+
+[data-theme="light"] .hero-3d-sub {
+  color: #D97706 !important;
+  font-weight: 700 !important;
 }
 
 [data-theme="light"] .main-3d-auth-tabs {
