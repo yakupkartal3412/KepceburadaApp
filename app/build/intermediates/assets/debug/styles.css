@@ -368,9 +368,9 @@ body {
 }
 
 .pill-btn {
-  background: rgba(15, 23, 42, 0.8);
+  background: var(--pill-bg);
   border: 1.5px solid var(--border-color);
-  color: #E2E8F0;
+  color: var(--pill-text);
   padding: 0.45rem 1rem;
   border-radius: 30px;
   font-size: 0.85rem;
@@ -383,12 +383,12 @@ body {
 .pill-btn:hover {
   background: rgba(245, 158, 11, 0.15);
   border-color: var(--primary);
-  color: #FFFFFF;
+  color: var(--primary-hover);
 }
 
 .pill-btn.active {
   background: var(--primary-gradient);
-  color: var(--dark);
+  color: #0F172A !important;
   border-color: transparent;
   font-weight: 800;
   box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);

@@ -1663,10 +1663,10 @@ function renderListings() {
 
   if (filtered.length === 0) {
     grid.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1.25rem; background: var(--dark-surface); border: 1.5px solid var(--border-color); border-radius: 16px; color: #FFFFFF; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" class="card">
-        <h3 style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.5rem;">🔍 Aradığınız Makine Bulunamadı</h3>
-        <p style="color: #94A3B8; font-size: 0.85rem; margin-bottom: 1.25rem;">Farklı bir şehir arayabilir veya tüm Türkiye makinelerini gösterebilirsiniz.</p>
-        <button class="btn btn-secondary" onclick="showAllTurkey()">🇹🇷 Tüm İlanları Göster</button>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 2.5rem 1.25rem; background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; color: var(--text-main); box-shadow: var(--card-shadow);" class="card empty-results-card">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading); margin-bottom: 0.5rem;">🔍 Aradığınız Kriterlere Uygun Makine Bulunamadı</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Farklı bir şehir arayabilir veya tüm Türkiye makinelerini gösterebilirsiniz.</p>
+        <button class="btn-3d-gold-action" style="max-width: 280px; margin: 0 auto; padding: 0.75rem 1.25rem; font-size: 0.88rem;" onclick="showAllTurkey()">🇹🇷 Tüm İlanları Göster</button>
       </div>
     `;
     return;
