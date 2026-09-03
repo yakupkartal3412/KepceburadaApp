@@ -425,15 +425,19 @@ body {
 }
 
 .card-status-badge.available {
-  background: rgba(245, 158, 11, 0.25) !important;
-  color: #FCD34D !important;
-  border: 1px solid var(--primary) !important;
+  background: #10B981 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
 }
 
 .card-status-badge.rented {
-  background: rgba(239, 68, 68, 0.2) !important;
-  color: #FCA5A5 !important;
-  border: 1px solid rgba(239, 68, 68, 0.5) !important;
+  background: #EF4444 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
 }
 
 /* Middle Details Column */
@@ -447,14 +451,16 @@ body {
 
 .sahibinden-title {
   font-family: var(--font-family) !important;
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   font-weight: 800;
   color: #FFFFFF !important;
-  line-height: 1.35;
+  line-height: 1.3;
   margin-bottom: 0.35rem;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
+  min-height: 2.5em;
 }
 
 .sahibinden-badge-row {
@@ -465,7 +471,7 @@ body {
 
 .sahibinden-tag-pill {
   background: rgba(15, 23, 42, 0.8);
-  color: var(--text-muted);
+  color: #CBD5E1;
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.2rem 0.6rem;
@@ -483,7 +489,7 @@ body {
 /* Location Subtitle */
 .sahibinden-location {
   font-size: 0.82rem;
-  color: var(--text-muted) !important;
+  color: #CBD5E1 !important;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }

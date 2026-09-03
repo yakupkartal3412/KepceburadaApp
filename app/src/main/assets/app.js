@@ -1692,8 +1692,8 @@ function renderListings() {
         <div class="sahibinden-details-box">
           <h3 class="sahibinden-title">${item.title}</h3>
           
-          <div class="sahibinden-owner-name" style="font-size: 0.76rem; font-weight: 700; color: #1E293B; margin-top: 0.15rem; margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.25rem;">
-            <span style="color: #F59E0B;">👤</span> <span>${item.owner || 'Makine Sahibi'}</span>
+          <div class="sahibinden-owner-name" style="font-size: 0.78rem; font-weight: 700; color: #E2E8F0; margin-top: 0.2rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.35rem;">
+            <span style="color: #F59E0B; font-size: 0.85rem;">👤</span> <span>${item.owner && item.owner.trim() ? item.owner : 'Makine Sahibi'}</span>
           </div>
 
           <div class="sahibinden-badge-row">
