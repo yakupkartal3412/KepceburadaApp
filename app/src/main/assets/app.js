@@ -2149,18 +2149,18 @@ function renderMyListings() {
           </div>
         </div>
 
-        <!-- Management Controls (High Contrast Solid Action Buttons) -->
+        <!-- Management Controls (Clean & Elegant Cohesive Action Buttons) -->
         <div style="display: flex; flex-direction: column; gap: 0.35rem;">
-          <button onclick="toggleStatus('${item.id}')" style="width: 100%; padding: 0.4rem 0.3rem; border-radius: 8px; font-weight: 800; font-size: 0.74rem; cursor: pointer; border: none; background: ${isAvailable ? 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)' : 'linear-gradient(135deg, #10B981 0%, #059669 100%)'}; color: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+          <button onclick="toggleStatus('${item.id}')" style="width: 100%; padding: 0.4rem 0.3rem; border-radius: 8px; font-weight: 700; font-size: 0.74rem; cursor: pointer; border: 1.5px solid var(--border-color); background: var(--pill-bg); color: var(--text-heading); transition: all 0.2s ease;">
             ${isAvailable ? '🔴 Kirada Yap' : '🟢 Müsait Yap'}
           </button>
 
           <div style="display: flex; gap: 0.35rem;">
-            <button onclick="openEditModal('${item.id}')" style="flex: 1; padding: 0.4rem 0.2rem; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #0F172A; font-weight: 800; border-radius: 8px; font-size: 0.74rem; cursor: pointer; box-shadow: 0 2px 8px rgba(245,158,11,0.3);">
+            <button onclick="openEditModal('${item.id}')" style="flex: 1; padding: 0.4rem 0.2rem; background: var(--pill-bg); border: 1.5px solid var(--border-color); color: var(--text-heading); font-weight: 700; border-radius: 8px; font-size: 0.74rem; cursor: pointer; transition: all 0.2s ease;">
               ✏️ Düzenle
             </button>
 
-            <button onclick="deleteListing('${item.id}')" style="flex: 1; padding: 0.4rem 0.2rem; background: #DC2626; border: none; color: #FFFFFF; font-weight: 800; border-radius: 8px; font-size: 0.74rem; cursor: pointer; box-shadow: 0 2px 8px rgba(220,38,38,0.3);">
+            <button onclick="deleteListing('${item.id}')" style="flex: 1; padding: 0.4rem 0.2rem; background: rgba(239, 68, 68, 0.08); border: 1.5px solid rgba(239, 68, 68, 0.3); color: #EF4444; font-weight: 700; border-radius: 8px; font-size: 0.74rem; cursor: pointer; transition: all 0.2s ease;">
               🗑️ Sil
             </button>
           </div>
