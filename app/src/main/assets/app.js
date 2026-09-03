@@ -2115,52 +2115,52 @@ function renderMyListings() {
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
 
     return `
-      <div class="card card-listing-sahibinden my-dark-listing-card" style="background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%); border: 1px solid rgba(245,158,11,0.25); border-radius: 12px; padding: 0.45rem; box-shadow: 0 6px 16px rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="card card-listing-sahibinden my-dark-listing-card" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 0.6rem; box-shadow: var(--card-shadow); display: flex; flex-direction: column; justify-content: space-between;">
         
         <!-- Top Image Box -->
-        <div class="sahibinden-img-box" style="position: relative; border-radius: 8px; overflow: hidden; background: #0B1120; height: 95px; margin-bottom: 0.35rem; border: 1px solid rgba(255,255,255,0.06);">
+        <div class="sahibinden-img-box" style="position: relative; border-radius: 10px; overflow: hidden; background: #0B1120; height: 110px; margin-bottom: 0.45rem; border: 1px solid var(--border-color);">
           <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/excavator1.png'" style="width: 100%; height: 100%; object-fit: cover;">
-          <span style="position: absolute; top: 4px; left: 4px; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.58rem; font-weight: 800; background: ${isAvailable ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)'}; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.4); backdrop-filter: blur(4px);">
+          <span style="position: absolute; top: 6px; left: 6px; padding: 0.2rem 0.55rem; border-radius: 8px; font-size: 0.65rem; font-weight: 800; background: ${isAvailable ? '#10B981' : '#EF4444'}; color: #FFFFFF; box-shadow: 0 2px 6px rgba(0,0,0,0.4);">
             ${statusText}
           </span>
         </div>
         
         <!-- Details Box -->
         <div style="flex: 1; display: flex; flex-direction: column;">
-          <h3 style="font-family: 'Poppins', sans-serif; font-size: 0.78rem; font-weight: 700; color: #FFFFFF; margin: 0 0 0.15rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+          <h3 style="font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 800; color: var(--text-heading); margin: 0 0 0.25rem; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
             ${item.title}
           </h3>
           
-          <div style="font-size: 0.68rem; color: #CBD5E1; margin-bottom: 0.15rem; display: flex; align-items: center; gap: 3px;">
-            <span style="color: #F59E0B;">👤</span> <span style="font-weight: 600;">${item.owner || (currentUser ? currentUser.displayName : 'Makine Sahibi')}</span>
+          <div style="font-size: 0.74rem; color: var(--text-main); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+            <span style="color: #F59E0B;">👤</span> <span>${item.owner || (currentUser ? currentUser.displayName : 'Makine Sahibi')}</span>
           </div>
 
-          <div style="font-size: 0.65rem; color: #94A3B8; margin-bottom: 0.35rem;">
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.45rem; font-weight: 500;">
             📍 ${item.city}, ${item.district || 'Merkez'}
           </div>
 
-          <div style="margin-top: auto; padding-top: 0.25rem; border-top: 1px solid rgba(255,255,255,0.06); margin-bottom: 0.4rem;">
-            <div style="font-size: 0.86rem; font-weight: 800; color: #F59E0B; line-height: 1.1;">
-              ${hourlyPriceNum.toLocaleString('tr-TR')} TL <span style="font-size: 0.6rem; color: #CBD5E1; font-weight: 600;">/ Saat</span>
+          <div style="margin-top: auto; padding-top: 0.35rem; border-top: 1px solid var(--border-color); margin-bottom: 0.5rem;">
+            <div style="font-size: 0.95rem; font-weight: 900; color: #D97706; line-height: 1.1;">
+              ${hourlyPriceNum.toLocaleString('tr-TR')} TL <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600;">/ Saat</span>
             </div>
-            <div style="font-size: 0.65rem; color: #94A3B8;">
-              Günlük: <strong style="color: #fff;">${item.price.toLocaleString('tr-TR')} TL</strong>
+            <div style="font-size: 0.7rem; color: var(--text-muted);">
+              Günlük: <strong style="color: var(--text-heading);">${item.price.toLocaleString('tr-TR')} TL</strong>
             </div>
           </div>
         </div>
 
-        <!-- Management Controls (Status Toggle, Edit, Delete) -->
-        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-          <button onclick="toggleStatus('${item.id}')" style="width: 100%; padding: 0.32rem 0.2rem; border-radius: 6px; font-weight: 800; font-size: 0.68rem; cursor: pointer; border: 1px solid ${isAvailable ? 'rgba(239,68,68,0.5)' : 'rgba(16,185,129,0.5)'}; background: ${isAvailable ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)'}; color: ${isAvailable ? '#FCA5A5' : '#6EE7B7'};">
+        <!-- Management Controls (High Contrast Solid Action Buttons) -->
+        <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+          <button onclick="toggleStatus('${item.id}')" style="width: 100%; padding: 0.4rem 0.3rem; border-radius: 8px; font-weight: 800; font-size: 0.74rem; cursor: pointer; border: none; background: ${isAvailable ? 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)' : 'linear-gradient(135deg, #10B981 0%, #059669 100%)'}; color: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
             ${isAvailable ? '🔴 Kirada Yap' : '🟢 Müsait Yap'}
           </button>
 
-          <div style="display: flex; gap: 0.25rem;">
-            <button onclick="openEditModal('${item.id}')" style="flex: 1; padding: 0.3rem 0.1rem; background: rgba(245,158,11,0.2); border: 1px solid #F59E0B; color: #FCD34D; font-weight: 700; border-radius: 6px; font-size: 0.68rem; cursor: pointer;">
+          <div style="display: flex; gap: 0.35rem;">
+            <button onclick="openEditModal('${item.id}')" style="flex: 1; padding: 0.4rem 0.2rem; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #0F172A; font-weight: 800; border-radius: 8px; font-size: 0.74rem; cursor: pointer; box-shadow: 0 2px 8px rgba(245,158,11,0.3);">
               ✏️ Düzenle
             </button>
 
-            <button onclick="deleteListing('${item.id}')" style="flex: 1; padding: 0.3rem 0.1rem; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #FCA5A5; font-weight: 700; border-radius: 6px; font-size: 0.68rem; cursor: pointer;">
+            <button onclick="deleteListing('${item.id}')" style="flex: 1; padding: 0.4rem 0.2rem; background: #DC2626; border: none; color: #FFFFFF; font-weight: 800; border-radius: 8px; font-size: 0.74rem; cursor: pointer; box-shadow: 0 2px 8px rgba(220,38,38,0.3);">
               🗑️ Sil
             </button>
           </div>
