@@ -1,23 +1,27 @@
 /* ==========================================================================
-   KEPÇEBURADA ULTRA PREMIUM DESIGN SYSTEM
+   KEPÇEBURADA ULTRA PREMIUM UNIFIED DESIGN SYSTEM
    ========================================================================== */
 
-/* ==================== EXACT USER SPECIFIED COLOR PALETTE ==================== */
 :root {
-  --primary: #F59E0B;        /* 🟠 Ana renk: #F59E0B */
-  --accent: #FFC107;         /* 🟡 Vurgu rengi: #FFC107 */
-  --dark-gray: #1F2937;      /* ⚫ Koyu gri: #1F2937 */
-  --bg-page: #F8FAFC;        /* ⚪ Arka plan: #F8FAFC */
-  --available: #22C55E;      /* 🟢 Müsait: #22C55E */
-  --rented: #EF4444;         /* 🔴 Kirada: #EF4444 */
-  --border-color: #E2E8F0;
-  --text-main: #1F2937;
-  --text-muted: #6B7280;
+  --primary: #F59E0B;               /* 🟠 İnşaat Sarısı Amber Gold */
+  --primary-hover: #D97706;
+  --primary-gradient: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  --primary-light: rgba(245, 158, 11, 0.15);
+  --dark: #0F172A;                  /* ⚫ Obsidian Slate Koyu Arka Plan */
+  --dark-surface: #1E293B;          /* 🔘 Koyu Kart Yüzeyi */
+  --bg-page: #0F172A;               /* 🌑 Sayfa Arka Planı */
+  --bg-card: #1E293B;               /* 🃏 Kart Arka Planı */
+  --border-color: rgba(245, 158, 11, 0.25);
+  --text-main: #E2E8F0;             /* ⚪ Okunaklı Açık Metin */
+  --text-muted: #94A3B8;            /* 🩶 İkincil Etiket Metni */
+  --text-heading: #FFFFFF;          /* 🤍 Parlak Beyaz Başlık */
+  --font-family: 'Manrope', system-ui, -apple-system, sans-serif;
 }
 
-/* ==================== GLOBAL STYLES & NATIVE SCROLL SYSTEM ==================== */
+/* ==================== GLOBAL UNIFIED TYPOGRAPHY & STYLES ==================== */
 * {
   box-sizing: border-box;
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif !important;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -37,8 +41,8 @@ body {
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
   background-color: var(--bg-page);
-  color: var(--dark-gray);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-main);
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif !important;
 }
 
 .main-app-content {
@@ -192,12 +196,12 @@ body {
 
 /* Search Box */
 .search-bar-google {
-  background: #FFFFFF;
+  background: var(--dark-surface);
   border-radius: 16px;
   padding: 1.25rem;
-  box-shadow: 0 4px 20px rgba(31, 41, 55, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   margin-bottom: 1.75rem;
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
 }
 
 .search-input-wrapper {
@@ -213,7 +217,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   font-size: 1.2rem;
-  color: #6B7280;
+  color: var(--primary);
   pointer-events: none;
   z-index: 10;
   line-height: 1;
@@ -221,24 +225,24 @@ body {
 
 .search-input-wrapper input {
   width: 100%;
-  padding-left: 3.8rem !important; /* Guaranteed zero overlap! */
+  padding-left: 3.8rem !important;
   padding-right: 3.2rem !important;
   padding-top: 0.9rem !important;
   padding-bottom: 0.9rem !important;
-  font-size: 0.98rem;
-  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-family: var(--font-family) !important;
   border-radius: 40px;
-  border: 2px solid var(--border-color);
-  background-color: var(--bg-page);
-  color: var(--dark-gray);
+  border: 1.5px solid var(--border-color);
+  background-color: var(--dark);
+  color: #FFFFFF;
   transition: all 0.2s ease;
 }
 
 .search-input-wrapper input:focus {
   outline: none;
   border-color: var(--primary);
-  background-color: #FFFFFF;
-  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+  background-color: var(--dark);
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25);
 }
 
 .btn-clear-search {
@@ -263,28 +267,30 @@ body {
 }
 
 .pill-btn {
-  background: #F1F5F9;
-  border: 1px solid var(--border-color);
-  color: #4B5563;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1.5px solid var(--border-color);
+  color: #E2E8F0;
   padding: 0.45rem 1rem;
   border-radius: 30px;
   font-size: 0.85rem;
-  font-weight: 500; /* Thin & sleek font weight */
+  font-weight: 600;
+  font-family: var(--font-family) !important;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .pill-btn:hover {
-  background: #E5E7EB;
+  background: rgba(245, 158, 11, 0.15);
   border-color: var(--primary);
+  color: #FFFFFF;
 }
 
 .pill-btn.active {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-  color: var(--dark-gray);
+  background: var(--primary-gradient);
+  color: var(--dark);
   border-color: transparent;
-  font-weight: 600; /* Refined active font weight */
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
 }
 
 .extra-categories-box {
@@ -299,18 +305,18 @@ body {
 }
 
 .pill-btn-more {
-  background: rgba(245, 158, 11, 0.12) !important;
-  color: #D97706 !important;
-  border: 1.5px solid #F59E0B !important;
-  font-weight: 700 !important;
+  background: rgba(245, 158, 11, 0.18) !important;
+  color: #FCD34D !important;
+  border: 1.5px solid var(--primary) !important;
+  font-weight: 800 !important;
 }
 
 .pill-btn-more:hover, .pill-btn-more.expanded {
-  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%) !important;
-  color: #1F2937 !important;
+  background: var(--primary-gradient) !important;
+  color: var(--dark) !important;
 }
 
-/* Results Header (Crisp High Contrast Reading) */
+/* Results Header */
 .results-header {
   display: flex;
   justify-content: space-between;
@@ -320,21 +326,22 @@ body {
 
 .results-header h3 {
   font-size: 1.12rem !important;
-  color: #1F2937 !important;
-  font-weight: 500 !important; /* Thin & elegant weight (not bold) */
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  font-family: var(--font-family) !important;
 }
 
 .view-notice {
-  background: #FEF3C7;
-  color: #B45309;
+  background: rgba(245, 158, 11, 0.18);
+  color: #FCD34D;
   padding: 0.35rem 0.85rem;
   border-radius: 20px;
   font-size: 0.82rem;
-  font-weight: 600;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-weight: 700;
+  border: 1px solid var(--border-color);
 }
 
-/* Sahibinden 4-Column Grid for Web Desktop */
+/* Listings Grid */
 .listings-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -360,12 +367,12 @@ body {
   }
 }
 
-/* PERFECT 4-COLUMN CLASSIFIEDS CARD LAYOUT (ZERO OVERFLOW GUARANTEED) */
+/* UNIFIED SINGLE THEME CLASSIFIEDS CARD LAYOUT */
 .card-listing-sahibinden {
-  background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  background: var(--dark-surface) !important;
+  border-radius: 16px;
+  border: 1.5px solid var(--border-color) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -378,20 +385,20 @@ body {
 
 .card-listing-sahibinden:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
-  border-color: #f59e0b;
+  box-shadow: 0 14px 30px rgba(245, 158, 11, 0.2);
+  border-color: var(--primary) !important;
 }
 
 /* Top Image Container */
 .sahibinden-img-box {
   width: 100%;
-  height: 155px;
-  min-height: 155px;
-  background-color: #fafafa;
-  border-radius: 10px;
+  height: 160px;
+  min-height: 160px;
+  background-color: var(--dark);
+  border-radius: 12px;
   overflow: hidden;
   position: relative;
-  border: 1px solid #f1f5f9;
+  border: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -412,19 +419,21 @@ body {
   font-size: 0.72rem;
   padding: 0.25rem 0.65rem;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 800;
   z-index: 5;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .card-status-badge.available {
-  background-color: var(--available); /* 🟢 Müsait: #22C55E */
-  color: #FFFFFF;
+  background: rgba(245, 158, 11, 0.25) !important;
+  color: #FCD34D !important;
+  border: 1px solid var(--primary) !important;
 }
 
 .card-status-badge.rented {
-  background-color: var(--rented); /* 🔴 Kirada: #EF4444 */
-  color: #FFFFFF;
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #FCA5A5 !important;
+  border: 1px solid rgba(239, 68, 68, 0.5) !important;
 }
 
 /* Middle Details Column */
@@ -436,12 +445,11 @@ body {
   min-width: 0;
 }
 
-/* Uppercase Clean Title */
 .sahibinden-title {
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-family: var(--font-family) !important;
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #FFFFFF !important;
   line-height: 1.35;
   margin-bottom: 0.35rem;
   white-space: nowrap;
@@ -456,66 +464,69 @@ body {
 }
 
 .sahibinden-tag-pill {
-  background: #f1f5f9;
-  color: #64748b;
+  background: rgba(15, 23, 42, 0.8);
+  color: var(--text-muted);
   font-size: 0.72rem;
-  font-weight: 500;
-  padding: 0.18rem 0.55rem;
-  border-radius: 4px;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
 }
 
 .sahibinden-tag-pill.my-tag {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: rgba(245, 158, 11, 0.2) !important;
+  color: #FCD34D !important;
+  border: 1px solid var(--primary) !important;
+  font-weight: 800 !important;
 }
 
 /* Location Subtitle */
 .sahibinden-location {
   font-size: 0.82rem;
-  color: #64748b;
-  font-weight: 500;
+  color: var(--text-muted) !important;
+  font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
-/* Price Box: Sahibinden Signature Navy Blue (#004b93) */
+/* Price Box */
 .sahibinden-price-row {
   margin-bottom: 0.5rem;
-  border-top: 1px dashed #e2e8f0;
+  border-top: 1px dashed var(--border-color);
   padding-top: 0.5rem;
 }
 
 .sahibinden-price-main {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-family) !important;
   font-size: 1.25rem;
   font-weight: 800;
-  color: #004b93; /* Signature Sahibinden Navy Blue */
+  color: var(--primary) !important;
   line-height: 1.1;
 }
 
 .sahibinden-price-main .price-unit {
   font-size: 0.8rem;
-  font-weight: 500;
-  color: #64748b;
+  font-weight: 700;
+  color: #FCD34D;
 }
 
 .sahibinden-price-sub {
   font-size: 0.78rem;
-  color: #64748b;
+  color: var(--text-muted);
   margin-top: 0.18rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* Full-Width Call Button (Guaranteed Zero Overflow) */
+/* Full-Width Call Button */
 .btn-sahibinden-call {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 60%, #d97706 100%);
-  color: #0f172a;
-  border: none;
+  background: var(--primary-gradient) !important;
+  color: var(--dark) !important;
+  border: none !important;
   outline: none;
-  font-family: inherit;
+  font-family: var(--font-family) !important;
   border-radius: 30px;
-  padding: 0.65rem 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 700;
+  padding: 0.7rem 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 800 !important;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -523,7 +534,7 @@ body {
   white-space: nowrap;
   width: 100%;
   box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4) !important;
   transition: all 0.2s ease;
   margin-top: auto;
   position: relative;
@@ -534,7 +545,7 @@ body {
 
 .btn-sahibinden-call:hover {
   transform: translateY(-1.5px);
-  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.45);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.6) !important;
 }
 
 /* ==================== 3D ULTRA-PREMIUM MACHINE OWNER REGISTRATION STYLES ==================== */
@@ -813,44 +824,40 @@ body {
 }
 
 /* 3D Action Buttons */
-.btn-3d-gold-action {
-  width: 100%;
-  padding: 0.95rem;
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  border: none;
-  color: #0F172A;
-  font-weight: 800;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
-  border-radius: 14px;
-  cursor: pointer;
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-  transition: all 0.25s ease;
-}
-
-.btn-3d-gold-action:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.55);
-}
-
+.btn-3d-gold-action,
 .btn-3d-emerald-action {
   width: 100%;
   padding: 0.95rem;
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-  border: none;
-  color: #FFFFFF;
-  font-weight: 800;
-  font-family: 'Poppins', sans-serif;
+  background: var(--primary-gradient) !important;
+  border: none !important;
+  color: var(--dark) !important;
+  font-weight: 800 !important;
+  font-family: var(--font-family) !important;
   font-size: 0.95rem;
   border-radius: 14px;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4) !important;
   transition: all 0.25s ease;
 }
 
+.btn-3d-gold-action:hover,
 .btn-3d-emerald-action:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.55);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.55) !important;
+}
+
+.btn-3d-secondary {
+  width: 100%;
+  padding: 0.95rem;
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1.5px solid var(--border-color) !important;
+  color: var(--text-main) !important;
+  font-weight: 700 !important;
+  font-family: var(--font-family) !important;
+  font-size: 0.9rem;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .btn-3d-secondary {
@@ -1337,57 +1344,9 @@ body {
   box-shadow: 0 6px 16px rgba(245, 158, 11, 0.45);
 }
 
-:root {
-  --primary: #f59e0b;               /* Construction Amber Gold */
-  --primary-hover: #d97706;
-  --primary-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
-  --primary-light: #fef3c7;
-  --dark: #0f172a;                  /* Deep Obsidian Slate */
-  --dark-surface: #1e293b;
-  --bg-page: #f8fafc;
-  --bg-card: #ffffff;
-  --border-color: #e2e8f0;
-  --text-main: #334155;
-  --text-muted: #64748b;
-  --text-heading: #0f172a;
-  --success: #10b981;
-  --success-light: #d1fae5;
-  --danger: #ef4444;
-  --danger-light: #fee2e2;
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --shadow-sm: 0 2px 5px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 20px 35px -10px rgba(15, 23, 42, 0.15);
-  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Reset & Global Base */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-page);
-  background-image: 
-    radial-gradient(at 100% 0%, rgba(245, 158, 11, 0.05) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(15, 23, 42, 0.03) 0px, transparent 50%);
-  background-attachment: fixed;
-  color: var(--text-main);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
 /* Typography */
-h1, h2, h3, h4 {
-  font-family: 'Outfit', 'Inter', sans-serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Manrope', system-ui, -apple-system, sans-serif !important;
   color: var(--text-heading);
   letter-spacing: -0.025em;
 }

@@ -202,9 +202,9 @@
                 </div>
                 <div>
                   <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
-                    <span style="background: rgba(16,185,129,0.2); color: #34D399; border: 1px solid rgba(16,185,129,0.4); padding: 0.08rem 0.45rem; border-radius: 6px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase;">🟢 Aktif Makine Sahibi</span>
+                    <span style="background: rgba(245,158,11,0.2); color: #FCD34D; border: 1px solid rgba(245,158,11,0.4); padding: 0.08rem 0.45rem; border-radius: 6px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase;">🟢 Aktif Makine Sahibi</span>
                   </div>
-                  <h3 id="dash-user-name" style="font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 800; color: #FFFFFF; margin: 0.1rem 0 0.05rem; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">Yakup Kartal (Bey Hafriyat)</h3>
+                  <h3 id="dash-user-name" style="font-size: 0.95rem; font-weight: 800; color: #FFFFFF; margin: 0.1rem 0 0.05rem; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">Yakup Kartal (Bey Hafriyat)</h3>
                   <p id="dash-user-sub" style="font-size: 0.72rem; color: #94A3B8; margin: 0;">📞 Telefon: <strong style="color: #FCD34D;">0531 726 84 54</strong> | 📍 Şehir: <strong style="color: #fff;">Bingöl</strong></p>
                 </div>
               </div>
@@ -219,10 +219,10 @@
 
           <!-- Segmented Navigation Tabs (Kompakt) -->
           <div style="display: flex; background: rgba(15,23,42,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 3px; margin-bottom: 0.65rem; gap: 4px;">
-            <button type="button" id="tab-btn-dash-listings" onclick="switchDashboardTab('listings')" style="flex: 1; padding: 0.55rem 0.5rem; border: none; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 800; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(135deg, #F59E0B, #D97706); color: #0F172A; box-shadow: 0 3px 10px rgba(245,158,11,0.3); white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <button type="button" id="tab-btn-dash-listings" onclick="switchDashboardTab('listings')" style="flex: 1; padding: 0.55rem 0.5rem; border: none; border-radius: 9px; font-size: 0.76rem; font-weight: 800; cursor: pointer; transition: all 0.25s ease; background: linear-gradient(135deg, #F59E0B, #D97706); color: #0F172A; box-shadow: 0 3px 10px rgba(245,158,11,0.3); white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 4px;">
               <span>📋 İlanlarım (<span id="dash-stat-my-listings">1</span>)</span>
             </button>
-            <button type="button" id="tab-btn-dash-add" onclick="switchDashboardTab('add')" style="flex: 1; padding: 0.55rem 0.5rem; border: none; border-radius: 9px; font-family: 'Poppins', sans-serif; font-size: 0.76rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; background: transparent; color: #94A3B8; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <button type="button" id="tab-btn-dash-add" onclick="switchDashboardTab('add')" style="flex: 1; padding: 0.55rem 0.5rem; border: none; border-radius: 9px; font-size: 0.76rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; background: transparent; color: #94A3B8; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 4px;">
               <span>➕ Yeni İlan Ekle</span>
             </button>
           </div>
@@ -230,7 +230,7 @@
           <!-- TAB 1: LISTINGS VIEW (Directly shown, no scrolling down needed!) -->
           <div id="dash-view-listings" style="display: block;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; padding: 0 0.15rem;">
-              <h4 style="font-family: 'Poppins', sans-serif; font-size: 0.86rem; font-weight: 800; color: #F59E0B; margin: 0; display: flex; align-items: center; gap: 6px;">
+              <h4 style="font-size: 0.86rem; font-weight: 800; color: #F59E0B; margin: 0; display: flex; align-items: center; gap: 6px;">
                 <img src="assets/logo_3d.png" alt="MakineBul 3D" style="width: 20px; height: 20px; object-fit: contain;">
                 <span>Yayındaki Makineleriniz</span>
               </h4>
@@ -244,7 +244,7 @@
 
           <!-- TAB 2: FAST ADD FORM VIEW (Kompakt & Şık Form) -->
           <div id="dash-view-add" style="display: none; background: linear-gradient(145deg, #0F172A 0%, #1E293B 100%); border: 1.5px solid rgba(245,158,11,0.35); border-radius: 14px; padding: 0.85rem 0.85rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
-            <div style="font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 800; color: #F59E0B; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 5px;">
+            <div style="font-size: 0.9rem; font-weight: 800; color: #F59E0B; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 5px;">
               <span>➕ Hızlı Yeni Makine / İlan Ekle</span>
             </div>
             
