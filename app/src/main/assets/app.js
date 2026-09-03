@@ -2491,14 +2491,10 @@ function applyTheme(theme) {
   localStorage.setItem("makinebul_theme", theme);
 
   const iconEls = document.querySelectorAll(".theme-toggle-icon");
-  const labelEls = document.querySelectorAll(".theme-toggle-label");
-
   if (theme === "light") {
     iconEls.forEach(el => el.textContent = "☀️");
-    labelEls.forEach(el => el.textContent = "Gündüz");
   } else {
     iconEls.forEach(el => el.textContent = "🌙");
-    labelEls.forEach(el => el.textContent = "Gece");
   }
 }
 
