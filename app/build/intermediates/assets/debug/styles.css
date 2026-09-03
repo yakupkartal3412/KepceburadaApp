@@ -4355,15 +4355,21 @@ select:focus, input:focus {
 
 /* ==================== 📱 PERFECT BALANCED MOBILE WIZARD FORM LAYOUT ==================== */
 @media (max-width: 640px) {
+  .main-content {
+    padding-top: 0.75rem !important;
+  }
+
   .card-3d-hero {
-    padding: 0.75rem 1rem !important;
+    margin-top: 0.65rem !important;
+    padding: 0.95rem 1rem !important;
     margin-bottom: 0.75rem !important;
     border-radius: 14px !important;
   }
 
   .hero-3d-title {
-    font-size: 1.1rem !important;
-    margin: 0 !important;
+    font-size: 1.05rem !important;
+    margin: 0 0 0.25rem 0 !important;
+    line-height: 1.25 !important;
   }
 
   .hero-3d-sub {
