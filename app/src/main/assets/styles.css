@@ -81,15 +81,15 @@ body {
   display: block !important;
 }
 
-/* App Header (Koyu Gri #1F2937 + Turuncu #F59E0B Accent - Edge to Edge Corner Layout) */
+/* App Header (Always keep deep dark obsidian background #0F172A) */
 .app-header {
-  background-color: var(--dark-gray);
-  border-bottom: 3px solid var(--primary);
+  background-color: #0F172A !important;
+  border-bottom: 3px solid #F59E0B !important;
   padding: 0.75rem 2rem !important;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 4px 20px rgba(31, 41, 55, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   width: 100%;
 }
 
@@ -4306,6 +4306,31 @@ select:focus, input:focus {
   color: #CBD5E1 !important;
   font-size: 0.82rem !important;
   margin: 0 !important;
+}
+
+/* 3D Secondary Back Button (‹ Geri) */
+.btn-3d-secondary {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.5) !important;
+  color: #FFFFFF !important;
+  font-weight: 800 !important;
+  font-size: 0.9rem !important;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.4rem !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-3d-secondary:hover {
+  background: rgba(245, 158, 11, 0.25) !important;
+  border-color: #F59E0B !important;
+  color: #FFFFFF !important;
+  transform: translateY(-1.5px) !important;
 }
 
 
