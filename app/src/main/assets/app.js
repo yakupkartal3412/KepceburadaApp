@@ -1393,10 +1393,9 @@ function updateLoggedInDashboardUI() {
     const subEl = document.getElementById("dash-user-sub");
     const statListingsEl = document.getElementById("dash-stat-my-listings");
 
-    if (nameEl) nameEl.textContent = `${currentUser.displayName || currentUser.name}`;
+    if (nameEl) nameEl.textContent = `${currentUser.name || currentUser.displayName}`;
     if (subEl) {
-      const cleanPhone = formatCleanPhoneNumber(currentUser.phone);
-      subEl.innerHTML = `📞 Telefon: <strong style="color: #FCD34D;">${cleanPhone || 'Girilmedi'}</strong> | 📍 Şehir: <strong style="color: #fff;">${currentUser.city || '81 İl'}</strong>`;
+      subEl.textContent = `${currentUser.company ? currentUser.company + ' · ' : ''}📍 ${currentUser.city || 'Bingöl'}`;
     }
     
     if (statListingsEl) {
@@ -2094,13 +2093,13 @@ function renderMyListings() {
 
   if (myList.length === 0) {
     container.innerHTML = `
-      <div style="background: rgba(15,23,42,0.7); border: 1.5px dashed rgba(245,158,11,0.35); border-radius: 18px; padding: 2.25rem 1.5rem; text-align: center; color: #fff; grid-column: 1 / -1; margin: 0.5rem 0;">
+      <div style="background: var(--bg-card); border: 1.5px dashed var(--border-color); border-radius: 18px; padding: 2.25rem 1.5rem; text-align: center; color: var(--text-main); grid-column: 1 / -1; margin: 0.5rem 0; box-shadow: var(--card-shadow);">
         <div style="margin-bottom: 0.6rem;">
           <img src="assets/logo_3d.png" alt="MakineBul 3D Logo" style="width: 48px; height: 48px; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(245,158,11,0.4));">
         </div>
-        <h4 style="font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 800; color: #F59E0B; margin-bottom: 0.4rem;">Henüz Yayında Makineniz Yok</h4>
-        <p style="font-size: 0.84rem; color: #94A3B8; margin-bottom: 1.25rem; max-width: 380px; margin-left: auto; margin-right: auto; line-height: 1.5;">Hemen 'Yeni İlan Ekle' sekmesine geçerek iş makinenizi 1 dakikada müşterilere ulaştırın.</p>
-        <button type="button" onclick="switchDashboardTab('add')" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: #0F172A; font-weight: 800; border-radius: 12px; font-size: 0.88rem; cursor: pointer; box-shadow: 0 8px 20px rgba(245,158,11,0.35);">
+        <h4 style="font-family: var(--font-family); font-size: 1.1rem; font-weight: 800; color: var(--primary-hover); margin-bottom: 0.4rem;">Henüz Yayında Makineniz Yok</h4>
+        <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 1.25rem; max-width: 380px; margin-left: auto; margin-right: auto; line-height: 1.5;">Hemen 'Yeni İlan Ekle' sekmesine geçerek iş makinenizi 1 dakikada müşterilere ulaştırın.</p>
+        <button type="button" onclick="switchDashboardTab('add')" style="padding: 0.75rem 1.5rem; background: var(--primary-gradient); border: none; color: #0F172A; font-weight: 800; border-radius: 12px; font-size: 0.88rem; cursor: pointer; box-shadow: 0 8px 20px rgba(245,158,11,0.35);">
           ➕ İlk İlanımı Hemen Ekle
         </button>
       </div>
@@ -2212,52 +2211,52 @@ function openEditModal(id) {
   ].join(';');
 
   modal.innerHTML = `
-    <div style="background:#fff;border-radius:16px;max-width:520px;width:100%;padding:1.75rem;box-shadow:0 20px 60px rgba(0,0,0,0.35);max-height:90vh;overflow-y:auto;position:relative;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;border-bottom:1px solid #E2E8F0;padding-bottom:0.75rem;">
-        <h3 style="font-size:1.15rem;font-weight:800;color:#1F2937;margin:0;">✏️ İlanı Düzenle</h3>
-        <button onclick="closeEditModal()" style="background:none;border:none;font-size:1.4rem;font-weight:700;cursor:pointer;color:#6B7280;line-height:1;">✕</button>
+    <div style="background: var(--bg-card); border-radius: 18px; max-width: 520px; width: 100%; padding: 1.5rem; box-shadow: var(--card-shadow); border: 1.5px solid var(--border-color); max-height: 90vh; overflow-y: auto; position: relative; color: var(--text-main);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading); margin: 0;">✏️ İlanı Düzenle</h3>
+        <button onclick="closeEditModal()" style="background: none; border: none; font-size: 1.4rem; font-weight: 700; cursor: pointer; color: var(--text-muted); line-height: 1;">✕</button>
       </div>
 
-      <div style="margin-bottom:1rem;">
-        <label style="display:block;font-size:0.88rem;font-weight:600;color:#374151;margin-bottom:0.4rem;">İlan Başlığı / Makine Modeli *</label>
-        <input type="text" id="em-title" value="${item.title}" style="width:100%;padding:0.75rem 0.9rem;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.9rem;box-sizing:border-box;">
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.35rem;">İlan Başlığı / Makine Modeli *</label>
+        <input type="text" id="em-title" value="${item.title}" class="input-3d-dark">
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
         <div>
-          <label style="display:block;font-size:0.88rem;font-weight:600;color:#374151;margin-bottom:0.4rem;">Bulunduğu İl *</label>
-          <select id="em-city" onchange="updateEditDistricts()" style="width:100%;padding:0.75rem 0.9rem;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.9rem;box-sizing:border-box;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.35rem;">Bulunduğu İl *</label>
+          <select id="em-city" onchange="updateEditDistricts()" class="input-3d-dark">
             <option value="">-- İl Seçin --</option>
             ${cityOptions}
           </select>
         </div>
         <div>
-          <label style="display:block;font-size:0.88rem;font-weight:600;color:#374151;margin-bottom:0.4rem;">Bulunduğu İlçe</label>
-          <select id="em-district" style="width:100%;padding:0.75rem 0.9rem;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.9rem;box-sizing:border-box;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.35rem;">Bulunduğu İlçe</label>
+          <select id="em-district" class="input-3d-dark">
             ${districtOptions}
           </select>
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
         <div>
-          <label style="display:block;font-size:0.88rem;font-weight:600;color:#374151;margin-bottom:0.4rem;">Günlük Ücret (TL) *</label>
-          <input type="number" id="em-price" value="${item.price}" style="width:100%;padding:0.75rem 0.9rem;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.9rem;box-sizing:border-box;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.35rem;">Günlük Ücret (TL) *</label>
+          <input type="number" id="em-price" value="${item.price}" class="input-3d-dark">
         </div>
         <div>
-          <label style="display:block;font-size:0.88rem;font-weight:600;color:#374151;margin-bottom:0.4rem;">Saatlik Ücret (TL)</label>
-          <input type="number" id="em-hourly" value="${item.hourlyPrice || Math.round(item.price/8)}" style="width:100%;padding:0.75rem 0.9rem;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.9rem;box-sizing:border-box;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.35rem;">Saatlik Ücret (TL)</label>
+          <input type="number" id="em-hourly" value="${item.hourlyPrice || Math.round(item.price/8)}" class="input-3d-dark">
         </div>
       </div>
 
-      <div style="margin-bottom:1.25rem;">
-        <label style="display:block;font-size:0.88rem;font-weight:600;color:#374151;margin-bottom:0.4rem;">Telefon Numaranız (WhatsApp) *</label>
-        <input type="tel" id="em-phone" value="${item.phone}" style="width:100%;padding:0.75rem 0.9rem;border:1.5px solid #E2E8F0;border-radius:10px;font-size:0.9rem;box-sizing:border-box;">
+      <div style="margin-bottom: 1.25rem;">
+        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.35rem;">Telefon Numaranız (WhatsApp) *</label>
+        <input type="tel" id="em-phone" value="${item.phone}" class="input-3d-dark">
       </div>
 
-      <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
-        <button onclick="closeEditModal()" style="padding:0.7rem 1.2rem;background:#F1F5F9;border:1px solid #CBD5E1;color:#475569;font-weight:700;border-radius:10px;cursor:pointer;font-size:0.9rem;">İptal</button>
-        <button onclick="saveEditListing('${item.id}')" style="padding:0.7rem 1.4rem;background:linear-gradient(135deg,#F59E0B,#D97706);border:none;color:#1F2937;font-weight:800;border-radius:10px;cursor:pointer;font-size:0.9rem;">💾 Kaydet</button>
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+        <button onclick="closeEditModal()" class="btn-3d-secondary" style="width: auto; padding: 0.6rem 1.2rem; font-size: 0.85rem;">İptal</button>
+        <button onclick="saveEditListing('${item.id}')" class="btn-3d-gold-action" style="width: auto; padding: 0.6rem 1.4rem; font-size: 0.85rem;">💾 Kaydet</button>
       </div>
     </div>
   `;
