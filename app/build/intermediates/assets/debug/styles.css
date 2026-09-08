@@ -4663,5 +4663,134 @@ select option {
   box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25) !important;
 }
 
+/* ==================== ⭐ OPERATOR RATING & REVIEW STYLES ==================== */
+.sahibinden-rating-badge-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--pill-bg);
+  border: 1px solid var(--border-color);
+  padding: 0.22rem 0.55rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 0.15rem;
+  margin-bottom: 0.35rem;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.sahibinden-rating-badge-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.rating-stars-gold {
+  color: #F59E0B;
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+
+.rating-count-text {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.rating-view-link {
+  font-size: 0.68rem;
+  color: #D97706;
+  font-weight: 800;
+  margin-left: auto;
+}
+
+[data-theme="dark"] .rating-view-link {
+  color: #FCD34D;
+}
+
+.review-score-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-page);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.review-big-score {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #F59E0B;
+  line-height: 1;
+}
+
+.review-card-item {
+  background: var(--pill-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.review-tag-chip {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.18rem 0.55rem;
+  border-radius: 20px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #D97706;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  margin-right: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+[data-theme="dark"] .review-tag-chip {
+  color: #FCD34D;
+}
+
+.review-tag-clickable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.review-tag-clickable:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.review-tag-clickable.selected {
+  background: var(--primary-gradient) !important;
+  color: #0F172A !important;
+  font-weight: 800 !important;
+  border-color: transparent !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+}
+
+.interactive-stars-box {
+  display: flex;
+  gap: 0.35rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.star-interactive {
+  color: #94A3B8;
+  transition: transform 0.15s ease, color 0.15s ease;
+  user-select: none;
+}
+
+.star-interactive.active {
+  color: #F59E0B;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+.star-interactive:hover {
+  transform: scale(1.25);
+}
+
 
 

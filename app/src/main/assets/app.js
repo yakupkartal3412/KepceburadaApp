@@ -124,10 +124,52 @@ const DEFAULT_LISTINGS = [
 // LocalStorage Keys (v12 for clean refresh with exact photos)
 const STORAGE_LISTINGS_KEY = "makinebul_listings_v12";
 const STORAGE_REQUESTS_KEY = "makinebul_requests_v10";
+const STORAGE_REVIEWS_KEY = "makinebul_reviews_v1";
+
+// Default Sample Reviews
+const DEFAULT_REVIEWS = [
+  {
+    id: "rev-1",
+    listingId: "kepce-bingol-1",
+    author: "Ahmet Demir (Demir İnşaat)",
+    rating: 5,
+    date: "2 gün önce",
+    tags: ["⏱️ Zamanında Geldi", "🚜 Usta Operatör", "🛠️ Bakımlı Makine"],
+    comment: "Operatör Yakup Usta şantiyemizde 4 gün temel kazısı yaptı. Milimetrik çalışıyor, makinenin hidroliği çok güçlü. Kesinlikle tavsiye ederim."
+  },
+  {
+    id: "rev-2",
+    listingId: "kepce-bingol-1",
+    author: "Murat Şahin (Şahin Hafriyat)",
+    rating: 5,
+    date: "1 hafta önce",
+    tags: ["🤝 Güvenilir", "⚡ Seri İşçilik"],
+    comment: "Kanal açma işinde çalıştık, tam vaktinde şantiyedeydi. Yakıt konusunda da çok tasarruflu makine."
+  },
+  {
+    id: "rev-3",
+    listingId: "kepce-bingol-2",
+    author: "Cemal Kaya",
+    rating: 5,
+    date: "3 gün önce",
+    tags: ["🚜 Usta Operatör", "⏱️ Zamanında Geldi"],
+    comment: "Kırıcı aparatı çok güçlü, taş kırma işini 1 günde bitirdi. Teşekkürler."
+  },
+  {
+    id: "rev-4",
+    listingId: "kepce-bingol-3",
+    author: "Serkan Yılmaz",
+    rating: 5,
+    date: "5 gün önce",
+    tags: ["🛠️ Bakımlı Makine"],
+    comment: "Temiz ve bakımlı araç, operatör işine sadık."
+  }
+];
 
 // State Management
 let listings = [];
 let requests = [];
+let reviews = [];
 let activeMode = "rent";
 
 // Türkiye 81 İl ve Kapsamlı Tüm İlçeleri Veri Kümesi
@@ -373,6 +415,50 @@ function loadData() {
     ];
     saveRequests();
   }
+
+  const storedReviews = localStorage.getItem(STORAGE_REVIEWS_KEY);
+  if (storedReviews) {
+    try {
+      reviews = JSON.parse(storedReviews);
+    } catch(e) {
+      reviews = DEFAULT_REVIEWS;
+    }
+  } else {
+    reviews = DEFAULT_REVIEWS;
+    saveReviews();
+  }
+}
+
+function saveReviews() {
+  localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify(reviews));
+}
+
+function getListingReviewStats(listingId) {
+  const itemReviews = reviews.filter(r => String(r.listingId) === String(listingId));
+  if (itemReviews.length === 0) {
+    return {
+      avgRating: "5.0",
+      count: 1,
+      list: [
+        {
+          id: "def-" + listingId,
+          listingId: listingId,
+          author: "Müteahhit Referansı",
+          rating: 5,
+          date: "Yakın zamanda",
+          tags: ["🚜 Usta Operatör", "⏱️ Zamanında Geldi"],
+          comment: "Zamanında teslim ve başarılı işçilik."
+        }
+      ]
+    };
+  }
+  const sum = itemReviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0);
+  const avg = (sum / itemReviews.length).toFixed(1);
+  return {
+    avgRating: avg,
+    count: itemReviews.length,
+    list: itemReviews
+  };
 }
 
 function saveListings() {
@@ -1678,6 +1764,7 @@ function renderListings() {
     const statusText = isAvailable ? '🟢 Müsait' : '🔴 Kirada';
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
     const isMine = isItemMine(item);
+    const stats = getListingReviewStats(item.id);
 
     return `
       <div class="card card-listing-sahibinden">
@@ -1693,6 +1780,13 @@ function renderListings() {
           
           <div class="sahibinden-owner-name" style="font-size: 0.78rem; font-weight: 700; color: var(--text-main); margin-top: 0.2rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.35rem;">
             <span style="color: #F59E0B; font-size: 0.85rem;">👤</span> <span style="color: var(--text-main);">${item.owner && item.owner.trim() ? item.owner : 'Makine Sahibi'}</span>
+          </div>
+
+          <!-- Rating & Reviews Badge -->
+          <div class="sahibinden-rating-badge-btn" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör">
+            <span class="rating-stars-gold">⭐ ${stats.avgRating}</span>
+            <span class="rating-count-text">(${stats.count} değerlendirme)</span>
+            <span class="rating-view-link">Yorumlar 💬</span>
           </div>
 
           <div class="sahibinden-badge-row">
@@ -2112,6 +2206,7 @@ function renderMyListings() {
     const statusClass = isAvailable ? 'available' : 'rented';
     const statusText = isAvailable ? '🟢 Müsait' : '🔴 Kirada';
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
+    const stats = getListingReviewStats(item.id);
 
     return `
       <div class="card card-listing-sahibinden my-dark-listing-card" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 0.6rem; box-shadow: var(--card-shadow); display: flex; flex-direction: column; justify-content: space-between;">
@@ -2132,6 +2227,13 @@ function renderMyListings() {
           
           <div style="font-size: 0.74rem; color: var(--text-main); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 4px; font-weight: 600;">
             <span style="color: #F59E0B;">👤</span> <span>${item.owner || (currentUser ? currentUser.displayName : 'Makine Sahibi')}</span>
+          </div>
+
+          <!-- Rating & Reviews Badge -->
+          <div class="sahibinden-rating-badge-btn" onclick="openReviewsModal('${item.id}')" style="margin-bottom: 0.35rem;" title="Gelen Yorumları Gör">
+            <span class="rating-stars-gold">⭐ ${stats.avgRating}</span>
+            <span class="rating-count-text">(${stats.count} yorum)</span>
+            <span class="rating-view-link">Görüntüle 💬</span>
           </div>
 
           <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.45rem; font-weight: 500;">
@@ -2283,6 +2385,217 @@ function closeEditModal() {
   // Also close old static modal if exists
   const old = document.getElementById('edit-modal');
   if (old) { old.style.display = 'none'; old.classList.remove('active'); }
+}
+
+// ==================== ⭐ OPERATOR REVIEWS & RATINGS MODAL ====================
+let selectedReviewRating = 5;
+let selectedReviewTags = [];
+
+function openReviewsModal(listingId) {
+  const item = listings.find(i => String(i.id) === String(listingId));
+  if (!item) return;
+
+  const existing = document.getElementById("reviews-modal-dynamic");
+  if (existing) existing.remove();
+
+  const stats = getListingReviewStats(item.id);
+  selectedReviewRating = 5;
+  selectedReviewTags = [];
+
+  const modal = document.createElement("div");
+  modal.id = "reviews-modal-dynamic";
+  modal.style.cssText = [
+    'position:fixed',
+    'top:0',
+    'left:0',
+    'width:100vw',
+    'height:100vh',
+    'background:rgba(15,23,42,0.85)',
+    'backdrop-filter:blur(6px)',
+    '-webkit-backdrop-filter:blur(6px)',
+    'z-index:2147483647',
+    'display:flex',
+    'align-items:center',
+    'justify-content:center',
+    'padding:1rem',
+    'box-sizing:border-box'
+  ].join(';');
+
+  const defaultAuthor = currentUser ? (currentUser.displayName || currentUser.name) : "";
+
+  const availableTags = [
+    "⏱️ Zamanında Geldi",
+    "🚜 Usta Operatör",
+    "🛠️ Bakımlı Makine",
+    "🤝 Güvenilir",
+    "⚡ Seri İş"
+  ];
+
+  const tagsHtml = availableTags.map(t => 
+    `<span class="review-tag-chip review-tag-clickable" onclick="toggleReviewTag('${t}', this)">${t}</span>`
+  ).join('');
+
+  const reviewsListHtml = stats.list.length > 0 
+    ? stats.list.map(r => `
+      <div class="review-card-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.25rem;">
+          <strong style="font-size:0.85rem;color:var(--text-heading);">${r.author || 'Anonim Müteahhit'}</strong>
+          <span style="font-size:0.75rem;color:#F59E0B;font-weight:800;">${'⭐'.repeat(Math.min(5, Math.max(1, Math.round(r.rating || 5))))} ${Number(r.rating || 5).toFixed(1)}</span>
+        </div>
+        <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:0.4rem;">📅 ${r.date || 'Yakın zamanda'}</div>
+        ${r.tags && r.tags.length ? `
+          <div style="margin-bottom:0.45rem;">
+            ${r.tags.map(tag => `<span class="review-tag-chip">${tag}</span>`).join('')}
+          </div>
+        ` : ''}
+        <p style="font-size:0.82rem;color:var(--text-main);margin:0;line-height:1.4;">${r.comment}</p>
+      </div>
+    `).join('')
+    : `<p style="font-size:0.82rem;color:var(--text-muted);text-align:center;padding:1rem;">Henüz yazılmış bir yorum bulunmuyor. İlk yorumu siz ekleyin!</p>`;
+
+  modal.innerHTML = `
+    <div style="background:var(--bg-card);border-radius:20px;max-width:520px;width:100%;padding:1.4rem;box-shadow:var(--card-shadow);border:1.5px solid var(--border-color);max-height:92vh;overflow-y:auto;position:relative;color:var(--text-main);">
+      
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.75rem;">
+        <div>
+          <h3 style="font-size:1.05rem;font-weight:800;color:var(--text-heading);margin:0 0 0.15rem;">⭐ Operatör & Makine Değerlendirmeleri</h3>
+          <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">${item.title} (${item.owner || 'Makine Sahibi'})</p>
+        </div>
+        <button onclick="closeReviewsModal()" style="background:none;border:none;font-size:1.4rem;font-weight:700;cursor:pointer;color:var(--text-muted);line-height:1;">✕</button>
+      </div>
+
+      <!-- Score Summary -->
+      <div class="review-score-summary">
+        <div class="review-big-score">${stats.avgRating}</div>
+        <div>
+          <div style="font-size:1rem;color:#F59E0B;letter-spacing:1px;margin-bottom:0.2rem;">⭐⭐⭐⭐⭐</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);font-weight:600;">Toplam ${stats.count} Değerlendirme & Yorum</div>
+        </div>
+      </div>
+
+      <!-- Add Review Form -->
+      <div style="background:var(--bg-page);border:1.5px solid var(--border-color);border-radius:14px;padding:1rem;margin-bottom:1.25rem;">
+        <h4 style="font-size:0.9rem;font-weight:800;color:var(--text-heading);margin:0 0 0.5rem;">✍️ Değerlendirme & Yorum Bırak</h4>
+        
+        <!-- Interactive 5 Stars -->
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
+          <span style="font-size:0.8rem;font-weight:700;color:var(--text-heading);">Puanınız:</span>
+          <div class="interactive-stars-box" id="rev-stars-box" style="margin-bottom:0;">
+            <span class="star-interactive active" onclick="setReviewRating(1)">★</span>
+            <span class="star-interactive active" onclick="setReviewRating(2)">★</span>
+            <span class="star-interactive active" onclick="setReviewRating(3)">★</span>
+            <span class="star-interactive active" onclick="setReviewRating(4)">★</span>
+            <span class="star-interactive active" onclick="setReviewRating(5)">★</span>
+          </div>
+          <span id="rev-rating-display" style="font-size:0.85rem;font-weight:800;color:#F59E0B;">5.0 / 5</span>
+        </div>
+
+        <!-- Fast Tags -->
+        <div style="margin-bottom:0.65rem;">
+          <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);margin-bottom:0.35rem;">Hızlı Etiket Seçin:</div>
+          <div style="display:flex;flex-wrap:wrap;">
+            ${tagsHtml}
+          </div>
+        </div>
+
+        <!-- Author Input -->
+        <div style="margin-bottom:0.65rem;">
+          <input type="text" id="rev-input-author" value="${defaultAuthor}" placeholder="Adınız / Firma Adı (Örn: Mehmet Usta - Kaya İnşaat)" class="input-3d-dark" style="padding:0.65rem 0.85rem;font-size:0.82rem;">
+        </div>
+
+        <!-- Comment Input -->
+        <div style="margin-bottom:0.75rem;">
+          <textarea id="rev-input-comment" rows="2" placeholder="Operatörün işçiliği, makinenin durumu nasıldı? Görüşlerinizi yazınız..." class="input-3d-dark" style="padding:0.65rem 0.85rem;font-size:0.82rem;resize:vertical;"></textarea>
+        </div>
+
+        <button onclick="submitReview('${item.id}')" class="btn-3d-gold-action" style="padding:0.65rem 1rem;font-size:0.85rem;">
+          ⭐ Değerlendirmeyi Gönder
+        </button>
+      </div>
+
+      <!-- Past Reviews List -->
+      <h4 style="font-size:0.92rem;font-weight:800;color:var(--text-heading);margin:0 0 0.65rem;">💬 Önceki Değerlendirmeler (${stats.count})</h4>
+      <div style="display:flex;flex-direction:column;">
+        ${reviewsListHtml}
+      </div>
+
+    </div>
+  `;
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) closeReviewsModal();
+  });
+
+  document.body.appendChild(modal);
+}
+
+function closeReviewsModal() {
+  const m = document.getElementById("reviews-modal-dynamic");
+  if (m) m.remove();
+}
+
+function setReviewRating(val) {
+  selectedReviewRating = Number(val);
+  const stars = document.querySelectorAll("#rev-stars-box .star-interactive");
+  stars.forEach((star, index) => {
+    if (index < val) {
+      star.classList.add("active");
+    } else {
+      star.classList.remove("active");
+    }
+  });
+  const display = document.getElementById("rev-rating-display");
+  if (display) display.textContent = val + ".0 / 5";
+}
+
+function toggleReviewTag(tagText, el) {
+  if (selectedReviewTags.includes(tagText)) {
+    selectedReviewTags = selectedReviewTags.filter(t => t !== tagText);
+    el.classList.remove("selected");
+  } else {
+    selectedReviewTags.push(tagText);
+    el.classList.add("selected");
+  }
+}
+
+function submitReview(listingId) {
+  const authorEl = document.getElementById("rev-input-author");
+  const commentEl = document.getElementById("rev-input-comment");
+
+  const author = authorEl ? authorEl.value.trim() : "";
+  const comment = commentEl ? commentEl.value.trim() : "";
+
+  if (!author) {
+    showToast("⚠️ Lütfen adınızı veya firma adınızı giriniz.");
+    return;
+  }
+  if (!comment) {
+    showToast("⚠️ Lütfen kısa bir değerlendirme yorumu yazınız.");
+    return;
+  }
+
+  const newRev = {
+    id: "rev-" + Date.now(),
+    listingId: String(listingId),
+    author: author,
+    rating: selectedReviewRating,
+    date: "Az önce",
+    tags: [...selectedReviewTags],
+    comment: comment
+  };
+
+  reviews.unshift(newRev);
+  saveReviews();
+
+  showToast("🎉 Değerlendirmeniz başarıyla yayınlandı!");
+
+  // Re-render listings so the card score updates instantly
+  renderListings();
+  if (typeof renderMyListings === 'function') renderMyListings();
+
+  // Re-open modal to show the new review
+  openReviewsModal(listingId);
 }
 
 function saveEditListing(id) {
