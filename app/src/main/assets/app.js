@@ -1780,8 +1780,10 @@ function renderListings() {
 
           <!-- Rating & Reviews Row -->
           <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör">
-            <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
-            <span class="rating-count-label">(${stats.count} Değerlendirme)</span>
+            <div style="display:inline-flex;align-items:center;gap:0.25rem;white-space:nowrap;">
+              <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
+              <span class="rating-count-label">(${stats.count})</span>
+            </div>
             <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
@@ -2227,8 +2229,10 @@ function renderMyListings() {
 
           <!-- Rating & Reviews Row -->
           <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Gelen Değerlendirmeleri Gör">
-            <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
-            <span class="rating-count-label">(${stats.count} Değerlendirme)</span>
+            <div style="display:inline-flex;align-items:center;gap:0.25rem;white-space:nowrap;">
+              <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
+              <span class="rating-count-label">(${stats.count})</span>
+            </div>
             <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
