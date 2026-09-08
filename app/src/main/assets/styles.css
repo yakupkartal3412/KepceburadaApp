@@ -336,15 +336,21 @@ body {
   font-family: var(--font-family) !important;
   border-radius: 40px;
   border: 1.5px solid var(--border-color);
-  background-color: var(--dark);
-  color: #FFFFFF;
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
   transition: all 0.2s ease;
+}
+
+.search-input-wrapper input::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.85;
 }
 
 .search-input-wrapper input:focus {
   outline: none;
-  border-color: var(--primary);
-  background-color: var(--dark);
+  border-color: var(--primary) !important;
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
   box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25);
 }
 
@@ -4638,6 +4644,23 @@ select option {
   border: 1.5px solid #E2E8F0 !important;
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;
   color: #0F172A !important;
+}
+
+[data-theme="light"] .search-input-wrapper input {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1.5px solid #CBD5E1 !important;
+}
+
+[data-theme="light"] .search-input-wrapper input::placeholder {
+  color: #64748B !important;
+}
+
+[data-theme="light"] .search-input-wrapper input:focus {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25) !important;
 }
 
 
