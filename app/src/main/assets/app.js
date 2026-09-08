@@ -1781,7 +1781,7 @@ function renderListings() {
           <!-- Rating & Reviews Row -->
           <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör">
             <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
-            <span class="rating-count-label">(${stats.count} Kişi Puan Verdi)</span>
+            <span class="rating-count-label">(${stats.count} Kişi)</span>
             <span class="rating-dot-sep">•</span>
             <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
@@ -2227,7 +2227,7 @@ function renderMyListings() {
           <!-- Rating & Reviews Row -->
           <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Gelen Değerlendirmeleri Gör">
             <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
-            <span class="rating-count-label">(${stats.count} Kişi Puan Verdi)</span>
+            <span class="rating-count-label">(${stats.count} Kişi)</span>
             <span class="rating-dot-sep">•</span>
             <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
