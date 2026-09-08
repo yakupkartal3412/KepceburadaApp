@@ -134,7 +134,6 @@ const DEFAULT_REVIEWS = [
     author: "Ahmet Demir (Demir İnşaat)",
     rating: 5,
     date: "2 gün önce",
-    tags: ["⏱️ Zamanında Geldi", "🚜 Usta Operatör", "🛠️ Bakımlı Makine"],
     comment: "Operatör Yakup Usta şantiyemizde 4 gün temel kazısı yaptı. Milimetrik çalışıyor, makinenin hidroliği çok güçlü. Kesinlikle tavsiye ederim."
   },
   {
@@ -143,7 +142,6 @@ const DEFAULT_REVIEWS = [
     author: "Murat Şahin (Şahin Hafriyat)",
     rating: 5,
     date: "1 hafta önce",
-    tags: ["🤝 Güvenilir", "⚡ Seri İşçilik"],
     comment: "Kanal açma işinde çalıştık, tam vaktinde şantiyedeydi. Yakıt konusunda da çok tasarruflu makine."
   },
   {
@@ -152,7 +150,6 @@ const DEFAULT_REVIEWS = [
     author: "Cemal Kaya",
     rating: 5,
     date: "3 gün önce",
-    tags: ["🚜 Usta Operatör", "⏱️ Zamanında Geldi"],
     comment: "Kırıcı aparatı çok güçlü, taş kırma işini 1 günde bitirdi. Teşekkürler."
   },
   {
@@ -161,7 +158,6 @@ const DEFAULT_REVIEWS = [
     author: "Serkan Yılmaz",
     rating: 5,
     date: "5 gün önce",
-    tags: ["🛠️ Bakımlı Makine"],
     comment: "Temiz ve bakımlı araç, operatör işine sadık."
   }
 ];
@@ -2423,18 +2419,6 @@ function openReviewsModal(listingId) {
 
   const defaultAuthor = currentUser ? (currentUser.displayName || currentUser.name) : "";
 
-  const availableTags = [
-    "⏱️ Zamanında Geldi",
-    "🚜 Usta Operatör",
-    "🛠️ Bakımlı Makine",
-    "🤝 Güvenilir",
-    "⚡ Seri İş"
-  ];
-
-  const tagsHtml = availableTags.map(t => 
-    `<span class="review-tag-chip review-tag-clickable" onclick="toggleReviewTag('${t}', this)">${t}</span>`
-  ).join('');
-
   const reviewsListHtml = stats.list.length > 0 
     ? stats.list.map(r => `
       <div class="review-card-item">
@@ -2443,11 +2427,6 @@ function openReviewsModal(listingId) {
           <span style="font-size:0.75rem;color:#F59E0B;font-weight:800;">${'⭐'.repeat(Math.min(5, Math.max(1, Math.round(r.rating || 5))))} ${Number(r.rating || 5).toFixed(1)}</span>
         </div>
         <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:0.4rem;">📅 ${r.date || 'Yakın zamanda'}</div>
-        ${r.tags && r.tags.length ? `
-          <div style="margin-bottom:0.45rem;">
-            ${r.tags.map(tag => `<span class="review-tag-chip">${tag}</span>`).join('')}
-          </div>
-        ` : ''}
         <p style="font-size:0.82rem;color:var(--text-main);margin:0;line-height:1.4;">${r.comment}</p>
       </div>
     `).join('')
@@ -2479,7 +2458,7 @@ function openReviewsModal(listingId) {
         <h4 style="font-size:0.9rem;font-weight:800;color:var(--text-heading);margin:0 0 0.5rem;">✍️ Değerlendirme & Yorum Bırak</h4>
         
         <!-- Interactive 5 Stars -->
-        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem;">
           <span style="font-size:0.8rem;font-weight:700;color:var(--text-heading);">Puanınız:</span>
           <div class="interactive-stars-box" id="rev-stars-box" style="margin-bottom:0;">
             <span class="star-interactive active" onclick="setReviewRating(1)">★</span>
@@ -2491,25 +2470,20 @@ function openReviewsModal(listingId) {
           <span id="rev-rating-display" style="font-size:0.85rem;font-weight:800;color:#F59E0B;">5.0 / 5</span>
         </div>
 
-        <!-- Fast Tags -->
-        <div style="margin-bottom:0.65rem;">
-          <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);margin-bottom:0.35rem;">Hızlı Etiket Seçin:</div>
-          <div style="display:flex;flex-wrap:wrap;">
-            ${tagsHtml}
-          </div>
-        </div>
-
         <!-- Author Input -->
-        <div style="margin-bottom:0.65rem;">
-          <input type="text" id="rev-input-author" value="${defaultAuthor}" placeholder="Adınız / Firma Adı (Örn: Mehmet Usta - Kaya İnşaat)" class="input-3d-dark" style="padding:0.65rem 0.85rem;font-size:0.82rem;">
+        <div style="margin-bottom:0.75rem;">
+          <label style="display:block;font-size:0.8rem;font-weight:700;color:var(--text-heading);margin-bottom:0.25rem;">Adınız & Soyadınız veya Firma / Şantiye Adınız *</label>
+          <input type="text" id="rev-input-author" value="${defaultAuthor}" placeholder="Örn: Hasan Usta (Kaya Hafriyat)" class="input-3d-dark" style="padding:0.65rem 0.85rem;font-size:0.85rem;">
+          <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.25rem;">💡 Yorumunuzda yukarıya yazdığınız isim görünecektir. Kayıt olmadan hızlıca değerlendirme yapabilirsiniz.</div>
         </div>
 
         <!-- Comment Input -->
         <div style="margin-bottom:0.75rem;">
-          <textarea id="rev-input-comment" rows="2" placeholder="Operatörün işçiliği, makinenin durumu nasıldı? Görüşlerinizi yazınız..." class="input-3d-dark" style="padding:0.65rem 0.85rem;font-size:0.82rem;resize:vertical;"></textarea>
+          <label style="display:block;font-size:0.8rem;font-weight:700;color:var(--text-heading);margin-bottom:0.25rem;">Yorumunuz *</label>
+          <textarea id="rev-input-comment" rows="3" placeholder="Operatörün işçiliği, makinenin durumu, çalışma performansı nasıldı? Görüşlerinizi yazınız..." class="input-3d-dark" style="padding:0.65rem 0.85rem;font-size:0.85rem;resize:vertical;"></textarea>
         </div>
 
-        <button onclick="submitReview('${item.id}')" class="btn-3d-gold-action" style="padding:0.65rem 1rem;font-size:0.85rem;">
+        <button onclick="submitReview('${item.id}')" class="btn-3d-gold-action" style="padding:0.7rem 1rem;font-size:0.88rem;">
           ⭐ Değerlendirmeyi Gönder
         </button>
       </div>
@@ -2549,16 +2523,6 @@ function setReviewRating(val) {
   if (display) display.textContent = val + ".0 / 5";
 }
 
-function toggleReviewTag(tagText, el) {
-  if (selectedReviewTags.includes(tagText)) {
-    selectedReviewTags = selectedReviewTags.filter(t => t !== tagText);
-    el.classList.remove("selected");
-  } else {
-    selectedReviewTags.push(tagText);
-    el.classList.add("selected");
-  }
-}
-
 function submitReview(listingId) {
   const authorEl = document.getElementById("rev-input-author");
   const commentEl = document.getElementById("rev-input-comment");
@@ -2581,7 +2545,6 @@ function submitReview(listingId) {
     author: author,
     rating: selectedReviewRating,
     date: "Az önce",
-    tags: [...selectedReviewTags],
     comment: comment
   };
 
