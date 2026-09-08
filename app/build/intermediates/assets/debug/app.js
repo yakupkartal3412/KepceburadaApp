@@ -1779,10 +1779,12 @@ function renderListings() {
           </div>
 
           <!-- Rating & Reviews Badge -->
-          <div class="sahibinden-rating-badge-btn" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör">
-            <span class="rating-stars-gold">⭐ ${stats.avgRating}</span>
-            <span class="rating-count-text">(${stats.count} değerlendirme)</span>
-            <span class="rating-view-link">Yorumlar 💬</span>
+          <div class="sahibinden-rating-badge-btn" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör & Puan Ver">
+            <div style="display: flex; align-items: center; gap: 0.35rem;">
+              <span class="rating-stars-gold">⭐ ${stats.avgRating}</span>
+              <span class="rating-count-text">(${stats.count} Yorum)</span>
+            </div>
+            <span class="rating-cta-btn">💬 Puan Ver & Oku</span>
           </div>
 
           <div class="sahibinden-badge-row">
@@ -2227,9 +2229,11 @@ function renderMyListings() {
 
           <!-- Rating & Reviews Badge -->
           <div class="sahibinden-rating-badge-btn" onclick="openReviewsModal('${item.id}')" style="margin-bottom: 0.35rem;" title="Gelen Yorumları Gör">
-            <span class="rating-stars-gold">⭐ ${stats.avgRating}</span>
-            <span class="rating-count-text">(${stats.count} yorum)</span>
-            <span class="rating-view-link">Görüntüle 💬</span>
+            <div style="display: flex; align-items: center; gap: 0.35rem;">
+              <span class="rating-stars-gold">⭐ ${stats.avgRating}</span>
+              <span class="rating-count-text">(${stats.count} Yorum)</span>
+            </div>
+            <span class="rating-cta-btn">💬 İncele</span>
           </div>
 
           <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.45rem; font-weight: 500;">
@@ -2453,38 +2457,47 @@ function openReviewsModal(listingId) {
         </div>
       </div>
 
-      <!-- Add Review Form -->
-      <div style="background:var(--bg-page);border:1.5px solid var(--border-color);border-radius:14px;padding:1rem;margin-bottom:1.25rem;">
-        <h4 style="font-size:0.9rem;font-weight:800;color:var(--text-heading);margin:0 0 0.5rem;">✍️ Değerlendirme & Yorum Bırak</h4>
+      <!-- Add Review Form (Prominent & Eye-Catching) -->
+      <div class="review-form-card-box">
+        <h4 style="font-size: 1rem; font-weight: 800; color: var(--text-heading); margin: 0 0 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+          <span>✍️ Değerlendirme & Puan Bırak</span>
+        </h4>
         
-        <!-- Interactive 5 Stars -->
-        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.75rem;">
-          <span style="font-size:0.8rem;font-weight:700;color:var(--text-heading);">Puanınız:</span>
-          <div class="interactive-stars-box" id="rev-stars-box" style="margin-bottom:0;">
+        <!-- Large Interactive Star Rating Hero Box -->
+        <div class="review-rating-hero-box">
+          <div style="font-size: 0.85rem; font-weight: 800; color: var(--text-heading); margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.4px;">
+            Operatör ve Makineyi Puanlayın
+          </div>
+          <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0 0 0.5rem 0;">Yıldızlara dokunarak 1 ile 5 arasında puan verin</p>
+          
+          <div class="interactive-stars-box" id="rev-stars-box">
             <span class="star-interactive active" onclick="setReviewRating(1)">★</span>
             <span class="star-interactive active" onclick="setReviewRating(2)">★</span>
             <span class="star-interactive active" onclick="setReviewRating(3)">★</span>
             <span class="star-interactive active" onclick="setReviewRating(4)">★</span>
             <span class="star-interactive active" onclick="setReviewRating(5)">★</span>
           </div>
-          <span id="rev-rating-display" style="font-size:0.85rem;font-weight:800;color:#F59E0B;">5.0 / 5</span>
+
+          <div id="rev-rating-display-badge" style="display: inline-block; margin-top: 0.35rem; padding: 0.35rem 0.95rem; border-radius: 20px; background: rgba(245,158,11,0.15); border: 1.5px solid #F59E0B; color: #D97706; font-size: 0.85rem; font-weight: 800;">
+            ⭐⭐⭐⭐⭐ Mükemmel (5.0 / 5)
+          </div>
         </div>
 
         <!-- Author Input -->
-        <div style="margin-bottom:0.75rem;">
-          <label style="display:block;font-size:0.8rem;font-weight:700;color:var(--text-heading);margin-bottom:0.25rem;">Adınız & Soyadınız veya Firma / Şantiye Adınız *</label>
-          <input type="text" id="rev-input-author" value="${defaultAuthor}" placeholder="Örn: Hasan Usta (Kaya Hafriyat)" class="input-3d-dark" style="padding:0.65rem 0.85rem;font-size:0.85rem;">
-          <div style="font-size:0.7rem;color:var(--text-muted);margin-top:0.25rem;">💡 Yorumunuzda yukarıya yazdığınız isim görünecektir. Kayıt olmadan hızlıca değerlendirme yapabilirsiniz.</div>
+        <div style="margin-bottom: 0.85rem;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.3rem;">Adınız & Soyadınız veya Firma / Şantiye Adınız *</label>
+          <input type="text" id="rev-input-author" value="${defaultAuthor}" placeholder="Örn: Hasan Usta (Kaya Hafriyat)" class="input-3d-dark" style="padding: 0.75rem 0.95rem; font-size: 0.88rem;">
+          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem;">💡 Yorumunuzda yukarıya yazdığınız isim görünecektir. Kayıt olmadan hızlıca değerlendirme yapabilirsiniz.</div>
         </div>
 
         <!-- Comment Input -->
-        <div style="margin-bottom:0.75rem;">
-          <label style="display:block;font-size:0.8rem;font-weight:700;color:var(--text-heading);margin-bottom:0.25rem;">Yorumunuz *</label>
-          <textarea id="rev-input-comment" rows="3" placeholder="Operatörün işçiliği, makinenin durumu, çalışma performansı nasıldı? Görüşlerinizi yazınız..." class="input-3d-dark" style="padding:0.65rem 0.85rem;font-size:0.85rem;resize:vertical;"></textarea>
+        <div style="margin-bottom: 0.95rem;">
+          <label style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-heading); margin-bottom: 0.3rem;">Yorumunuz *</label>
+          <textarea id="rev-input-comment" rows="3" placeholder="Operatörün işçiliği, makinenin durumu, çalışma performansı nasıldı? Görüşlerinizi yazınız..." class="input-3d-dark" style="padding: 0.75rem 0.95rem; font-size: 0.88rem; resize: vertical;"></textarea>
         </div>
 
-        <button onclick="submitReview('${item.id}')" class="btn-3d-gold-action" style="padding:0.7rem 1rem;font-size:0.88rem;">
-          ⭐ Değerlendirmeyi Gönder
+        <button onclick="submitReview('${item.id}')" class="btn-3d-gold-action" style="padding: 0.8rem 1rem; font-size: 0.92rem;">
+          ⭐ Değerlendirmeyi Yayınla
         </button>
       </div>
 
@@ -2509,6 +2522,14 @@ function closeReviewsModal() {
   if (m) m.remove();
 }
 
+const RATING_FEEDBACK_TEXTS = {
+  5: "⭐⭐⭐⭐⭐ Mükemmel (5.0 / 5)",
+  4: "⭐⭐⭐⭐ Çok İyi (4.0 / 5)",
+  3: "⭐⭐⭐ İyi / Ortalama (3.0 / 5)",
+  2: "⭐⭐ Geliştirilmeli (2.0 / 5)",
+  1: "⭐ Yetersiz (1.0 / 5)"
+};
+
 function setReviewRating(val) {
   selectedReviewRating = Number(val);
   const stars = document.querySelectorAll("#rev-stars-box .star-interactive");
@@ -2519,8 +2540,10 @@ function setReviewRating(val) {
       star.classList.remove("active");
     }
   });
-  const display = document.getElementById("rev-rating-display");
-  if (display) display.textContent = val + ".0 / 5";
+  const displayBadge = document.getElementById("rev-rating-display-badge");
+  if (displayBadge) {
+    displayBadge.textContent = RATING_FEEDBACK_TEXTS[val] || (val + ".0 / 5");
+  }
 }
 
 function submitReview(listingId) {
