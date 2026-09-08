@@ -1774,22 +1774,19 @@ function renderListings() {
         <div class="sahibinden-details-box">
           <h3 class="sahibinden-title">${item.title}</h3>
           
-          <div class="sahibinden-owner-name" style="font-size: 0.78rem; font-weight: 700; color: var(--text-main); margin-top: 0.2rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.35rem;">
-            <span style="color: #F59E0B; font-size: 0.85rem;">👤</span> <span style="color: var(--text-main);">${item.owner && item.owner.trim() ? item.owner : 'Makine Sahibi'}</span>
+          <div class="sahibinden-owner-name">
+            <span style="color: #F59E0B; font-size: 0.82rem;">👤</span> <span>${item.owner && item.owner.trim() ? item.owner : 'Makine Sahibi'}</span>
           </div>
 
           <!-- Rating & Reviews Row -->
           <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör">
-            <div style="display:inline-flex;align-items:center;gap:0.25rem;white-space:nowrap;">
-              <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
-              <span class="rating-count-label">(${stats.count})</span>
-            </div>
+            <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
+            <span class="rating-count-label">(${stats.count})</span>
+            <span class="rating-dot-sep">•</span>
             <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
-          <div class="sahibinden-badge-row">
-            ${isMine ? `<span class="sahibinden-tag-pill my-tag">Sizin İlanınız</span>` : ''}
-          </div>
+          ${isMine ? `<div class="sahibinden-badge-row"><span class="sahibinden-tag-pill my-tag">Sizin İlanınız</span></div>` : ''}
 
           <div class="sahibinden-location">
             📍 ${item.city}, ${item.district}
@@ -2229,10 +2226,9 @@ function renderMyListings() {
 
           <!-- Rating & Reviews Row -->
           <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Gelen Değerlendirmeleri Gör">
-            <div style="display:inline-flex;align-items:center;gap:0.25rem;white-space:nowrap;">
-              <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
-              <span class="rating-count-label">(${stats.count})</span>
-            </div>
+            <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
+            <span class="rating-count-label">(${stats.count})</span>
+            <span class="rating-dot-sep">•</span>
             <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
