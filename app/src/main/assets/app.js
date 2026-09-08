@@ -1778,13 +1778,11 @@ function renderListings() {
             <span style="color: #F59E0B; font-size: 0.85rem;">👤</span> <span style="color: var(--text-main);">${item.owner && item.owner.trim() ? item.owner : 'Makine Sahibi'}</span>
           </div>
 
-          <!-- Rating & Reviews Badge -->
-          <div class="sahibinden-rating-badge-btn" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör & Puan Ver">
-            <div style="display: flex; align-items: center; gap: 0.35rem;">
-              <span class="rating-stars-gold">⭐ ${stats.avgRating}</span>
-              <span class="rating-count-text">(${stats.count} Yorum)</span>
-            </div>
-            <span class="rating-cta-btn">💬 Puan Ver & Oku</span>
+          <!-- Rating & Reviews Row -->
+          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör">
+            <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
+            <span class="rating-count-label">(${stats.count} Değerlendirme)</span>
+            <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
           <div class="sahibinden-badge-row">
@@ -2227,13 +2225,11 @@ function renderMyListings() {
             <span style="color: #F59E0B;">👤</span> <span>${item.owner || (currentUser ? currentUser.displayName : 'Makine Sahibi')}</span>
           </div>
 
-          <!-- Rating & Reviews Badge -->
-          <div class="sahibinden-rating-badge-btn" onclick="openReviewsModal('${item.id}')" style="margin-bottom: 0.35rem;" title="Gelen Yorumları Gör">
-            <div style="display: flex; align-items: center; gap: 0.35rem;">
-              <span class="rating-stars-gold">⭐ ${stats.avgRating}</span>
-              <span class="rating-count-text">(${stats.count} Yorum)</span>
-            </div>
-            <span class="rating-cta-btn">💬 İncele</span>
+          <!-- Rating & Reviews Row -->
+          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Gelen Değerlendirmeleri Gör">
+            <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
+            <span class="rating-count-label">(${stats.count} Değerlendirme)</span>
+            <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
           <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.45rem; font-weight: 500;">
