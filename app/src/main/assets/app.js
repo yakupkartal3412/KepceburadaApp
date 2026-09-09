@@ -413,8 +413,16 @@ function loadData() {
     saveRequests();
   }
 
-  reviews = [];
-  localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify([]));
+  const storedReviews = localStorage.getItem(STORAGE_REVIEWS_KEY);
+  if (storedReviews) {
+    try {
+      reviews = JSON.parse(storedReviews);
+    } catch(e) {
+      reviews = [];
+    }
+  } else {
+    reviews = [];
+  }
 }
 
 function saveReviews() {
@@ -1882,6 +1890,7 @@ function renderListings() {
     const statusText = isAvailable ? '🟢 Müsait' : '🔴 Kirada';
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
     const isMine = isItemMine(item);
+    const stats = getListingReviewStats(item.id);
 
     return `
       <div class="card card-listing-sahibinden">
@@ -1897,6 +1906,14 @@ function renderListings() {
           
           <div class="sahibinden-owner-name">
             <span style="color: #F59E0B; font-size: 0.82rem;">👤</span> <span>${formatOwnerDisplayName(item.owner)}</span>
+          </div>
+
+          <!-- Rating & Reviews Row -->
+          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Puan Ver ve Yorumları Gör">
+            <span class="rating-star-badge">${stats.count > 0 ? `⭐ ${stats.avgRating}` : '⭐ Puan Ver'}</span>
+            <span class="rating-count-label">${stats.count > 0 ? `(${stats.count} Değerlendirme)` : '(0 Yorum)'}</span>
+            <span class="rating-dot-sep">•</span>
+            <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
           ${isMine ? `<div class="sahibinden-badge-row"><span class="sahibinden-tag-pill my-tag">Sizin İlanınız</span></div>` : ''}
@@ -2322,6 +2339,7 @@ function renderMyListings() {
     const statusClass = isAvailable ? 'available' : 'rented';
     const statusText = isAvailable ? '🟢 Müsait' : '🔴 Kirada';
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
+    const stats = getListingReviewStats(item.id);
 
     return `
       <div class="card card-listing-sahibinden my-dark-listing-card" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 0.6rem; box-shadow: var(--card-shadow); display: flex; flex-direction: column; justify-content: space-between;">
@@ -2342,6 +2360,14 @@ function renderMyListings() {
           
           <div style="font-size: 0.74rem; color: var(--text-main); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 4px; font-weight: 600;">
             <span style="color: #F59E0B;">👤</span> <span>${formatOwnerDisplayName(item.owner || (currentUser ? currentUser.company || currentUser.phone || currentUser.name : 'Makine Sahibi'))}</span>
+          </div>
+
+          <!-- Rating & Reviews Row -->
+          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Gelen Puan ve Yorumları Gör">
+            <span class="rating-star-badge">${stats.count > 0 ? `⭐ ${stats.avgRating}` : '⭐ Puan Ver'}</span>
+            <span class="rating-count-label">${stats.count > 0 ? `(${stats.count} Değerlendirme)` : '(0 Yorum)'}</span>
+            <span class="rating-dot-sep">•</span>
+            <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
           <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.45rem; font-weight: 500;">
