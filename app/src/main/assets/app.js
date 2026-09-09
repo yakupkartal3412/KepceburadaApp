@@ -1569,7 +1569,7 @@ function switchDashboardTab(tab) {
     if (addView) addView.style.display = "block";
     if (btnListings) {
       btnListings.style.background = "transparent";
-      btnListings.style.color = "#94A3B8";
+      btnListings.style.color = "var(--text-muted)";
       btnListings.style.boxShadow = "none";
       btnListings.style.fontWeight = "700";
     }
@@ -1585,7 +1585,7 @@ function switchDashboardTab(tab) {
     if (listingsView) listingsView.style.display = "block";
     if (btnAdd) {
       btnAdd.style.background = "transparent";
-      btnAdd.style.color = "#94A3B8";
+      btnAdd.style.color = "var(--text-muted)";
       btnAdd.style.boxShadow = "none";
       btnAdd.style.fontWeight = "700";
     }
