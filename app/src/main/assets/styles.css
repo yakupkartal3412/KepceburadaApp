@@ -4598,7 +4598,8 @@ select:focus, input:focus {
 }
 
 [data-theme="light"] .step-3d-label {
-  color: #475569 !important;
+  color: #334155 !important;
+  font-weight: 700 !important;
 }
 
 [data-theme="light"] .step-3d-pill.active .step-3d-num {
@@ -4647,14 +4648,39 @@ select:focus, input:focus {
 }
 
 [data-theme="light"] .dropzone-3d-box h4,
-[data-theme="light"] #main-wiz-prompt h4 {
+[data-theme="light"] #main-wiz-prompt h4,
+[data-theme="light"] #wiz-dropzone-prompt h4,
+[data-theme="light"] #fast-photo-prompt h4 {
   color: #0F172A !important;
   text-shadow: none !important;
+  font-weight: 800 !important;
 }
 
 [data-theme="light"] .dropzone-3d-box p,
-[data-theme="light"] #main-wiz-prompt p {
-  color: #64748B !important;
+[data-theme="light"] #main-wiz-prompt p,
+[data-theme="light"] #wiz-dropzone-prompt p,
+[data-theme="light"] #fast-photo-prompt p {
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="light"] .custom-file-dropzone-compact {
+  background: #F8FAFC !important;
+  border: 2px dashed #CBD5E1 !important;
+}
+
+[data-theme="light"] #wiz-dropzone-prompt span {
+  color: #334155 !important;
+}
+
+[data-theme="light"] #wiz-dropzone-prompt span:nth-child(2) {
+  color: #D97706 !important;
+  font-weight: 800 !important;
+}
+
+[data-theme="light"] #fast-photo-prompt div:nth-child(2) {
+  color: #D97706 !important;
+  font-weight: 800 !important;
 }
 
 /* ==================== 🛠️ GLOBAL CONTRAST & TYPOGRAPHY FIXES ==================== */
