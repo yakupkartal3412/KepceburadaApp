@@ -1618,7 +1618,7 @@ function updateLoggedInDashboardUI() {
     }
   } catch(e) {}
 
-  if (currentUser && currentUser.name) {
+  if (currentUser && (currentUser.name || currentUser.company || currentUser.phone)) {
     if (dashContainer) dashContainer.style.display = "block";
     if (anonAuthSection) anonAuthSection.style.display = "none";
 
@@ -1626,10 +1626,18 @@ function updateLoggedInDashboardUI() {
     const subEl = document.getElementById("dash-user-sub");
     const statListingsEl = document.getElementById("dash-stat-my-listings");
 
-    if (nameEl) nameEl.textContent = `${currentUser.name || currentUser.displayName}`;
-    if (subEl) {
-      subEl.textContent = `${currentUser.company ? currentUser.company + ' · ' : ''}📍 ${currentUser.city || 'Bingöl'}`;
-    }
+    // Option C: Öncelikli Kurumsal / Firma Unvanı ve Telefon Bilgisi
+    const company = (currentUser.company || "").trim();
+    const phone = (currentUser.phone || "").trim();
+    const city = (currentUser.city || "Antalya").trim();
+
+    const primaryTitle = company ? company : (phone ? `📱 ${phone}` : (currentUser.name || "Makine Sahibi"));
+    const secondaryText = company && phone
+      ? `📱 ${phone} · 📍 ${city}`
+      : `📍 ${city} · 🟢 Makine Sahibi`;
+
+    if (nameEl) nameEl.textContent = primaryTitle;
+    if (subEl) subEl.textContent = secondaryText;
     
     if (statListingsEl) {
       const myList = getMyListings();
@@ -1845,6 +1853,17 @@ const NEARBY_CITIES_MAP = {
   "Antalya": ["Antalya", "Isparta", "Burdur", "Muğla"]
 };
 
+// Format owner display name cleanly (extract company name if present)
+function formatOwnerDisplayName(rawOwner) {
+  if (!rawOwner) return "Makine Sahibi";
+  const str = String(rawOwner).trim();
+  const match = str.match(/\((.*?)\)/);
+  if (match && match[1] && match[1].trim()) {
+    return match[1].trim();
+  }
+  return str;
+}
+
 // Render Listings for Rent View - Ultra Simple Cards with Strict Location Filtering
 function renderListings() {
   const grid = document.getElementById("listings-grid");
@@ -1930,7 +1949,7 @@ function renderListings() {
           <h3 class="sahibinden-title">${item.title}</h3>
           
           <div class="sahibinden-owner-name">
-            <span style="color: #F59E0B; font-size: 0.82rem;">👤</span> <span>${item.owner && item.owner.trim() ? item.owner : 'Makine Sahibi'}</span>
+            <span style="color: #F59E0B; font-size: 0.82rem;">🏢</span> <span>${formatOwnerDisplayName(item.owner)}</span>
           </div>
 
           <!-- Rating & Reviews Row -->
@@ -2384,7 +2403,7 @@ function renderMyListings() {
           </h3>
           
           <div style="font-size: 0.74rem; color: var(--text-main); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 4px; font-weight: 600;">
-            <span style="color: #F59E0B;">👤</span> <span>${item.owner || (currentUser ? currentUser.displayName : 'Makine Sahibi')}</span>
+            <span style="color: #F59E0B;">🏢</span> <span>${formatOwnerDisplayName(item.owner || (currentUser ? currentUser.company || currentUser.phone || currentUser.name : 'Makine Sahibi'))}</span>
           </div>
 
           <!-- Rating & Reviews Row -->
