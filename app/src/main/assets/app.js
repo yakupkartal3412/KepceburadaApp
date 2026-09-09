@@ -118,11 +118,45 @@ const DEFAULT_LISTINGS = [
     image: "assets/manitou.png",
     status: "available",
     createdAt: new Date().toISOString()
+  },
+  {
+    id: "makine-adana-lowbed-1",
+    title: "Scania R500 4 Dingil Ağır Lowbed Dorse",
+    type: "Lowbed (Ağır Makine Taşıyıcı)",
+    city: "Adana",
+    district: "Seyhan",
+    price: 8500,
+    hourlyPrice: 1100,
+    period: "Günlük",
+    operator: "Operatörlü",
+    specs: "60 Ton Kapasite | Hidrolik Rampa",
+    phone: "0532 999 11 22",
+    owner: "Çukurova Ağır Nakliyat",
+    image: "assets/lowbed_truck.jpg",
+    status: "available",
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: "makine-diyarbakir-cekici-1",
+    title: "Ford Cargo Kayar Kasa Makine & Araç Çekici",
+    type: "Oto & Makine Çekici / Kurtarıcı",
+    city: "Diyarbakır",
+    district: "Bağlar",
+    price: 3200,
+    hourlyPrice: 450,
+    period: "Günlük",
+    operator: "Operatörlü",
+    specs: "10 Ton Tamburlu Vinç | 7/24 Yol Yardım",
+    phone: "0543 888 22 11",
+    owner: "Diyarbakır Güven Oto Kurtarma",
+    image: "assets/tow_truck.jpg",
+    status: "available",
+    createdAt: new Date().toISOString()
   }
 ];
 
-// LocalStorage Keys (v12 for clean refresh with exact photos)
-const STORAGE_LISTINGS_KEY = "makinebul_listings_v12";
+// LocalStorage Keys (v13 for Lowbed & Çekici support)
+const STORAGE_LISTINGS_KEY = "makinebul_listings_v13";
 const STORAGE_REQUESTS_KEY = "makinebul_requests_v10";
 const STORAGE_REVIEWS_KEY = "makinebul_reviews_v1";
 
@@ -826,6 +860,10 @@ function handleMainWizStep3(event) {
       ? "assets/manitou.png"
       : machineType.includes("Kamyon")
       ? "assets/dump_truck.png"
+      : machineType.toLowerCase().includes("lowbed")
+      ? "assets/lowbed_truck.jpg"
+      : (machineType.toLowerCase().includes("çekici") || machineType.toLowerCase().includes("kurtarıcı") || machineType.toLowerCase().includes("cekici"))
+      ? "assets/tow_truck.jpg"
       : "assets/excavator1.png";
   }
 
@@ -1335,6 +1373,10 @@ function completeWizardListing(event) {
       ? "assets/manitou.png"
       : pendingAuthData.type === "Hafriyat Kamyonu"
       ? "assets/dump_truck.png"
+      : (pendingAuthData.type && pendingAuthData.type.toLowerCase().includes("lowbed"))
+      ? "assets/lowbed_truck.jpg"
+      : (pendingAuthData.type && (pendingAuthData.type.toLowerCase().includes("çekici") || pendingAuthData.type.toLowerCase().includes("kurtarıcı") || pendingAuthData.type.toLowerCase().includes("cekici")))
+      ? "assets/tow_truck.jpg"
       : "assets/excavator1.png";
   }
 
@@ -1719,6 +1761,10 @@ function handleFastAddListing(event) {
       ? "assets/manitou.png"
       : type.toLowerCase().includes("kamyon")
       ? "assets/dump_truck.png"
+      : type.toLowerCase().includes("lowbed")
+      ? "assets/lowbed_truck.jpg"
+      : (type.toLowerCase().includes("çekici") || type.toLowerCase().includes("kurtarıcı") || type.toLowerCase().includes("cekici"))
+      ? "assets/tow_truck.jpg"
       : "assets/excavator1.png"
   );
 
@@ -2179,6 +2225,10 @@ function handleCreateListing(event) {
       ? "Manitou Telehandler"
       : title.toLowerCase().includes("kamyon")
       ? "Hafriyat Kamyonu"
+      : title.toLowerCase().includes("lowbed")
+      ? "Lowbed (Ağır Makine Taşıyıcı)"
+      : (title.toLowerCase().includes("çekici") || title.toLowerCase().includes("kurtarıcı") || title.toLowerCase().includes("cekici"))
+      ? "Oto & Makine Çekici / Kurtarıcı"
       : "Paletli Ekskavatör";
   }
 
@@ -2195,6 +2245,10 @@ function handleCreateListing(event) {
       ? "assets/manitou.png"
       : type === "Hafriyat Kamyonu"
       ? "assets/dump_truck.png"
+      : (type && type.toLowerCase().includes("lowbed"))
+      ? "assets/lowbed_truck.jpg"
+      : (type && (type.toLowerCase().includes("çekici") || type.toLowerCase().includes("kurtarıcı") || type.toLowerCase().includes("cekici")))
+      ? "assets/tow_truck.jpg"
       : "assets/excavator1.png";
   }
 
