@@ -4547,20 +4547,29 @@ select:focus, input:focus {
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
 }
 
-[data-theme="light"] .hero-3d-icon-badge {
-  background: linear-gradient(145deg, #1E293B 0%, #0F172A 100%) !important;
-  border: 2px solid #F59E0B !important;
-  border-radius: 18px !important;
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3), 0 2px 6px rgba(0, 0, 0, 0.15) !important;
-  padding: 5px !important;
+[data-theme="light"] .hero-3d-icon-badge,
+.hero-3d-icon-badge {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  border-radius: 10px !important;
+  flex-shrink: 0 !important;
+  padding: 2px !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1.5px solid #F59E0B !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-[data-theme="light"] .hero-3d-logo-img {
-  width: 46px !important;
-  height: 46px !important;
-  object-fit: contain !important;
-  border-radius: 12px !important;
-  filter: drop-shadow(0 4px 10px rgba(245, 158, 11, 0.4)) !important;
+[data-theme="light"] .hero-3d-logo-img,
+.hero-3d-logo-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 6px !important;
+  filter: none !important;
 }
 
 [data-theme="light"] .hero-3d-title {
