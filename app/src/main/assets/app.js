@@ -1378,11 +1378,120 @@ function logoutUser() {
   renderUserBadge();
   updateLoggedInDashboardUI();
   renderListings();
-  renderMyListings();
+  if (typeof renderMyListings === 'function') renderMyListings();
   showToast("🚪 Hesabınızdan başarıyla çıkış yapıldı.");
   switchMode('list');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// ==================== 🗑️ DELETE ACCOUNT (GOOGLE PLAY STORE COMPLIANT) ====================
+function openDeleteAccountModal() {
+  if (!currentUser) return;
+
+  const existing = document.getElementById("delete-account-modal");
+  if (existing) existing.remove();
+
+  const modal = document.createElement("div");
+  modal.id = "delete-account-modal";
+  modal.style.cssText = [
+    'position:fixed',
+    'top:0',
+    'left:0',
+    'width:100vw',
+    'height:100vh',
+    'background:rgba(15,23,42,0.85)',
+    'backdrop-filter:blur(6px)',
+    '-webkit-backdrop-filter:blur(6px)',
+    'z-index:2147483647',
+    'display:flex',
+    'align-items:center',
+    'justify-content:center',
+    'padding:1rem',
+    'box-sizing:border-box'
+  ].join(';');
+
+  const displayName = currentUser.displayName || currentUser.name || "Kullanıcı";
+  const myListingCount = listings.filter(item => isItemMine(item)).length;
+
+  modal.innerHTML = `
+    <div style="background:var(--bg-card);border-radius:20px;max-width:440px;width:100%;padding:1.4rem;box-shadow:var(--card-shadow);border:1.5px solid var(--border-color);color:var(--text-main);text-align:center;box-sizing:border-box;position:relative;">
+      <div style="width:52px;height:52px;border-radius:50%;background:rgba(239,68,68,0.15);border:2px solid #EF4444;display:flex;align-items:center;justify-content:center;margin:0 auto 0.85rem;font-size:1.5rem;">
+        🗑️
+      </div>
+      
+      <h3 style="font-size:1.05rem;font-weight:800;color:var(--text-heading);margin:0 0 0.5rem;line-height:1.3;">
+        Hesabınızı Silmek İstiyor Musunuz?
+      </h3>
+
+      <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:12px;padding:0.75rem;margin-bottom:1rem;text-align:left;font-size:0.78rem;line-height:1.45;color:var(--text-main);">
+        <strong style="color:#EF4444;display:block;margin-bottom:0.25rem;">⚠️ Kalıcı Olarak Silinecekler:</strong>
+        • <strong>${displayName}</strong> adlı profiliniz ve kayıtlı telefon numaranız<br>
+        • Yayındaki <strong>${myListingCount} adet makine ilanınız</strong><br>
+        • Tüm hesap verileriniz ve oturumunuz
+      </div>
+
+      <p style="font-size:0.72rem;color:var(--text-muted);margin:0 0 1.25rem;line-height:1.4;">
+        Google Play Store politikaları uyarınca hesabınız ve verileriniz sistemden kalıcı olarak temizlenecektir. Bu işlem geri alınamaz.
+      </p>
+
+      <div style="display:flex;gap:0.65rem;">
+        <button type="button" onclick="closeDeleteAccountModal()" class="btn-3d-secondary" style="flex:1;padding:0.7rem 0.5rem;font-size:0.85rem;margin:0;">
+          Vazgeç
+        </button>
+        <button type="button" onclick="confirmDeleteAccount()" style="flex:1.2;padding:0.7rem 0.5rem;font-size:0.85rem;background:#EF4444;color:#fff;border:none;border-radius:10px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(239,68,68,0.4);transition:opacity 0.2s;">
+          Evet, Hesabımı Sil
+        </button>
+      </div>
+    </div>
+  `;
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeDeleteAccountModal();
+  });
+
+  document.body.appendChild(modal);
+}
+
+function closeDeleteAccountModal() {
+  const m = document.getElementById("delete-account-modal");
+  if (m) m.remove();
+}
+
+function confirmDeleteAccount() {
+  if (!currentUser) return;
+
+  const cleanUserPhone = currentUser.phone ? currentUser.phone.replace(/\D/g, '') : '';
+
+  // 1. Remove all listings created by this user
+  listings = listings.filter(item => !isItemMine(item));
+  saveListings();
+
+  // 2. Clear current user session
+  currentUser = null;
+  localStorage.removeItem("makinebul_current_user");
+
+  // 3. Clear any saved registered users in localStorage
+  try {
+    const savedUsers = JSON.parse(localStorage.getItem("makinebul_users") || "[]");
+    const filteredUsers = savedUsers.filter(u => {
+      const uPhone = u.phone ? u.phone.replace(/\D/g, '') : '';
+      return uPhone !== cleanUserPhone;
+    });
+    localStorage.setItem("makinebul_users", JSON.stringify(filteredUsers));
+  } catch(e) {}
+
+  closeDeleteAccountModal();
+  renderUserBadge();
+  updateLoggedInDashboardUI();
+  renderListings();
+  if (typeof renderMyListings === 'function') renderMyListings();
+
+  showToast("🗑️ Hesabınız ve tüm ilanlarınız kalıcı olarak silindi.");
+  switchMode('rent');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
 
 function toggleUserMenu(e) {
   if (e) e.stopPropagation();
