@@ -160,41 +160,8 @@ const STORAGE_LISTINGS_KEY = "makinebul_listings_v13";
 const STORAGE_REQUESTS_KEY = "makinebul_requests_v10";
 const STORAGE_REVIEWS_KEY = "makinebul_reviews_v1";
 
-// Default Sample Reviews
-const DEFAULT_REVIEWS = [
-  {
-    id: "rev-1",
-    listingId: "kepce-bingol-1",
-    author: "Ahmet Demir (Demir İnşaat)",
-    rating: 5,
-    date: "2 gün önce",
-    comment: "Operatör Yakup Usta şantiyemizde 4 gün temel kazısı yaptı. Milimetrik çalışıyor, makinenin hidroliği çok güçlü. Kesinlikle tavsiye ederim."
-  },
-  {
-    id: "rev-2",
-    listingId: "kepce-bingol-1",
-    author: "Murat Şahin (Şahin Hafriyat)",
-    rating: 5,
-    date: "1 hafta önce",
-    comment: "Kanal açma işinde çalıştık, tam vaktinde şantiyedeydi. Yakıt konusunda da çok tasarruflu makine."
-  },
-  {
-    id: "rev-3",
-    listingId: "kepce-bingol-2",
-    author: "Cemal Kaya",
-    rating: 5,
-    date: "3 gün önce",
-    comment: "Kırıcı aparatı çok güçlü, taş kırma işini 1 günde bitirdi. Teşekkürler."
-  },
-  {
-    id: "rev-4",
-    listingId: "kepce-bingol-3",
-    author: "Serkan Yılmaz",
-    rating: 5,
-    date: "5 gün önce",
-    comment: "Temiz ve bakımlı araç, operatör işine sadık."
-  }
-];
+// Default Sample Reviews (Boş - Kullanıcı talebi üzerine sahte/otomatik yorumlar kaldırıldı)
+const DEFAULT_REVIEWS = [];
 
 // State Management
 let listings = [];
@@ -446,17 +413,8 @@ function loadData() {
     saveRequests();
   }
 
-  const storedReviews = localStorage.getItem(STORAGE_REVIEWS_KEY);
-  if (storedReviews) {
-    try {
-      reviews = JSON.parse(storedReviews);
-    } catch(e) {
-      reviews = DEFAULT_REVIEWS;
-    }
-  } else {
-    reviews = DEFAULT_REVIEWS;
-    saveReviews();
-  }
+  reviews = [];
+  localStorage.setItem(STORAGE_REVIEWS_KEY, JSON.stringify([]));
 }
 
 function saveReviews() {
@@ -467,19 +425,9 @@ function getListingReviewStats(listingId) {
   const itemReviews = reviews.filter(r => String(r.listingId) === String(listingId));
   if (itemReviews.length === 0) {
     return {
-      avgRating: "5.0",
-      count: 1,
-      list: [
-        {
-          id: "def-" + listingId,
-          listingId: listingId,
-          author: "Müteahhit Referansı",
-          rating: 5,
-          date: "Yakın zamanda",
-          tags: ["🚜 Usta Operatör", "⏱️ Zamanında Geldi"],
-          comment: "Zamanında teslim ve başarılı işçilik."
-        }
-      ]
+      avgRating: "0.0",
+      count: 0,
+      list: []
     };
   }
   const sum = itemReviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0);
@@ -1934,7 +1882,6 @@ function renderListings() {
     const statusText = isAvailable ? '🟢 Müsait' : '🔴 Kirada';
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
     const isMine = isItemMine(item);
-    const stats = getListingReviewStats(item.id);
 
     return `
       <div class="card card-listing-sahibinden">
@@ -1950,14 +1897,6 @@ function renderListings() {
           
           <div class="sahibinden-owner-name">
             <span style="color: #F59E0B; font-size: 0.82rem;">👤</span> <span>${formatOwnerDisplayName(item.owner)}</span>
-          </div>
-
-          <!-- Rating & Reviews Row -->
-          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör">
-            <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
-            <span class="rating-count-label">(${stats.count} Kişi)</span>
-            <span class="rating-dot-sep">•</span>
-            <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
           ${isMine ? `<div class="sahibinden-badge-row"><span class="sahibinden-tag-pill my-tag">Sizin İlanınız</span></div>` : ''}
@@ -2383,7 +2322,6 @@ function renderMyListings() {
     const statusClass = isAvailable ? 'available' : 'rented';
     const statusText = isAvailable ? '🟢 Müsait' : '🔴 Kirada';
     const hourlyPriceNum = item.hourlyPrice || Math.round(item.price / 8);
-    const stats = getListingReviewStats(item.id);
 
     return `
       <div class="card card-listing-sahibinden my-dark-listing-card" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 0.6rem; box-shadow: var(--card-shadow); display: flex; flex-direction: column; justify-content: space-between;">
@@ -2404,14 +2342,6 @@ function renderMyListings() {
           
           <div style="font-size: 0.74rem; color: var(--text-main); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 4px; font-weight: 600;">
             <span style="color: #F59E0B;">👤</span> <span>${formatOwnerDisplayName(item.owner || (currentUser ? currentUser.company || currentUser.phone || currentUser.name : 'Makine Sahibi'))}</span>
-          </div>
-
-          <!-- Rating & Reviews Row -->
-          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Gelen Değerlendirmeleri Gör">
-            <span class="rating-star-badge">⭐ ${stats.avgRating}</span>
-            <span class="rating-count-label">(${stats.count} Kişi)</span>
-            <span class="rating-dot-sep">•</span>
-            <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
           <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.45rem; font-weight: 500;">
