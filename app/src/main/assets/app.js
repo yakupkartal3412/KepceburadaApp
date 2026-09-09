@@ -1631,10 +1631,10 @@ function updateLoggedInDashboardUI() {
     const phone = (currentUser.phone || "").trim();
     const city = (currentUser.city || "Antalya").trim();
 
-    const primaryTitle = company ? company : (phone ? `📱 ${phone}` : (currentUser.name || "Makine Sahibi"));
+    const primaryTitle = company ? company : (phone ? phone : (currentUser.name || "Makine Sahibi"));
     const secondaryText = company && phone
-      ? `📱 ${phone} · 📍 ${city}`
-      : `📍 ${city} · 🟢 Makine Sahibi`;
+      ? `📍 ${city} · 📱 ${phone}`
+      : `📍 ${city} · 🟢 Onaylı Hesap`;
 
     if (nameEl) nameEl.textContent = primaryTitle;
     if (subEl) subEl.textContent = secondaryText;
@@ -1949,7 +1949,7 @@ function renderListings() {
           <h3 class="sahibinden-title">${item.title}</h3>
           
           <div class="sahibinden-owner-name">
-            <span style="color: #F59E0B; font-size: 0.82rem;">🏢</span> <span>${formatOwnerDisplayName(item.owner)}</span>
+            <span style="color: #F59E0B; font-size: 0.82rem;">👤</span> <span>${formatOwnerDisplayName(item.owner)}</span>
           </div>
 
           <!-- Rating & Reviews Row -->
@@ -2403,7 +2403,7 @@ function renderMyListings() {
           </h3>
           
           <div style="font-size: 0.74rem; color: var(--text-main); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 4px; font-weight: 600;">
-            <span style="color: #F59E0B;">🏢</span> <span>${formatOwnerDisplayName(item.owner || (currentUser ? currentUser.company || currentUser.phone || currentUser.name : 'Makine Sahibi'))}</span>
+            <span style="color: #F59E0B;">👤</span> <span>${formatOwnerDisplayName(item.owner || (currentUser ? currentUser.company || currentUser.phone || currentUser.name : 'Makine Sahibi'))}</span>
           </div>
 
           <!-- Rating & Reviews Row -->
