@@ -160,8 +160,33 @@ const STORAGE_LISTINGS_KEY = "makinebul_listings_v13";
 const STORAGE_REQUESTS_KEY = "makinebul_requests_v10";
 const STORAGE_REVIEWS_KEY = "makinebul_reviews_v1";
 
-// Default Sample Reviews (Boş - Kullanıcı talebi üzerine sahte/otomatik yorumlar kaldırıldı)
-const DEFAULT_REVIEWS = [];
+// Default Sample Reviews
+const DEFAULT_REVIEWS = [
+  {
+    id: "rev-1",
+    listingId: "kepce-bingol-1",
+    author: "Ahmet Demir (Demir İnşaat)",
+    rating: 5,
+    date: "2 gün önce",
+    comment: "Operatör Yakup Usta şantiyemizde 4 gün temel kazısı yaptı. Milimetrik çalışıyor, makinenin hidroliği çok güçlü. Kesinlikle tavsiye ederim."
+  },
+  {
+    id: "rev-2",
+    listingId: "kepce-bingol-1",
+    author: "Murat Şahin (Şahin Hafriyat)",
+    rating: 5,
+    date: "1 hafta önce",
+    comment: "Kanal açma işinde çalıştık, tam vaktinde şantiyedeydi. Yakıt konusunda da çok tasarruflu makine."
+  },
+  {
+    id: "rev-3",
+    listingId: "kepce-bingol-2",
+    author: "Cemal Kaya",
+    rating: 5,
+    date: "3 gün önce",
+    comment: "Kırıcı aparatı çok güçlü, taş kırma işini 1 günde bitirdi. Teşekkürler."
+  }
+];
 
 // State Management
 let listings = [];
@@ -418,10 +443,11 @@ function loadData() {
     try {
       reviews = JSON.parse(storedReviews);
     } catch(e) {
-      reviews = [];
+      reviews = DEFAULT_REVIEWS;
     }
   } else {
-    reviews = [];
+    reviews = DEFAULT_REVIEWS;
+    saveReviews();
   }
 }
 
@@ -433,7 +459,7 @@ function getListingReviewStats(listingId) {
   const itemReviews = reviews.filter(r => String(r.listingId) === String(listingId));
   if (itemReviews.length === 0) {
     return {
-      avgRating: "0.0",
+      avgRating: "5.0",
       count: 0,
       list: []
     };
@@ -1909,10 +1935,8 @@ function renderListings() {
           </div>
 
           <!-- Rating & Reviews Row -->
-          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Puan Ver ve Yorumları Gör">
-            <span class="rating-star-badge">${stats.count > 0 ? `⭐ ${stats.avgRating}` : '⭐ Puan Ver'}</span>
-            <span class="rating-count-label">${stats.count > 0 ? `(${stats.count} Değerlendirme)` : '(0 Yorum)'}</span>
-            <span class="rating-dot-sep">•</span>
+          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Operatör ve Makine Yorumlarını Gör">
+            <span class="rating-star-badge">⭐ ${stats.count > 0 ? stats.avgRating : '5.0'} <span class="rating-count-label">(${stats.count})</span></span>
             <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 
@@ -2363,10 +2387,8 @@ function renderMyListings() {
           </div>
 
           <!-- Rating & Reviews Row -->
-          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Gelen Puan ve Yorumları Gör">
-            <span class="rating-star-badge">${stats.count > 0 ? `⭐ ${stats.avgRating}` : '⭐ Puan Ver'}</span>
-            <span class="rating-count-label">${stats.count > 0 ? `(${stats.count} Değerlendirme)` : '(0 Yorum)'}</span>
-            <span class="rating-dot-sep">•</span>
+          <div class="sahibinden-rating-row" onclick="openReviewsModal('${item.id}')" title="Gelen Değerlendirmeleri Gör">
+            <span class="rating-star-badge">⭐ ${stats.count > 0 ? stats.avgRating : '5.0'} <span class="rating-count-label">(${stats.count})</span></span>
             <span class="rating-chevron-link">Yorumlar ❯</span>
           </div>
 

@@ -4062,25 +4062,28 @@ select:focus, input:focus {
 
   /* Compact Rating Row */
   .sahibinden-rating-row {
-    gap: 0.22rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     padding: 0.14rem 0 !important;
     margin-bottom: 0.25rem !important;
     white-space: nowrap !important;
+    width: 100% !important;
     overflow: hidden !important;
   }
 
   .rating-star-badge {
-    font-size: 0.74rem !important;
+    font-size: 0.72rem !important;
     flex-shrink: 0 !important;
   }
 
   .rating-count-label {
-    font-size: 0.7rem !important;
+    font-size: 0.68rem !important;
     flex-shrink: 0 !important;
   }
 
   .rating-chevron-link {
-    font-size: 0.7rem !important;
+    font-size: 0.68rem !important;
     flex-shrink: 0 !important;
   }
 
@@ -4814,8 +4817,7 @@ select option {
 .sahibinden-rating-row {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 0.28rem;
+  justify-content: space-between;
   padding: 0.16rem 0;
   margin-top: 0.05rem;
   margin-bottom: 0.35rem;
@@ -4825,7 +4827,6 @@ select option {
   white-space: nowrap;
   width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis;
   transition: opacity 0.15s ease;
 }
 
